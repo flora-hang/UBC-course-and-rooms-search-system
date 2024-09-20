@@ -1,0 +1,17 @@
+{
+	"title": "QUERY middle wildcard",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"sections_dept": "g*ob"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept"
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

@@ -1,0 +1,17 @@
+{
+	"title": "no underscore for query key",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"sections_avg": 97
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sectionsdept"
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

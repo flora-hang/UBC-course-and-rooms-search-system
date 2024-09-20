@@ -1,0 +1,13 @@
+{
+	"title": "Invalid key sections_students",
+	"input": {
+		"WHERE": {},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_students"
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

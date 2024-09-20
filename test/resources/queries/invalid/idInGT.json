@@ -1,0 +1,17 @@
+{
+	"title": "id key in GT",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"sections_id": "1234"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept"
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

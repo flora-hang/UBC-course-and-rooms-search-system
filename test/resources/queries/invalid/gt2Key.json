@@ -1,0 +1,21 @@
+{
+	"title": "GT === 2 keys",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"sections_avg": 96,
+				"sections_year": 2011
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept",
+				"sections_avg",
+				"sections_year"
+			],
+			"ORDER": "sections_avg"
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

@@ -1,0 +1,17 @@
+{
+	"title": "dept key in GT",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"sections_dept": "geob"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept"
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

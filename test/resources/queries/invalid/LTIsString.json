@@ -1,0 +1,17 @@
+{
+	"title": "LT type is String",
+	"input": {
+		"WHERE": {
+			"LT": ""
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_avg",
+				"sections_dept",
+				"sections_title"
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

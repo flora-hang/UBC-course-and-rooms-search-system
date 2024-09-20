@@ -1,0 +1,26 @@
+{
+	"title": "valid AND",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"GT": {
+						"sections_avg": 70
+					}
+				},
+				{
+					"LT": {
+						"sections_avg": 70.02
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept"
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected":[{"sections_dept":"biol"},{"sections_dept":"biol"},{"sections_dept":"biol"},{"sections_dept":"busi"},{"sections_dept":"chem"},{"sections_dept":"chem"},{"sections_dept":"econ"},{"sections_dept":"econ"},{"sections_dept":"eosc"},{"sections_dept":"eosc"},{"sections_dept":"geog"},{"sections_dept":"geog"},{"sections_dept":"phil"},{"sections_dept":"phil"},{"sections_dept":"psyc"},{"sections_dept":"psyc"}]
+}

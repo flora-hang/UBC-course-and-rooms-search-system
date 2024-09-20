@@ -1,0 +1,17 @@
+{
+	"title": "QUERY middle wildcard near last character",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"sections_dept": "CPS*C"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept"
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}
