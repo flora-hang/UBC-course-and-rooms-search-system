@@ -34,6 +34,7 @@ describe("InsightFacade", function () {
 	// let invalidCourseDataset: string;
 	let badCoursesFolderDataset: string;
 	let invalidSectionDataset: string;
+	let oneValidSection: string;
 
 	before(async function () {
 		// This block runs once and loads the datasets.
@@ -47,6 +48,7 @@ describe("InsightFacade", function () {
 		// ); //
 		badCoursesFolderDataset = await getContentFromArchives("badCoursesFolderDataset.zip");
 		invalidSectionDataset = await getContentFromArchives("invalidSectionDataset.zip");
+		oneValidSection = await getContentFromArchives("oneValidSection.zip");
 
 		// Just in case there is anything hanging around from a previous run of the test suite
 		await clearDisk();
@@ -250,16 +252,9 @@ describe("InsightFacade", function () {
 				} else if (expected === "ResultTooLargeError") {
 					expect(err).to.be.instanceOf(ResultTooLargeError);
 				} else {
-					expect(err).to.be.instanceOf(NotFoundError);
+					expect.fail(`performQuery threw unexpected error: ${err}`);
 				}
 			}
-			// if (errorExpected) {
-			// 	expect.fail(
-			// 		`performQuery resolved when it should have rejected with ${expected}`
-			// 	);
-			// }
-			//
-			// expect(result).to.be.equal(expected);
 		}
 
 		before(async function () {
@@ -269,14 +264,13 @@ describe("InsightFacade", function () {
 			// Will *fail* if there is a problem reading ANY dataset.
 			const loadDatasetPromises: Promise<string[]>[] = [
 				facade.addDataset("sections", fakeSections, InsightDatasetKind.Sections),
+				facade.addDataset("one aanb", oneValidSection, InsightDatasetKind.Sections),
 			];
 
 			try {
 				await Promise.all(loadDatasetPromises);
 			} catch (err) {
-				// throw new Error(
-				// 	`In PerformQuery Before hook, dataset(s) failed to be added. \n${err}`
-				// );
+				throw new Error(`In PerformQuery Before hook, dataset(s) failed to be added. \n${err}`);
 			}
 		});
 
@@ -344,5 +338,19 @@ describe("InsightFacade", function () {
 		it("[invalid/is2Key.json] IS === 2 keys", checkQuery);
 		it("[invalid/not0Key.json] NOT === 0 key", checkQuery);
 		it("[invalid/not2Key.json] NOT === 2 keys", checkQuery);
+
+		it("should reject with a input that is not object type", async function () {
+			try {
+				await facade.performQuery(1);
+			} catch (err) {
+				expect(err).to.be.instanceOf(InsightError);
+			}
+		});
+		it("[valid/noFilter.json] no filter used (empty WHERE)", checkQuery);
+		it("[invalid/noMatchingDataset.json] no such dataset added", checkQuery);
+		it("[invalid/referenceTwoDatasets.json] references 2 existing datasets", checkQuery);
+		it("[valid/noResults.json] valid query that has zero results", checkQuery);
+		it("[valid/negativeNumberFilter.json] negative number in WHERE under LT", checkQuery);
+		it("[valid/zeroCharacterFilter.json] zero character in string under IS filter", checkQuery);
 	});
 });

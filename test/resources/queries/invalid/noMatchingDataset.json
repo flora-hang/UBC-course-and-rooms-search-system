@@ -1,0 +1,18 @@
+{
+	"title": "noMatchingDataset",
+	"input": {
+		"WHERE": {
+			"EQ": {
+				"math_avg": 89
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"math_dept"
+			],
+			"ORDER": "math_dept"
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

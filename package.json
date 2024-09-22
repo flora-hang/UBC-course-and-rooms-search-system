@@ -43,11 +43,12 @@
 	"scripts": {
 		"postinstall": "git config core.hooksPath .githooks",
 		"cover": "nyc --reporter text --reporter html yarn run test",
-		"build": "tsc && yarn prettier:check && yarn lint",
+		"build": "tsc && yarn prettier:check && yarn lint:check",
 		"test": "mocha --require ts-node/register --timeout 10000 --extension .spec.ts --recursive test",
 		"lint:check": "eslint src test --ext .ts",
 		"lint:fix": "eslint src test --ext .ts --fix",
 		"prettier:check": "prettier src/**/*.ts test/**/*.ts --check",
 		"prettier:fix": "prettier src/**/*.ts test/**/*.ts --write"
-	}
+	},
+	"packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
