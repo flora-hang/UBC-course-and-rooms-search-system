@@ -1,0 +1,18 @@
+{
+	"title": "noFilterValid",
+	"input": {
+		"WHERE": {},
+		"OPTIONS": {
+			"COLUMNS": [
+				"one aanb_dept"
+			],
+			"ORDER": "one aanb_dept"
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"one aanb_dept": "aanb"
+		}
+	]
+}

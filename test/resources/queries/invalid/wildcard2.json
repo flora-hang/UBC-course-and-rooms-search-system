@@ -1,0 +1,17 @@
+{
+	"title": "QUERY middle wildcard in middle",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"sections_dept": "CP*SC"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept"
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

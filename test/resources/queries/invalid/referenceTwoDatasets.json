@@ -1,0 +1,19 @@
+{
+	"title": "referenceTwoDatasets",
+	"input": {
+		"WHERE": {
+			"EQ": {
+				"sections_avg": 89
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept",
+				"one aanb_avg"
+			],
+			"ORDER": "sections_dept"
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

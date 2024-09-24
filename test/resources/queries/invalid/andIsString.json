@@ -1,0 +1,20 @@
+{
+	"title": "AND type is String",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"": ""
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"courses_dept",
+				"courses_avg"
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

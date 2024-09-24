@@ -1,0 +1,21 @@
+{
+	"title": "NOT in AND",
+	"input": {
+		"WHERE": {
+			"AND": [
+				"NOT": {
+					"GT": {
+						"sections_avg": 97
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_dept"
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

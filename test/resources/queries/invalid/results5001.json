@@ -1,0 +1,28 @@
+{
+	"title": "result === 5001",
+		"input": {
+			"WHERE": {
+				"AND": [
+					{
+						"GT": {
+							"sections_avg": 61.7
+						}
+					},
+					{
+						"LT": {
+							"sections_avg": 69
+						}
+					}
+				]
+			},
+			"OPTIONS": {
+				"COLUMNS": [
+					"sections_avg",
+					"sections_dept",
+					"sections_title"
+				]
+			}
+		},
+	"errorExpected": true,
+	"expected": "ResultTooLargeError"
+}

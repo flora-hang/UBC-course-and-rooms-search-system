@@ -1,0 +1,17 @@
+{
+	"title": "dataset not found",
+	"input": {
+		"WHERE": {
+			"GT": {
+				"section_avg": 97
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"section_dept"
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}
