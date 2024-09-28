@@ -1,5 +1,5 @@
 import { IInsightFacade, InsightDataset, InsightDatasetKind, InsightResult, InsightError } from "./IInsightFacade";
-
+import JSZip from "jszip";
 /**
  * This is the main programmatic entry point for the project.
  * Method documentation is in IInsightFacade
@@ -7,6 +7,8 @@ import { IInsightFacade, InsightDataset, InsightDatasetKind, InsightResult, Insi
  */
 export default class InsightFacade implements IInsightFacade {
 	// some data structure to store datasets???
+	// maybe Dataset[] datasets;?
+
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
 		// TODO: Remove this once you implement the methods!
