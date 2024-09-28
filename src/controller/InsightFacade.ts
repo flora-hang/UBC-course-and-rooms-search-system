@@ -1,4 +1,4 @@
-import { IInsightFacade, InsightDataset, InsightDatasetKind, InsightResult } from "./IInsightFacade";
+import { IInsightFacade, InsightDataset, InsightDatasetKind, InsightResult, InsightError } from "./IInsightFacade";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -6,11 +6,34 @@ import { IInsightFacade, InsightDataset, InsightDatasetKind, InsightResult } fro
  *
  */
 export default class InsightFacade implements IInsightFacade {
+	// some data structure to store datasets???
+
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
 		// TODO: Remove this once you implement the methods!
-		throw new Error(
-			`InsightFacadeImpl::addDataset() is unimplemented! - id=${id}; content=${content?.length}; kind=${kind}`
-		);
+		// throw new Error(
+		// 	`InsightFacadeImpl::addDataset() is unimplemented! - id=${id}; content=${content?.length}; kind=${kind}`
+		// );
+
+		// id validation: (reject with InsightError if invalid)
+		// - one of more of any character, except underscore
+		// - id with only whitespace is invalid
+		// - same id as an already added dataset is invalid !!!
+		if (id.trim().length === 0 || id.includes("_")) {
+			return Promise.reject(new InsightError("Invalid id"));
+		}
+
+		// kind validation:
+		// - only valid kind is sections for c1
+		if (kind !== InsightDatasetKind.Sections) {
+			return Promise.reject(new InsightError("Invalid kind"));
+		}
+
+		// parse & validate content
+
+		// store dataset in disk
+
+		// return a string array containing the ids of all currently added datasets upon a successful add
+		return Promise.resolve([]); //stub
 	}
 
 	public async removeDataset(id: string): Promise<string> {
