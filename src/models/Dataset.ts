@@ -1,4 +1,5 @@
 import Course from "./Course";
+import JSZip from "jszip";
 
 export default class Dataset {
 	private readonly ID: string;
