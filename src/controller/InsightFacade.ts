@@ -1,14 +1,17 @@
+import Dataset from "../models/Dataset";
 import { IInsightFacade, InsightDataset, InsightDatasetKind, InsightResult, InsightError } from "./IInsightFacade";
-import JSZip from "jszip";
+
 /**
  * This is the main programmatic entry point for the project.
  * Method documentation is in IInsightFacade
  *
  */
 export default class InsightFacade implements IInsightFacade {
-	// some data structure to store datasets???
-	// maybe Dataset[] datasets;?
+	private datasets: Map<string, Dataset> = new Map<string, Dataset>();
 
+	constructor() {
+		// load data from disk !!!
+	}
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
 		// TODO: Remove this once you implement the methods!
@@ -19,8 +22,8 @@ export default class InsightFacade implements IInsightFacade {
 		// id validation: (reject with InsightError if invalid)
 		// - one of more of any character, except underscore
 		// - id with only whitespace is invalid
-		// - same id as an already added dataset is invalid !!!
-		if (id.trim().length === 0 || id.includes("_")) {
+		// - same id as an already added dataset is invalid 
+		if (id.trim().length === 0 || id.includes("_") || this.datasets.has(id)) {
 			return Promise.reject(new InsightError("Invalid id"));
 		}
 
@@ -30,9 +33,10 @@ export default class InsightFacade implements IInsightFacade {
 			return Promise.reject(new InsightError("Invalid kind"));
 		}
 
-		// parse & validate content
-
-		// store dataset in disk
+		// parse & validate content (async)
+		
+		// add to data structure 
+		// store dataset in disk !!!
 
 		// return a string array containing the ids of all currently added datasets upon a successful add
 		return Promise.resolve([]); //stub
