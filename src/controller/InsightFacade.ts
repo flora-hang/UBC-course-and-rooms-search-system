@@ -1,6 +1,6 @@
 import Dataset from "../models/Dataset";
 import { IInsightFacade, InsightDataset, InsightDatasetKind, InsightResult, InsightError } from "./IInsightFacade";
-import * as fs from "fs/promises";
+import * as fsPromises from "fs/promises";
 import fs from "fs-extra";
 
 /**
@@ -65,7 +65,7 @@ export default class InsightFacade implements IInsightFacade {
 		// removing dataset
 		const filePath = `../../data/${id}.json`;
 		try {
-			await fs.unlink(filePath);
+			await fsPromises.unlink(filePath);
 			return id;
 		} catch (err) {
 			return Promise.reject(new InsightError(`Error: ${err}`));
