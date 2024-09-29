@@ -83,7 +83,33 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async listDatasets(): Promise<InsightDataset[]> {
-		throw new Error(`InsightFacadeImpl::listDatasets() is unimplemented!;`);
+		const cachedDatasets = await fs.readdir("../../data");
+		const datasetsIdArray: string[] = Array.from(this.datasets.values()).map((tuple) => tuple[1].id);
+
+		const loadedDatasets: Dataset[] = await Promise.all(
+			cachedDatasets.map(async (dataset) => await this.loadDatasetFromDisk(dataset.replace(".json", "")))
+		); // get all of the datasets from the disk in Dataset form/type
+
+		let count = 0; // used for indexing in the loadedDatasets array
+
+		// looping through all datasets stored on disk to store missing datasets in map
+		for (const dataset of cachedDatasets) {
+			const datasetId: string = dataset.replace(".json", "");
+
+			if (!datasetsIdArray.includes(datasetId)) {
+				// if the current this.datasets doesn't include a dataset found within the disk, add to this.datasets
+				const loadedInsightDataset: InsightDataset = {
+					// creating a InsightDataset object to later add to map
+					id: datasetId,
+					kind: InsightDatasetKind.Sections,
+					numRows: loadedDatasets[count].getTotalSections(),
+				};
+				this.datasets.set(datasetId, [loadedDatasets[count], loadedInsightDataset]); // adding tuple of Dataset and InsightDataset to this.datasets map
+			}
+			count++;
+		}
+
+		return Array.from(this.datasets.values()).map((tuple) => tuple[1]); // returning list of InsightDataset
 	}
 
 	// saves newly added dataset to disk
@@ -96,10 +122,11 @@ export default class InsightFacade implements IInsightFacade {
 
 	// loads dataset from disk
 	// assumes that id is valid and corresponds to an existing dataset
-	private async loadDatasetFromDisk(id: string): Promise<void> {
+	private async loadDatasetFromDisk(id: string): Promise<Dataset> {
 		const file = "../../data/" + id + ".json";
-		const dataset = await fs.readJSON(file); // could throw error
-		this.datasets.set(id, dataset);
+		const dataset: Dataset = await fs.readJSON(file); // could throw error
+		// this.datasets.set(id, dataset);
+		return dataset;
 	}
 
 	JSZip = require('jszip');
