@@ -1,6 +1,7 @@
 import Dataset from "../models/Dataset";
 import { IInsightFacade, InsightDataset, InsightDatasetKind, InsightResult, InsightError } from "./IInsightFacade";
 import * as fs from "fs/promises";
+import fs from "fs-extra";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -44,6 +45,13 @@ export default class InsightFacade implements IInsightFacade {
 		// add to data structure
 		// store dataset in disk !!!
 
+		// try {
+		// 	await this.saveDatasetToDisk(id);
+		// } catch (_err) {
+		// 	return Promise.reject(new InsightError("Error saving dataset to disk"));
+		// }
+		await this.saveDatasetToDisk(id);
+
 		// return a string array containing the ids of all currently added datasets upon a successful add
 		return Promise.resolve([]); //stub
 	}
@@ -71,5 +79,21 @@ export default class InsightFacade implements IInsightFacade {
 
 	public async listDatasets(): Promise<InsightDataset[]> {
 		throw new Error(`InsightFacadeImpl::listDatasets() is unimplemented!;`);
+	}
+
+	// saves newly added dataset to disk
+	// assumes that the dataset corresponding to the id is already in the datasets map
+	private async saveDatasetToDisk(id: string): Promise<void> {
+		const newDataset = this.datasets.get(id);
+		const file = "../../data/" + id + ".json";
+		await fs.writeJSON(file, newDataset); // could throw error (catches in addDataset)
+	}
+
+	// loads dataset from disk
+	// assumes that id is valid and corresponds to an existing dataset
+	private async loadDatasetFromDisk(id: string): Promise<void> {
+		const file = "../../data/" + id + ".json";
+		const dataset = await fs.readJSON(file); // could throw error
+		this.datasets.set(id, dataset);
 	}
 }
