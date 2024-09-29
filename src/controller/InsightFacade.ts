@@ -12,7 +12,7 @@ export default class InsightFacade implements IInsightFacade {
 	constructor() {
 		// load data from disk !!!
 	}
-
+	
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
 		// TODO: Remove this once you implement the methods!
 		// throw new Error(
@@ -22,7 +22,7 @@ export default class InsightFacade implements IInsightFacade {
 		// id validation: (reject with InsightError if invalid)
 		// - one of more of any character, except underscore
 		// - id with only whitespace is invalid
-		// - same id as an already added dataset is invalid 
+		// - same id as an already added dataset is invalid
 		if (id.trim().length === 0 || id.includes("_") || this.datasets.has(id)) {
 			return Promise.reject(new InsightError("Invalid id"));
 		}
@@ -34,8 +34,13 @@ export default class InsightFacade implements IInsightFacade {
 		}
 
 		// parse & validate content (async)
-		
-		// add to data structure 
+		const base64Pattern = /^(?:[A-Z0-9+/]{4})*([A-Z0-9+/]{2}==|[A-Z0-9+/]{3}=)?$/i; // Regular expression to check if the string is valid Base64
+		if (!base64Pattern.test(content)) {
+			// tests if content is in base64 format, if not throw InsightError
+			return Promise.reject(new InsightError("Content not in base64 format"));
+		} 
+
+		// add to data structure
 		// store dataset in disk !!!
 
 		// return a string array containing the ids of all currently added datasets upon a successful add

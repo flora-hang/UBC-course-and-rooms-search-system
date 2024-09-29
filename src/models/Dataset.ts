@@ -1,6 +1,5 @@
 import Course from "./Course";
 
-
 export default class Dataset {
 	private readonly ID: string;
 	private totalSections: number;
