@@ -12,7 +12,7 @@ export default class InsightFacade implements IInsightFacade {
 	constructor() {
 		// load data from disk !!!
 	}
-	
+
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
 		// TODO: Remove this once you implement the methods!
 		// throw new Error(
@@ -38,7 +38,7 @@ export default class InsightFacade implements IInsightFacade {
 		if (!base64Pattern.test(content)) {
 			// tests if content is in base64 format, if not throw InsightError
 			return Promise.reject(new InsightError("Content not in base64 format"));
-		} 
+		}
 
 		// add to data structure
 		// store dataset in disk !!!

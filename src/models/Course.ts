@@ -4,7 +4,7 @@ export default class Course {
 	private readonly Subject: string; // department of the course, e.g. CPSC
 	private readonly Sections: Section[];
 
-	constructor(subj: string, numS: number, sections: Section[]) {
+	constructor(subj: string, sections: Section[]) {
 		this.Subject = subj;
 		this.Sections = sections;
 	}

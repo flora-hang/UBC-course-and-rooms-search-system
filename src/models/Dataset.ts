@@ -4,7 +4,7 @@ export default class Dataset {
 	private readonly ID: string;
 	private Courses: Course[];
 
-	constructor(id: string, total: number, courses: Course[]) {
+	constructor(id: string, courses: Course[]) {
 		this.ID = id;
 		this.Courses = courses;
 	}
