@@ -44,7 +44,9 @@ export default class InsightFacade implements IInsightFacade {
 			// tests if content is in base64 format, if not throw InsightError
 			return Promise.reject(new InsightError("Content not in base64 format"));
 		}
-
+		let dataset: Dataset = this.processZip(content, id);
+		let insight: InsightDataset = new InsightDataset(id, dataset.getTotalSections, kind);
+		this.datasets.set(id, [dataset, insight]);
 		// add to data structure
 		// store dataset in disk !!!
 

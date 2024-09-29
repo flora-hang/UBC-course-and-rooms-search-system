@@ -16,7 +16,11 @@ export default class Dataset {
 	}
 
 	public getTotalSections(): number {
-		return this.Courses.length;
+		let total: number = 0;
+		this.Courses.forEach ((course) =>
+			total += course.getNumSections())
+	
+		return total;
 	}
 
 	public getCourses(): Course[] {
