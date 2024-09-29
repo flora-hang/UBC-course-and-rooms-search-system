@@ -2,13 +2,15 @@ import Section from "./Section";
 
 export default class Course {
 	private readonly Subject: string; // department of the course, e.g. CPSC
-	private readonly Sections: Section[];
+	private Sections: Section[];
 
-	constructor(subj: string, sections: Section[]) {
+	constructor(subj: string) {
 		this.Subject = subj;
-		this.Sections = sections;
+		this.Sections = [];
 	}
-
+	public addSection(section: Section): void {
+		this.Sections.push(section);
+	}
 	public getSubject(): string {
 		return this.Subject;
 	}
