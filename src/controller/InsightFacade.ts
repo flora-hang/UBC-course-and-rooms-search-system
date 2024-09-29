@@ -136,7 +136,7 @@ export default class InsightFacade implements IInsightFacade {
 			    const jsonData: SectionData[] = JSON.parse(fileData).result; // Assuming 'result' is an array of sections
 
 				// Create an array of section promises to handle async validation
-				const sectionPromises = jsonData.map(async (section: SectionData) => {
+				const sectionPromises = jsonData.map(async (sectionn: SectionData) => {
 					const {
 						id: uuid,
 						Course: id,
@@ -148,17 +148,17 @@ export default class InsightFacade implements IInsightFacade {
 						Pass: pass,
 						Fail: fail,
 						Audit: audit
-					} = section;
+					} = sectionn;
 
 					try {
 						// Validate the section data asynchronously
-						await validateSectionData(section);
+						await this.validateSectionData(sectionn);
 
 						// Create the section object if validation passes
 						const section = new Section(uuid, id, title, instructor, dept, year, avg, pass, fail, audit);
 						course.addSection(section);
 					} catch (err) {
-						console.warn(`Skipping invalid section: ${JSON.stringify(section)} - ${(err as Error).message}`);
+						console.warn(`Skipping invalid section: ${JSON.stringify(sectionn)} - ${(err as Error).message}`);
 					}
 				});
 
