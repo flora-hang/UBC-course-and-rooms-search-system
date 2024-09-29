@@ -100,75 +100,84 @@ export default class InsightFacade implements IInsightFacade {
 		this.datasets.set(id, dataset);
 	}
 
-JSZip = require('jszip');
+	JSZip = require('jszip');
+	// Function to validate section data
+	private async validateSectionData(sectionData: SectionData) {
+		return new Promise((resolve, reject) => {
+			const requiredFields = ['id', 'Title', 'Professor', 'Subject', 'Year', 'Avg', 'Pass', 'Fail', 'Audit'];
 
-// Function to validate section data
-private async validateSectionData(sectionData) {
-    const requiredFields = ['id', 'Title', 'Professor', 'Subject', 'Year', 'Avg', 'Pass', 'Fail', 'Audit'];
+			for (let field of requiredFields) {
+				if (!(field in sectionData)) {
+					console.warn(`Missing required field: ${field} in section: ${JSON.stringify(sectionData)}`);
+					reject(new Error(`Validation failed: Missing field - ${field}`)); // Reject the promise if validation fails
+					return;
+				}
+			}
 
-    for (let field of requiredFields) {
-        if (!(field in sectionData)) {
-            console.warn(`Missing required field: ${field} in section: ${JSON.stringify(sectionData)}`);
-            return false;
-        }
-    }
+			resolve(true); // Resolve the promise if validation succeeds
+		});
+	}
 
-    return true;
+
+
+	// Function to process the zip file using Promises
+	private async processZip(zipFilePath: string, name: string): Promise<Dataset> {
+		const dataset = new Dataset(name);
+
+		try {
+			const data = await fs.readFile(zipFilePath);  // Read the zip file as binary data
+			const zip = await JSZip.loadAsync(data);      // Load zip asynchronously
+
+			const filePromises = Object.keys(zip.files).map(async (filename: string) => {
+				const courseName = filename.split('.')[0]; // Assuming filename as course name
+				const course = new Course(courseName);
+
+				const fileData = await zip.files[filename].async('string'); // Read file content as string
+			    const jsonData: SectionData[] = JSON.parse(fileData).result; // Assuming 'result' is an array of sections
+
+				// Create an array of section promises to handle async validation
+				const sectionPromises = jsonData.map(async (section: SectionData) => {
+					const {
+						id: uuid,
+						Course: id,
+						Title: title,
+						Professor: instructor,
+						Subject: dept,
+						Year: year,
+						Avg: avg,
+						Pass: pass,
+						Fail: fail,
+						Audit: audit
+					} = section;
+
+					try {
+						// Validate the section data asynchronously
+						await validateSectionData(section);
+
+						// Create the section object if validation passes
+						const section = new Section(uuid, id, title, instructor, dept, year, avg, pass, fail, audit);
+						course.addSection(section);
+					} catch (err) {
+						console.warn(`Skipping invalid section: ${JSON.stringify(section)} - ${(err as Error).message}`);
+					}
+				});
+
+				// Wait for all section validations to complete
+				await Promise.all(sectionPromises);
+				dataset.addCourse(course);
+			});
+
+			await Promise.all(filePromises); // Wait for all files to be processed
+		} catch (err) {
+			throw new Error(`Error processing zip file: ${(err as Error).message}`);
+		}
+
+		return dataset;
+	}
 }
 
-// Function to process the zip file using Promises
-private async processZip(zipFilePath: string, DataID: string) {
-    return new Promise((resolve, reject) => {
-		
-        const dataset = new Dataset();
-
-        // Read the zip file as binary data
-        fs.readFile(zipFilePath)
-            .then(data => this.JSZip.loadAsync(data))  // Load zip asynchronously
-            .then(zip => {
-                const filePromises = Object.keys(zip.files).map(filename => {
-                    const courseName = filename.split('.')[0]; // Assuming filename as course name
-                    const course = new Course(courseName);
-
-                    return zip.files[filename].async('string')  // Read file content as string
-                        .then(fileData => {
-                            const jsonData = JSON.parse(fileData).result;
-
-                            // Process each section in the file
-                            jsonData.forEach(sectionData => {
-                                if (validateSectionData(sectionData)) {
-                                    const section = new Section(
-										sectionData.uuid,
-                                        sectionData.id,
-                                        sectionData.Title,
-                                        sectionData.Professor,
-                                        sectionData.Subject,
-                                        sectionData.Year,
-                                        sectionData.Avg,
-                                        sectionData.Pass,
-                                        sectionData.Fail,
-                                        sectionData.Audit
-                                    );
-
-                                    course.addSection(section);
-                                } else {
-                                    console.warn(`Skipping invalid section: ${JSON.stringify(sectionData)}`);
-                                }
-                            });
-
-                            dataset.addCourse(course);
-                        });
-                });
-
-                return Promise.all(filePromises);  // Wait for all files to be processed
-            })
-            .then(() => resolve(dataset))  // Resolve the dataset once all files are processed
-            .catch(err => reject(new InsightError("error when processing dataset")));    // Handle any errors
-    });
-}
 
 
 
-}
 
 

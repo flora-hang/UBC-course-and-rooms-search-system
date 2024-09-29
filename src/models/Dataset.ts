@@ -4,9 +4,9 @@ export default class Dataset {
 	private readonly ID: string;
 	private Courses: Course[];
 
-	constructor(id: string, courses: Course[]) {
+	constructor(id: string) {
 		this.ID = id;
-		this.Courses = courses;
+		this.Courses = [];
 	}
 	public addCourse(course: Course): void {
 		this.Courses.push(course);
