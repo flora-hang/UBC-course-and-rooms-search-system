@@ -2,12 +2,10 @@ import Course from "./Course";
 
 export default class Dataset {
 	private readonly ID: string;
-	private totalSections: number;
 	private Courses: Course[];
 
 	constructor(id: string, total: number, courses: Course[]) {
 		this.ID = id;
-		this.totalSections = 0;
 		this.Courses = courses;
 	}
 
@@ -16,7 +14,7 @@ export default class Dataset {
 	}
 
 	public getTotalSections(): number {
-		return this.totalSections;
+		return this.Courses.length;
 	}
 
 	public getCourses(): Course[] {
