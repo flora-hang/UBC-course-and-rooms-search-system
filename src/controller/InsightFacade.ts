@@ -1,5 +1,6 @@
 import Dataset from "../models/Dataset";
 import { IInsightFacade, InsightDataset, InsightDatasetKind, InsightResult, InsightError } from "./IInsightFacade";
+import * as fs from "fs/promises";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -7,7 +8,7 @@ import { IInsightFacade, InsightDataset, InsightDatasetKind, InsightResult, Insi
  *
  */
 export default class InsightFacade implements IInsightFacade {
-	private datasets: Map<string, Dataset> = new Map<string, Dataset>();
+	private datasets: Map<string, [Dataset, InsightDataset]> = new Map<string, [Dataset, InsightDataset]>();
 
 	constructor() {
 		// load data from disk !!!
@@ -48,8 +49,19 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async removeDataset(id: string): Promise<string> {
-		// TODO: Remove this once you implement the methods!
-		throw new Error(`InsightFacadeImpl::removeDataset() is unimplemented! - id=${id};`);
+		// id checking
+		if (id.trim().length === 0 || id.includes("_") || this.datasets.has(id)) {
+			return Promise.reject(new InsightError("Invalid id"));
+		}
+
+		// removing dataset
+		const filePath = `../../data/${id}.json`;
+		try {
+			await fs.unlink(filePath);
+			return id;
+		} catch (err) {
+			return Promise.reject(new InsightError(`Error: ${err}`));
+		}
 	}
 
 	public async performQuery(query: unknown): Promise<InsightResult[]> {
@@ -58,7 +70,6 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async listDatasets(): Promise<InsightDataset[]> {
-		// TODO: Remove this once you implement the methods!
-		throw new Error(`InsightFacadeImpl::listDatasets is unimplemented!`);
+		throw new Error(`InsightFacadeImpl::listDatasets() is unimplemented!;`);
 	}
 }
