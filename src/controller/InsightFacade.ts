@@ -1,6 +1,9 @@
 import Dataset from "../models/Dataset";
+import Section from "../models/Section";
+import Course from "../models/Course";
 import { IInsightFacade, InsightDataset, InsightDatasetKind, InsightResult, InsightError } from "./IInsightFacade";
 import fs from "fs-extra";
+import JSZip from "jszip";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -85,4 +88,76 @@ export default class InsightFacade implements IInsightFacade {
 		const dataset = await fs.readJSON(file); // could throw error
 		this.datasets.set(id, dataset);
 	}
+
+JSZip = require('jszip');
+
+// Function to validate section data
+private async validateSectionData(sectionData) {
+    const requiredFields = ['id', 'Title', 'Professor', 'Subject', 'Year', 'Avg', 'Pass', 'Fail', 'Audit'];
+
+    for (let field of requiredFields) {
+        if (!(field in sectionData)) {
+            console.warn(`Missing required field: ${field} in section: ${JSON.stringify(sectionData)}`);
+            return false;
+        }
+    }
+
+    return true;
 }
+
+// Function to process the zip file using Promises
+private async processZip(zipFilePath: string, DataID: string) {
+    return new Promise((resolve, reject) => {
+		
+        const dataset = new Dataset();
+
+        // Read the zip file as binary data
+        fs.readFile(zipFilePath)
+            .then(data => this.JSZip.loadAsync(data))  // Load zip asynchronously
+            .then(zip => {
+                const filePromises = Object.keys(zip.files).map(filename => {
+                    const courseName = filename.split('.')[0]; // Assuming filename as course name
+                    const course = new Course(courseName);
+
+                    return zip.files[filename].async('string')  // Read file content as string
+                        .then(fileData => {
+                            const jsonData = JSON.parse(fileData).result;
+
+                            // Process each section in the file
+                            jsonData.forEach(sectionData => {
+                                if (validateSectionData(sectionData)) {
+                                    const section = new Section(
+										sectionData.uuid,
+                                        sectionData.id,
+                                        sectionData.Title,
+                                        sectionData.Professor,
+                                        sectionData.Subject,
+                                        sectionData.Year,
+                                        sectionData.Avg,
+                                        sectionData.Pass,
+                                        sectionData.Fail,
+                                        sectionData.Audit
+                                    );
+
+                                    course.addSection(section);
+                                } else {
+                                    console.warn(`Skipping invalid section: ${JSON.stringify(sectionData)}`);
+                                }
+                            });
+
+                            dataset.addCourse(course);
+                        });
+                });
+
+                return Promise.all(filePromises);  // Wait for all files to be processed
+            })
+            .then(() => resolve(dataset))  // Resolve the dataset once all files are processed
+            .catch(err => reject(new InsightError("error when processing dataset")));    // Handle any errors
+    });
+}
+
+
+
+}
+
+
