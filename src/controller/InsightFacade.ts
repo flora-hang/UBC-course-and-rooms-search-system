@@ -43,8 +43,14 @@ export default class InsightFacade implements IInsightFacade {
 		// add to data structure
 		// store dataset in disk !!!
 
+		await this.saveDatasetToDisk(id);
+
 		// return a string array containing the ids of all currently added datasets upon a successful add
 		return Promise.resolve([]); //stub
+	}
+
+	private async saveDatasetToDisk(id: string): Promise<void> {
+		// save newly added dataset to disk
 	}
 
 	public async removeDataset(id: string): Promise<string> {
