@@ -12,18 +12,14 @@ import JSZip from "jszip";
  *
  */
 export default class InsightFacade implements IInsightFacade {
+	private dataDir = "./data";
 	private datasets: Map<string, [Dataset, InsightDataset]> = new Map<string, [Dataset, InsightDataset]>();
 
 	constructor() {
-		// load data from disk !!!
+		// might not need constructor
 	}
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
-		// TODO: Remove this once you implement the methods!
-		// throw new Error(
-		// 	`InsightFacadeImpl::addDataset() is unimplemented! - id=${id}; content=${content?.length}; kind=${kind}`
-		// );
-
 		// id validation: (reject with InsightError if invalid)
 		// - one of more of any character, except underscore
 		// - id with only whitespace is invalid
@@ -44,23 +40,19 @@ export default class InsightFacade implements IInsightFacade {
 			// tests if content is in base64 format, if not throw InsightError
 			return Promise.reject(new InsightError("Content not in base64 format"));
 		}
-		let dataset: Dataset = new Dataset(id);
-		this.processZip(content, id, dataset);
-		let total: number = dataset.getTotalSections();
-		const insight: InsightDataset = {id: id, numRows: total, kind: kind};
-		this.datasets.set(id, [dataset, insight]);
-		// add to data structure
-		// store dataset in disk !!!
+		// let dataset: Dataset = new Dataset(id);
+		// this.processZip(content, id, dataset);
+		const dataset: Dataset = await this.processZip(content, id, new Dataset(id));
 
-		// try {
-		// 	await this.saveDatasetToDisk(id);
-		// } catch (_err) {
-		// 	return Promise.reject(new InsightError("Error saving dataset to disk"));
-		// }
-		await this.saveDatasetToDisk(id);
+		const total: number = dataset.getTotalSections();
+		const insight: InsightDataset = { id: id, numRows: total, kind: kind };
+		this.datasets.set(id, [dataset, insight]);
+
+		await this.saveDatasetToDisk(id); // need try catch?
 
 		// return a string array containing the ids of all currently added datasets upon a successful add
-		return Promise.resolve([]); //stub
+		return Array.from(this.datasets.keys());
+		// map might not have all the keys!!!
 	}
 
 	public async removeDataset(id: string): Promise<string> {
@@ -70,7 +62,7 @@ export default class InsightFacade implements IInsightFacade {
 		}
 
 		// removing dataset
-		const filePath = `../../data/${id}.json`;
+		const filePath = this.dataDir + `/${id}.json`;
 		try {
 			await fsPromises.unlink(filePath);
 			return id;
@@ -85,7 +77,7 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async listDatasets(): Promise<InsightDataset[]> {
-		const cachedDatasets = await fs.readdir("../../data");
+		const cachedDatasets = await fs.readdir(this.dataDir);
 		const datasetsIdArray: string[] = Array.from(this.datasets.values()).map((tuple) => tuple[1].id);
 
 		const loadedDatasets: Dataset[] = await Promise.all(
@@ -118,24 +110,23 @@ export default class InsightFacade implements IInsightFacade {
 	// assumes that the dataset corresponding to the id is already in the datasets map
 	private async saveDatasetToDisk(id: string): Promise<void> {
 		const newDataset = this.datasets.get(id);
-		const file = "../../data/" + id + ".json";
-		await fs.writeJSON(file, newDataset); // could throw error (catches in addDataset)
+		const file = this.dataDir + "/" + id + ".json";
+		await fs.writeJSON(file, newDataset); // could throw error (catch in addDataset?)
 	}
 
 	// loads dataset from disk
 	// assumes that id is valid and corresponds to an existing dataset
 	private async loadDatasetFromDisk(id: string): Promise<Dataset> {
-		const file = "../../data/" + id + ".json";
+		const file = this.dataDir + "/" + id + ".json";
 		const dataset: Dataset = await fs.readJSON(file); // could throw error
-		// this.datasets.set(id, dataset);
 		return dataset;
 	}
 
-	JSZip = require('jszip');
+	// JSZip = require("jszip");
 	// Function to validate section data
-	private async validateSectionData(sectionData: SectionData) {
+	private async validateSectionData(sectionData: SectionData): Promise<boolean> {
 		return new Promise((resolve, reject) => {
-			const requiredFields = ['id', 'Title', 'Professor', 'Subject', 'Year', 'Avg', 'Pass', 'Fail', 'Audit'];
+			const requiredFields = ["id", "Title", "Professor", "Subject", "Year", "Avg", "Pass", "Fail", "Audit"];
 
 			for (let field of requiredFields) {
 				if (!(field in sectionData)) {
@@ -149,22 +140,20 @@ export default class InsightFacade implements IInsightFacade {
 		});
 	}
 
-
-
 	// Function to process the zip file using Promises
 	private async processZip(zipFilePath: string, name: string, dataset: Dataset): Promise<Dataset> {
 		// const dataset = new Dataset(name);
 
 		try {
-			const data = await fs.readFile(zipFilePath);  // Read the zip file as binary data
-			const zip = await JSZip.loadAsync(data);      // Load zip asynchronously
+			const data = await fs.readFile(zipFilePath); // Read the zip file as binary data
+			const zip = await JSZip.loadAsync(data); // Load zip asynchronously
 
 			const filePromises = Object.keys(zip.files).map(async (filename: string) => {
-				const courseName = filename.split('.')[0]; // Assuming filename as course name
+				const courseName = filename.split(".")[0]; // Assuming filename as course name
 				const course = new Course(courseName);
 
-				const fileData = await zip.files[filename].async('string'); // Read file content as string
-			    const jsonData: SectionData[] = JSON.parse(fileData).result; // Assuming 'result' is an array of sections
+				const fileData = await zip.files[filename].async("string"); // Read file content as string
+				const jsonData: SectionData[] = JSON.parse(fileData).result; // Assuming 'result' is an array of sections
 
 				// Create an array of section promises to handle async validation
 				const sectionPromises = jsonData.map(async (sectionn: SectionData) => {
@@ -178,7 +167,7 @@ export default class InsightFacade implements IInsightFacade {
 						Avg: avg,
 						Pass: pass,
 						Fail: fail,
-						Audit: audit
+						Audit: audit,
 					} = sectionn;
 
 					try {
@@ -206,9 +195,3 @@ export default class InsightFacade implements IInsightFacade {
 		return dataset;
 	}
 }
-
-
-
-
-
-
