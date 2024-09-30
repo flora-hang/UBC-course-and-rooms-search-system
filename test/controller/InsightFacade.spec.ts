@@ -108,6 +108,17 @@ describe("InsightFacade", function () {
 			return expect(result).to.eventually.be.rejectedWith(InsightError, "Content not in base64 format");
 		});
 
+		it("should fulfill with everything valid", async function () {
+			try {
+				const result = await facade.addDataset("one", oneValidSection, InsightDatasetKind.Sections);
+				expect(result.length).to.equal(1);
+				expect(result[0]).to.equal("one");
+			} catch (_err) {
+				// console.error("Error: ", err);
+				expect.fail("Should not have thrown an error.");
+			}
+		});
+
 		it("reject content with dataset without any valid sections", function () {
 			const result = facade.addDataset("invalidDataset", "invalidDataset.zip", InsightDatasetKind.Sections);
 			return expect(result).to.eventually.be.rejectedWith(InsightError, "No valid sections");

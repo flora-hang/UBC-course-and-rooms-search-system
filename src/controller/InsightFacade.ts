@@ -163,6 +163,7 @@ export default class InsightFacade implements IInsightFacade {
 				const section = new Section(uuid, id, title, instructor, dept, year, avg, pass, fail, audit);
 				course.addSection(section);
 				flag = true;
+				// console.log("section added: ", id);
 			}
 		});
 
@@ -175,26 +176,27 @@ export default class InsightFacade implements IInsightFacade {
 		let validSection = false; // seeing if at least one section is valid
 		const dataset = new Dataset(id);
 
+
 		try {
-			// var zip = fs.readFile(content, function(err, data) {
-			// if (err) throw err;
-			// return JSZip.loadAsync(data);
-			// });
-			// const zip = await JSZip.loadAsync(content); // Load zip asynchronously
-			const data = await fs.readFile(content);
-			const zip = await JSZip.loadAsync(data);
+			const zip = await JSZip.loadAsync(content, { base64: true }); // Load zip asynchronously
+			const filteredFiles = this.filterFiles(zip);
+
 			// iterating through courses in dataset
-			const filePromises = Object.keys(zip.files).map(async (filename: string) => {
-				const courseName = filename.split(".")[0]; // Assuming filename as course name
+			const filePromises = filteredFiles.map(async (filename: string) => {
+				const courseName = filename.split("/")[1];
 				const course = new Course(courseName);
 
-				const fileData = await zip.files[filename].async("string"); // Read file content as string
-				const jsonData: SectionData[] = JSON.parse(fileData).result; // Assuming 'result' is an array of sections
-
-				// Create an array of section promises to handle async validation
-				validSection = await this.handleSections(course, jsonData);
+				const fileData = await zip.files[filename].async("string"); // Read file content as
+				let jsonData: SectionData[] = [];
+				try {
+					jsonData = JSON.parse(fileData).result; // Assuming 'result' is an array of sections
+				} catch (_err) {
+					return; // skip this file
+				}
 
 				// Wait for all section validations to complete
+				validSection = await this.handleSections(course, jsonData);
+
 				dataset.addCourse(course);
 			});
 			await Promise.all(filePromises); // Wait for all files to be processed
@@ -206,5 +208,18 @@ export default class InsightFacade implements IInsightFacade {
 			return Promise.reject(new InsightError("No valid sections"));
 		}
 		return dataset;
+	}
+
+	private filterFiles(zip: JSZip): string[] {
+		const coursesFiles = Object.keys(zip.files).filter((filename) => filename.startsWith("courses/"));
+		const coursesFiltered: string[] = [];
+
+		for (const file of coursesFiles) {
+			if (file.split("/")[1].length !== 0 && !file.includes("_")) {
+				coursesFiltered.push(file);
+			}
+		}
+		// console.log("courses filtered: ", coursesFiltered);
+		return coursesFiltered;
 	}
 }
