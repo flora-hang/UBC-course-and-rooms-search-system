@@ -42,7 +42,8 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		// let dataset: Dataset = new Dataset(id);
 		// this.processZip(content, id, dataset);
-		const dataset: Dataset = await this.processZip(content, id, new Dataset(id));
+		// const dataset: Dataset = await this.processZip(content, id, new Dataset(id));
+		const dataset: Dataset = await this.processZip(id, content);
 
 		const total: number = dataset.getTotalSections();
 		const insight: InsightDataset = { id: id, numRows: total, kind: kind };
@@ -131,9 +132,9 @@ export default class InsightFacade implements IInsightFacade {
 
 			for (let field of requiredFields) {
 				if (!(field in sectionData)) {
-					console.warn(`Missing required field: ${field} in section: ${JSON.stringify(sectionData)}`);
-					reject(new Error(`Validation failed: Missing field - ${field}`)); // Reject the promise if validation fails
-					return;
+					// console.warn(`Missing required field: ${field} in section: ${JSON.stringify(sectionData)}`);
+					// reject(new Error(`Validation failed: Missing field - ${field}`)); // Reject the promise if validation fails
+					reject(false);
 				}
 			}
 
@@ -142,12 +143,12 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	// Function to process the zip file using Promises
-	private async processZip(zipFilePath: string, name: string, dataset: Dataset): Promise<Dataset> {
-		// const dataset = new Dataset(name);
+	private async processZip(id: string, content: string): Promise<Dataset> {
+		let dataset = new Dataset(id);
 
 		try {
-			const data = await fs.readFile(zipFilePath); // Read the zip file as binary data
-			const zip = await JSZip.loadAsync(data); // Load zip asynchronously
+			// const data = await fs.readFile(zipFilePath); // Read the zip file as binary data
+			const zip = await JSZip.loadAsync(content); // Load zip asynchronously
 
 			const filePromises = Object.keys(zip.files).map(async (filename: string) => {
 				const courseName = filename.split(".")[0]; // Assuming filename as course name
