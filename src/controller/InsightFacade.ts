@@ -80,9 +80,10 @@ export default class InsightFacade implements IInsightFacade {
 		const cachedDatasets = await fs.readdir(this.dataDir);
 		const datasetsIdArray: string[] = Array.from(this.datasets.values()).map((tuple) => tuple[1].id);
 
+		// get all of the datasets from the disk in Dataset form/type
 		const loadedDatasets: Dataset[] = await Promise.all(
 			cachedDatasets.map(async (dataset) => await this.loadDatasetFromDisk(dataset.replace(".json", "")))
-		); // get all of the datasets from the disk in Dataset form/type
+		);
 
 		let count = 0; // used for indexing in the loadedDatasets array
 
@@ -90,10 +91,10 @@ export default class InsightFacade implements IInsightFacade {
 		for (const dataset of cachedDatasets) {
 			const datasetId: string = dataset.replace(".json", "");
 
+			// if the current this.datasets doesn't include a dataset found within the disk, add to this.datasets
 			if (!datasetsIdArray.includes(datasetId)) {
-				// if the current this.datasets doesn't include a dataset found within the disk, add to this.datasets
+				// creating a InsightDataset object to later add to map
 				const loadedInsightDataset: InsightDataset = {
-					// creating a InsightDataset object to later add to map
 					id: datasetId,
 					kind: InsightDatasetKind.Sections,
 					numRows: loadedDatasets[count].getTotalSections(),
