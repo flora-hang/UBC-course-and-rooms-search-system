@@ -83,70 +83,55 @@ describe("InsightFacade", function () {
 			await clearDisk();
 		});
 
-		// adding a valid dataset
-		// it("should add valid dataset", async function () {
-		// 	try {
-		// 		const result = await facade.addDataset(
-		// 			"validDataset",
-		// 			validDataset,
-		// 			InsightDatasetKind.Sections
-		// 		);
-		// 		const expected: string[] = ["validDataset"];
-		// 		return expect(result).to.deep.equal(expected);
-		// 	} catch (err) {
-		// 		expect.fail(err, "Should not have rejected");
-		// 	}
-		// });
-
 		it("reject empty string dataset id", function () {
 			const result = facade.addDataset("", sections, InsightDatasetKind.Sections);
 
-			return expect(result).to.eventually.be.rejectedWith(InsightError);
+			return expect(result).to.eventually.be.rejectedWith(InsightError, "Invalid id");
 		});
 
 		it("reject only whitespace dataset id", function () {
 			const result = facade.addDataset(" ", validDataset, InsightDatasetKind.Sections);
 
-			return expect(result).to.eventually.be.rejectedWith(InsightError);
+			return expect(result).to.eventually.be.rejectedWith(InsightError, "Invalid id");
 		});
 
 		it("reject dataset id containing an underscore", function () {
 			const result = facade.addDataset("a_b", validDataset, InsightDatasetKind.Sections);
 
-			return expect(result).to.eventually.be.rejectedWith(InsightError);
+			return expect(result).to.eventually.be.rejectedWith(InsightError), "Invalid id";
 		});
 
 		it("reject content not in the format of a base64 string", function () {
 			const invalidContent = "invalid content";
 			const result = facade.addDataset("invalidContent", invalidContent, InsightDatasetKind.Sections);
 
-			return expect(result).to.eventually.be.rejectedWith(InsightError);
+			return expect(result).to.eventually.be.rejectedWith(InsightError, "Content not in base64 format");
 		});
 
 		it("reject content with dataset without any valid sections", function () {
 			const result = facade.addDataset("invalidDataset", invalidDataset, InsightDatasetKind.Sections);
-			return expect(result).to.eventually.be.rejectedWith(InsightError);
+			return expect(result).to.eventually.be.rejectedWith(InsightError, "No valid sections");
 		});
 
 		it("reject content with course not in JSON format", function () {
 			const result = facade.addDataset("nonJSONCourseDataset", nonJSONCourseDataset, InsightDatasetKind.Sections);
-			return expect(result).to.eventually.be.rejectedWith(InsightError);
+			return expect(result).to.eventually.be.rejectedWith(InsightError, "No valid sections");
 		});
 
 		it('reject content with course not correctly located in a "courses" folder', function () {
 			const result = facade.addDataset("badCoursesFolderDataset", badCoursesFolderDataset, InsightDatasetKind.Sections);
-			return expect(result).to.eventually.be.rejectedWith(InsightError);
+			return expect(result).to.eventually.be.rejectedWith(InsightError, "No valid sections");
 		});
 
 		it("reject content with section not containing all fields used by query", function () {
 			const result = facade.addDataset("invalidSectionDataset", invalidSectionDataset, InsightDatasetKind.Sections);
-			return expect(result).to.eventually.be.rejectedWith(InsightError);
+			return expect(result).to.eventually.be.rejectedWith(InsightError, "No valid sections");
 		});
 
 		// !!! will need to delete later in c2 and afterward
 		it('reject kind parameter if is "rooms"', function () {
 			const result = facade.addDataset("validDataset", validDataset, InsightDatasetKind.Rooms);
-			return expect(result).to.eventually.be.rejectedWith(InsightError);
+			return expect(result).to.eventually.be.rejectedWith(InsightError, "Invalid kind");
 		});
 	});
 

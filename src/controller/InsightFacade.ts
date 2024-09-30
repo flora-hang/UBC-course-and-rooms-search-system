@@ -113,6 +113,7 @@ export default class InsightFacade implements IInsightFacade {
 	private async saveDatasetToDisk(id: string): Promise<void> {
 		const newDataset = this.datasets.get(id);
 		const file = this.dataDir + "/" + id + ".json";
+		await fs.ensureDir(this.dataDir); // could throw error
 		await fs.writeJSON(file, newDataset); // could throw error (catch in addDataset?)
 	}
 
