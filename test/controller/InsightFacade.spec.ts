@@ -29,7 +29,7 @@ describe("InsightFacade", function () {
 	let sections: string;
 	let fakeSections: string;
 	let validDataset: string;
-	let invalidDataset: string;
+	// let invalidDataset: string;
 	let nonJSONCourseDataset: string;
 	// let invalidCourseDataset: string;
 	let badCoursesFolderDataset: string;
@@ -41,7 +41,7 @@ describe("InsightFacade", function () {
 		sections = await getContentFromArchives("pair.zip");
 		fakeSections = await getContentFromArchives("fakepair.zip"); // has two extra sections w/ avg === 65
 		validDataset = await getContentFromArchives("validDataset.zip");
-		invalidDataset = await getContentFromArchives("invalidDataset.zip");
+		// invalidDataset = await getContentFromArchives("invalidDataset.zip");
 		nonJSONCourseDataset = await getContentFromArchives("nonJSONCourseDataset.zip");
 		// invalidCourseDataset = await getContentFromArchives(
 		// 	"invalidCourseDataset.zip"
@@ -109,7 +109,7 @@ describe("InsightFacade", function () {
 		});
 
 		it("reject content with dataset without any valid sections", function () {
-			const result = facade.addDataset("invalidDataset", invalidDataset, InsightDatasetKind.Sections);
+			const result = facade.addDataset("invalidDataset", "invalidDataset.zip", InsightDatasetKind.Sections);
 			return expect(result).to.eventually.be.rejectedWith(InsightError, "No valid sections");
 		});
 

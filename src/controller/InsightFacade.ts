@@ -6,6 +6,7 @@ import { IInsightFacade, InsightDataset, InsightDatasetKind, InsightResult, Insi
 import * as fsPromises from "fs/promises";
 import fs from "fs-extra";
 import JSZip from "jszip";
+// import { json } from "stream/consumers";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -173,9 +174,15 @@ export default class InsightFacade implements IInsightFacade {
 	private async processZip(id: string, content: string): Promise<Dataset> {
 		let validSection = false; // seeing if at least one section is valid
 		const dataset = new Dataset(id);
-		try {
-			const zip = await JSZip.loadAsync(content); // Load zip asynchronously
 
+		try {
+			// var zip = fs.readFile(content, function(err, data) {
+			// if (err) throw err;
+			// return JSZip.loadAsync(data);
+			// });
+			// const zip = await JSZip.loadAsync(content); // Load zip asynchronously
+			const data = await fs.readFile(content);
+			const zip = await JSZip.loadAsync(data);
 			// iterating through courses in dataset
 			const filePromises = Object.keys(zip.files).map(async (filename: string) => {
 				const courseName = filename.split(".")[0]; // Assuming filename as course name
