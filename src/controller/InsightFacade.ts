@@ -176,7 +176,6 @@ export default class InsightFacade implements IInsightFacade {
 		let validSection = false; // seeing if at least one section is valid
 		const dataset = new Dataset(id);
 
-
 		try {
 			const zip = await JSZip.loadAsync(content, { base64: true }); // Load zip asynchronously
 			const filteredFiles = this.filterFiles(zip);
