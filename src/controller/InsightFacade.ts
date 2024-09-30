@@ -44,8 +44,10 @@ export default class InsightFacade implements IInsightFacade {
 			// tests if content is in base64 format, if not throw InsightError
 			return Promise.reject(new InsightError("Content not in base64 format"));
 		}
-		let dataset: Dataset = this.processZip(content, id);
-		let insight: InsightDataset = new InsightDataset(id, dataset.getTotalSections, kind);
+		let dataset: Dataset = new Dataset(id);
+		this.processZip(content, id, dataset);
+		let total: number = dataset.getTotalSections();
+		const insight: InsightDataset = {id: id, numRows: total, kind: kind};
 		this.datasets.set(id, [dataset, insight]);
 		// add to data structure
 		// store dataset in disk !!!
@@ -150,8 +152,8 @@ export default class InsightFacade implements IInsightFacade {
 
 
 	// Function to process the zip file using Promises
-	private async processZip(zipFilePath: string, name: string): Promise<Dataset> {
-		const dataset = new Dataset(name);
+	private async processZip(zipFilePath: string, name: string, dataset: Dataset): Promise<Dataset> {
+		// const dataset = new Dataset(name);
 
 		try {
 			const data = await fs.readFile(zipFilePath);  // Read the zip file as binary data
