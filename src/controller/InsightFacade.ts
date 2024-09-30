@@ -1,6 +1,7 @@
 import Dataset from "../models/Dataset";
 import Section from "../models/Section";
 import Course from "../models/Course";
+import SectionData from "../models/SectionData";
 import { IInsightFacade, InsightDataset, InsightDatasetKind, InsightResult, InsightError } from "./IInsightFacade";
 import * as fsPromises from "fs/promises";
 import fs from "fs-extra";
@@ -42,7 +43,7 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		// let dataset: Dataset = new Dataset(id);
 		// this.processZip(content, id, dataset);
-		const dataset: Dataset = await this.processZip(content, id, new Dataset(id));
+		const dataset: Dataset = await this.processZip(id, content);
 
 		const total: number = dataset.getTotalSections();
 		const insight: InsightDataset = { id: id, numRows: total, kind: kind };
@@ -125,30 +126,56 @@ export default class InsightFacade implements IInsightFacade {
 
 	// JSZip = require("jszip");
 	// Function to validate section data
-	private async validateSectionData(sectionData: SectionData): Promise<boolean> {
-		return new Promise((resolve, reject) => {
-			const requiredFields = ["id", "Title", "Professor", "Subject", "Year", "Avg", "Pass", "Fail", "Audit"];
+	private validateSectionData(sectionData: SectionData): boolean {
+		const requiredFields = ["id", "Title", "Professor", "Subject", "Year", "Avg", "Pass", "Fail", "Audit"];
 
-			for (let field of requiredFields) {
-				if (!(field in sectionData)) {
-					console.warn(`Missing required field: ${field} in section: ${JSON.stringify(sectionData)}`);
-					reject(new Error(`Validation failed: Missing field - ${field}`)); // Reject the promise if validation fails
-					return;
-				}
+		for (const field of requiredFields) {
+			if (!(field in sectionData)) {
+				return false; // return false
 			}
+		}
 
-			resolve(true); // Resolve the promise if validation succeeds
+		return true; // return true if all fields
+	}
+
+	private async handleSections(course: Course, jsonData: SectionData[]): Promise<boolean> {
+		let flag = false;
+
+		const sectionPromises = jsonData.map(async (sectionn: SectionData) => {
+			const {
+				id: uuid,
+				Course: id,
+				Title: title,
+				Professor: instructor,
+				Subject: dept,
+				Year: year,
+				Avg: avg,
+				Pass: pass,
+				Fail: fail,
+				Audit: audit,
+			} = sectionn;
+
+			// if sectionn is valid, then add the section
+			if (this.validateSectionData(sectionn)) {
+				// Create the section object if validation passes
+				const section = new Section(uuid, id, title, instructor, dept, year, avg, pass, fail, audit);
+				course.addSection(section);
+				flag = true;
+			}
 		});
+
+		await Promise.all(sectionPromises);
+		return flag;
 	}
 
 	// Function to process the zip file using Promises
-	private async processZip(zipFilePath: string, name: string, dataset: Dataset): Promise<Dataset> {
-		// const dataset = new Dataset(name);
-
+	private async processZip(id: string, content: string): Promise<Dataset> {
+		let validSection = false; // seeing if at least one section is valid
+		const dataset = new Dataset(id);
 		try {
-			const data = await fs.readFile(zipFilePath); // Read the zip file as binary data
-			const zip = await JSZip.loadAsync(data); // Load zip asynchronously
+			const zip = await JSZip.loadAsync(content); // Load zip asynchronously
 
+			// iterating through courses in dataset
 			const filePromises = Object.keys(zip.files).map(async (filename: string) => {
 				const courseName = filename.split(".")[0]; // Assuming filename as course name
 				const course = new Course(courseName);
@@ -157,42 +184,19 @@ export default class InsightFacade implements IInsightFacade {
 				const jsonData: SectionData[] = JSON.parse(fileData).result; // Assuming 'result' is an array of sections
 
 				// Create an array of section promises to handle async validation
-				const sectionPromises = jsonData.map(async (sectionn: SectionData) => {
-					const {
-						id: uuid,
-						Course: id,
-						Title: title,
-						Professor: instructor,
-						Subject: dept,
-						Year: year,
-						Avg: avg,
-						Pass: pass,
-						Fail: fail,
-						Audit: audit,
-					} = sectionn;
-
-					try {
-						// Validate the section data asynchronously
-						await this.validateSectionData(sectionn);
-
-						// Create the section object if validation passes
-						const section = new Section(uuid, id, title, instructor, dept, year, avg, pass, fail, audit);
-						course.addSection(section);
-					} catch (err) {
-						console.warn(`Skipping invalid section: ${JSON.stringify(sectionn)} - ${(err as Error).message}`);
-					}
-				});
+				validSection = await this.handleSections(course, jsonData);
 
 				// Wait for all section validations to complete
-				await Promise.all(sectionPromises);
 				dataset.addCourse(course);
 			});
-
 			await Promise.all(filePromises); // Wait for all files to be processed
 		} catch (err) {
 			throw new Error(`Error processing zip file: ${(err as Error).message}`);
 		}
 
+		if (!validSection) {
+			return Promise.reject(new InsightError("No valid sections"));
+		}
 		return dataset;
 	}
 }

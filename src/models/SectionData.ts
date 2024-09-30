@@ -1,4 +1,4 @@
-interface SectionData {
+export default interface SectionData {
 	id: string;
 	Course: string;
 	Title: string;
