@@ -191,7 +191,7 @@ export default class InsightFacade implements IInsightFacade {
 			});
 			await Promise.all(filePromises); // Wait for all files to be processed
 		} catch (err) {
-			throw new Error(`Error processing zip file: ${(err as Error).message}`);
+			throw new InsightError(`Error processing zip file: ${(err as Error).message}`);
 		}
 
 		if (!validSection) {
