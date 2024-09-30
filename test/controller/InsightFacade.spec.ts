@@ -114,7 +114,6 @@ describe("InsightFacade", function () {
 				expect(result.length).to.equal(1);
 				expect(result[0]).to.equal("one");
 			} catch (_err) {
-				// console.error("Error: ", err);
 				expect.fail("Should not have thrown an error.");
 			}
 		});
@@ -143,6 +142,17 @@ describe("InsightFacade", function () {
 		it('reject kind parameter if is "rooms"', function () {
 			const result = facade.addDataset("validDataset", validDataset, InsightDatasetKind.Rooms);
 			return expect(result).to.eventually.be.rejectedWith(InsightError, "Invalid kind");
+		});
+
+		it.only("should fulfill with large valid dataset (pair.zip)", async function () {
+			try {
+				const result = await facade.addDataset("sections", sections, InsightDatasetKind.Sections);
+				expect(result.length).to.equal(1);
+				expect(result[0]).to.equal("one");
+			} catch (err) {
+				console.log(err);
+				expect.fail("Should not have thrown an error.");
+			}
 		});
 	});
 
