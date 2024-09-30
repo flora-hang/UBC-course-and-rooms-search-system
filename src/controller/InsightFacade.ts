@@ -128,7 +128,7 @@ export default class InsightFacade implements IInsightFacade {
 		return new Promise((resolve, reject) => {
 			const requiredFields = ["id", "Title", "Professor", "Subject", "Year", "Avg", "Pass", "Fail", "Audit"];
 
-			for (let field of requiredFields) {
+			for (const field of requiredFields) {
 				if (!(field in sectionData)) {
 					console.warn(`Missing required field: ${field} in section: ${JSON.stringify(sectionData)}`);
 					reject(new Error(`Validation failed: Missing field - ${field}`)); // Reject the promise if validation fails
