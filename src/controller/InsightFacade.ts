@@ -129,31 +129,47 @@ export default class InsightFacade implements IInsightFacade {
 	private validateSectionData(sectionData: SectionData): boolean {
 		const requiredFields = ["id", "Title", "Professor", "Subject", "Year", "Avg", "Pass", "Fail", "Audit"];
 
-		for (const field of requiredFields) {
-			if (!(field in sectionData)) {
-				return false; // return false
+			for (let field of requiredFields) {
+				if (!(field in sectionData)) {
+					console.warn(`Missing required field: ${field} in section: ${JSON.stringify(sectionData)}`);
+					reject(new Error(`Validation failed: Missing field - ${field}`)); // Reject the promise if validation fails
+					return;
+				}
 			}
-		}
 
-		return true; // return true if all fields
+			resolve(true); // Resolve the promise if validation succeeds
+		});
 	}
 
-	private async handleSections(course: Course, jsonData: SectionData[]): Promise<boolean> {
-		let flag = false;
+	// Function to process the zip file using Promises
+	private async processZip(zipFilePath: string, name: string, dataset: Dataset): Promise<Dataset> {
+		// const dataset = new Dataset(name);
 
-		const sectionPromises = jsonData.map(async (sectionn: SectionData) => {
-			const {
-				id: uuid,
-				Course: id,
-				Title: title,
-				Professor: instructor,
-				Subject: dept,
-				Year: year,
-				Avg: avg,
-				Pass: pass,
-				Fail: fail,
-				Audit: audit,
-			} = sectionn;
+		try {
+			const data = await fs.readFile(zipFilePath); // Read the zip file as binary data
+			const zip = await JSZip.loadAsync(data); // Load zip asynchronously
+
+			const filePromises = Object.keys(zip.files).map(async (filename: string) => {
+				const courseName = filename.split(".")[0]; // Assuming filename as course name
+				const course = new Course(courseName);
+
+				const fileData = await zip.files[filename].async("string"); // Read file content as string
+				const jsonData: SectionData[] = JSON.parse(fileData).result; // Assuming 'result' is an array of sections
+
+				// Create an array of section promises to handle async validation
+				const sectionPromises = jsonData.map(async (sectionn: SectionData) => {
+					const {
+						id: uuid,
+						Course: id,
+						Title: title,
+						Professor: instructor,
+						Subject: dept,
+						Year: year,
+						Avg: avg,
+						Pass: pass,
+						Fail: fail,
+						Audit: audit,
+					} = sectionn;
 
 			// if sectionn is valid, then add the section
 			if (this.validateSectionData(sectionn)) {
