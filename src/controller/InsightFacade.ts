@@ -2,7 +2,14 @@ import Dataset from "../models/Dataset";
 import Section from "../models/Section";
 import Course from "../models/Course";
 import SectionData from "../models/SectionData";
-import { IInsightFacade, InsightDataset, InsightDatasetKind, InsightResult, InsightError } from "./IInsightFacade";
+import {
+	IInsightFacade,
+	InsightDataset,
+	InsightDatasetKind,
+	InsightResult,
+	InsightError,
+	NotFoundError,
+} from "./IInsightFacade";
 import * as fsPromises from "fs/promises";
 import fs from "fs-extra";
 import JSZip from "jszip";
@@ -60,14 +67,19 @@ export default class InsightFacade implements IInsightFacade {
 
 	public async removeDataset(id: string): Promise<string> {
 		// id checking
-		if (id.trim().length === 0 || id.includes("_") || this.datasets.has(id)) {
+		if (id.trim().length === 0 || id.includes("_")) {
 			return Promise.reject(new InsightError("Invalid id"));
+		}
+
+		if (!this.datasets.has(id)) {
+			return Promise.reject(new NotFoundError("Dataset not found"));
 		}
 
 		// removing dataset
 		const filePath = this.dataDir + `/${id}.json`;
 		try {
 			await fsPromises.unlink(filePath);
+			this.datasets["delete"](id);
 			return id;
 		} catch (err) {
 			return Promise.reject(new InsightError(`Error: ${err}`));
