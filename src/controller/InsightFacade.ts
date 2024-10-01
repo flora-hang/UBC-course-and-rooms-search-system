@@ -44,13 +44,13 @@ export default class InsightFacade implements IInsightFacade {
 		}
 
 		// parse & validate content (async)
-		// const base64Pattern = /^(?:[A-Z0-9+/]{4})*([A-Z0-9+/]{2}==|[A-Z0-9+/]{3}=)?$/i; // Regular expression to check if the string is valid Base64
-		// if (!base64Pattern.test(content)) {
-		// 	// tests if content is in base64 format, if not throw InsightError
-		// 	return Promise.reject(new InsightError("Content not in base64 format"));
-		// }
-		// let dataset: Dataset = new Dataset(id);
-		// this.processZip(content, id, dataset);
+		const base64Regex = /^[A-Za-z0-9+/]+={0,2}$/;
+
+		// Test against the regex
+		if (!base64Regex.test(content)) {
+			return Promise.reject(new InsightError("Content not in base64 format"));
+		}
+
 		const dataset: Dataset = await this.processZip(id, content);
 
 		const total: number = dataset.getTotalSections();
@@ -216,7 +216,7 @@ export default class InsightFacade implements IInsightFacade {
 			throw new InsightError(`Error processing zip file: ${(err as Error).message}`);
 		}
 
-		if (dataset.getCourses().length === 0) {
+		if (dataset.getTotalSections() === 0) {
 			return Promise.reject(new InsightError("No valid sections"));
 		}
 

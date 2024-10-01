@@ -134,19 +134,6 @@ describe("InsightFacade", function () {
 			return expect(result).to.eventually.be.rejectedWith(InsightError, "Invalid kind");
 		});
 
-<<<<<<< HEAD
-=======
-		it("should fulfill with everything valid", async function () {
-			try {
-				const result = await facade.addDataset("one", oneValidSection, InsightDatasetKind.Sections);
-				expect(result.length).to.equal(1);
-				expect(result[0]).to.equal("one");
-			} catch (_err) {
-				expect.fail("Should not have thrown an error.");
-			}
-		});
-
->>>>>>> 8f82abe76c5940dbf3cf2f6f76ebb39f7ce6ea1d
 		it("should fulfill with large valid dataset (pair.zip)", async function () {
 			try {
 				const result = await facade.addDataset("sections", sections, InsightDatasetKind.Sections);
