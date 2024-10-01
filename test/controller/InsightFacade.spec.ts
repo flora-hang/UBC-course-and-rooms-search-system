@@ -89,7 +89,7 @@ describe("InsightFacade", function () {
 			return expect(result).to.eventually.be.rejectedWith(InsightError, "Invalid id");
 		});
 
-		it("reject only whitespace dataset id", function () {
+		it("reject whitespace dataset id", function () {
 			const result = facade.addDataset(" ", validDataset, InsightDatasetKind.Sections);
 
 			return expect(result).to.eventually.be.rejectedWith(InsightError, "Invalid id");
@@ -106,16 +106,6 @@ describe("InsightFacade", function () {
 			const result = facade.addDataset("invalidContent", invalidContent, InsightDatasetKind.Sections);
 
 			return expect(result).to.eventually.be.rejectedWith(InsightError, "Content not in base64 format");
-		});
-
-		it("should fulfill with everything valid", async function () {
-			try {
-				const result = await facade.addDataset("one", oneValidSection, InsightDatasetKind.Sections);
-				expect(result.length).to.equal(1);
-				expect(result[0]).to.equal("one");
-			} catch (_err) {
-				expect.fail("Should not have thrown an error.");
-			}
 		});
 
 		it("reject content with dataset without any valid sections", function () {
@@ -144,7 +134,17 @@ describe("InsightFacade", function () {
 			return expect(result).to.eventually.be.rejectedWith(InsightError, "Invalid kind");
 		});
 
-		it.only("should fulfill with large valid dataset (pair.zip)", async function () {
+		it("should fulfill with everything valid", async function () {
+			try {
+				const result = await facade.addDataset("one", oneValidSection, InsightDatasetKind.Sections);
+				expect(result.length).to.equal(1);
+				expect(result[0]).to.equal("one");
+			} catch (_err) {
+				expect.fail("Should not have thrown an error.");
+			}
+		});
+
+		it("should fulfill with large valid dataset (pair.zip)", async function () {
 			try {
 				const result = await facade.addDataset("sections", sections, InsightDatasetKind.Sections);
 				expect(result.length).to.equal(1);
@@ -180,7 +180,7 @@ describe("InsightFacade", function () {
 			return expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 
-		it("reject dataset id == only whitespace", function () {
+		it("reject dataset id == whitespace", function () {
 			const result = facade.removeDataset(" ");
 			return expect(result).to.eventually.be.rejectedWith(InsightError);
 		});

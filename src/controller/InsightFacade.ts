@@ -18,7 +18,7 @@ export default class InsightFacade implements IInsightFacade {
 	private datasets: Map<string, [Dataset, InsightDataset]> = new Map<string, [Dataset, InsightDataset]>();
 
 	constructor() {
-		// might not need constructor
+		// prob dont need constructor
 	}
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
@@ -53,8 +53,9 @@ export default class InsightFacade implements IInsightFacade {
 		await this.saveDatasetToDisk(id); // need try catch?
 
 		// return a string array containing the ids of all currently added datasets upon a successful add
-		return Array.from(this.datasets.keys());
-		// map might not have all the keys!!!
+		const fileNames = await fs.readdir(this.dataDir);
+		const ids = fileNames.map((addedId) => addedId.replace(".json", ""));
+		return ids;
 	}
 
 	public async removeDataset(id: string): Promise<string> {
