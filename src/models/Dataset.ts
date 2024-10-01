@@ -8,8 +8,8 @@ export default class Dataset {
 		this.ID = id;
 		this.Courses = [];
 	}
-	public addCourse(course: Course): void {
-		this.Courses.push(course);
+	public addCourse(course: Course[]): void {
+		this.Courses = course;
 	}
 	public getId(): string {
 		return this.ID;

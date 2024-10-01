@@ -37,11 +37,11 @@ export default class InsightFacade implements IInsightFacade {
 		}
 
 		// parse & validate content (async)
-		const base64Pattern = /^(?:[A-Z0-9+/]{4})*([A-Z0-9+/]{2}==|[A-Z0-9+/]{3}=)?$/i; // Regular expression to check if the string is valid Base64
-		if (!base64Pattern.test(content)) {
-			// tests if content is in base64 format, if not throw InsightError
-			return Promise.reject(new InsightError("Content not in base64 format"));
-		}
+		// const base64Pattern = /^(?:[A-Z0-9+/]{4})*([A-Z0-9+/]{2}==|[A-Z0-9+/]{3}=)?$/i; // Regular expression to check if the string is valid Base64
+		// if (!base64Pattern.test(content)) {
+		// 	// tests if content is in base64 format, if not throw InsightError
+		// 	return Promise.reject(new InsightError("Content not in base64 format"));
+		// }
 		// let dataset: Dataset = new Dataset(id);
 		// this.processZip(content, id, dataset);
 		const dataset: Dataset = await this.processZip(id, content);
@@ -140,10 +140,8 @@ export default class InsightFacade implements IInsightFacade {
 		return true; // return true if all fields
 	}
 
-	private async handleSections(course: Course, jsonData: SectionData[]): Promise<boolean> {
-		let flag = false;
-
-		const sectionPromises = jsonData.map(async (sectionn: SectionData) => {
+	private handleSections(course: Course, jsonData: SectionData[]): Course {
+		jsonData.map((sectionn: SectionData) => {
 			const {
 				id: uuid,
 				Course: id,
@@ -162,18 +160,15 @@ export default class InsightFacade implements IInsightFacade {
 				// Create the section object if validation passes
 				const section = new Section(uuid, id, title, instructor, dept, year, avg, pass, fail, audit);
 				course.addSection(section);
-				flag = true;
+
 				// console.log("section added: ", id);
 			}
 		});
-
-		await Promise.all(sectionPromises);
-		return flag;
+		return course;
 	}
 
 	// Function to process the zip file using Promises
 	private async processZip(id: string, content: string): Promise<Dataset> {
-		let validSection = false; // seeing if at least one section is valid
 		const dataset = new Dataset(id);
 
 		try {
@@ -181,31 +176,37 @@ export default class InsightFacade implements IInsightFacade {
 			const filteredFiles = this.filterFiles(zip);
 
 			// iterating through courses in dataset
-			const filePromises = filteredFiles.map(async (filename: string) => {
+			const proms: any = [];
+			const courses: Course[] = [];
+			filteredFiles.map(async (filename: string) => {
 				const courseName = filename.split("/")[1];
 				const course = new Course(courseName);
+				courses.push(course);
+				proms.push(zip.files[filename].async("string"));
+			});
+			const array = await Promise.all(proms); // Wait for all files to be processed
 
-				const fileData = await zip.files[filename].async("string"); // Read file content as
+			const handle: any = [];
+			array.forEach((element, index) => {
 				let jsonData: SectionData[] = [];
 				try {
-					jsonData = JSON.parse(fileData).result; // Assuming 'result' is an array of sections
+					jsonData = JSON.parse(element).result; // Assuming 'result' is an array of sections
 				} catch (_err) {
 					return; // skip this file
 				}
-
-				// Wait for all section validations to complete
-				validSection = await this.handleSections(course, jsonData);
-
-				dataset.addCourse(course);
+				const course = courses[index];
+				handle.push(this.handleSections(course, jsonData));
 			});
-			await Promise.all(filePromises); // Wait for all files to be processed
+			const courseArray: Course[] = await Promise.all(handle);
+			dataset.addCourse(courseArray);
 		} catch (err) {
 			throw new InsightError(`Error processing zip file: ${(err as Error).message}`);
 		}
 
-		if (!validSection) {
+		if (dataset.getCourses().length === 0) {
 			return Promise.reject(new InsightError("No valid sections"));
 		}
+
 		return dataset;
 	}
 
