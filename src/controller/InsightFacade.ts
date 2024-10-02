@@ -79,7 +79,7 @@ export default class InsightFacade implements IInsightFacade {
 		const filePath = this.dataDir + `/${id}.json`;
 		try {
 			await fsPromises.unlink(filePath);
-			this.datasets["delete"](id);
+			this.datasets.delete(id);
 			return id;
 		} catch (err) {
 			return Promise.reject(new InsightError(`Error: ${err}`));
@@ -189,13 +189,13 @@ export default class InsightFacade implements IInsightFacade {
 			const filteredFiles = this.filterFiles(zip);
 
 			// iterating through courses in dataset
-			const proms: any = [];
+			const proms: Promise<string>[] = [];
 			const courses: Course[] = [];
-			filteredFiles.map(async (filename: string) => {
+			filteredFiles.map((filename: string) => {
 				const courseName = filename.split("/")[1];
-				const course = new Course(courseName);
-				courses.push(course);
-				proms.push(zip.files[filename].async("string"));
+				courses.push(new Course(courseName));
+				const f = zip.files[filename];
+				proms.push(f.async("string"));
 			});
 			const array = await Promise.all(proms); // Wait for all files to be processed
 
