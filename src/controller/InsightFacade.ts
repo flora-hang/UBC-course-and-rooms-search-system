@@ -86,10 +86,7 @@ export default class InsightFacade implements IInsightFacade {
 		}
 	}
 
-	public async performQuery(query: unknown): Promise<InsightResult[]> {
-		// TODO: Remove this once you implement the methods!
-		throw new Error(`InsightFacadeImpl::performQuery() is unimplemented! - query=${query};`);
-	}
+	
 
 	public async listDatasets(): Promise<InsightDataset[]> {
 		const cachedDatasets = await fs.readdir(this.dataDir);
@@ -234,5 +231,9 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		// console.log("courses filtered: ", coursesFiltered);
 		return coursesFiltered;
+	}
+	public async performQuery(query: unknown): Promise<InsightResult[]> {
+		// TODO: Remove this once you implement the methods!
+		throw new Error(`InsightFacadeImpl::performQuery() is unimplemented! - query=${query};`);
 	}
 }
