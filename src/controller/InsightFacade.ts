@@ -193,9 +193,12 @@ export default class InsightFacade implements IInsightFacade {
 			const courses: Course[] = [];
 			filteredFiles.map(async (filename: string) => {
 				const courseName = filename.split("/")[1];
-				const course = new Course(courseName);
-				courses.push(course);
-				proms.push(void zip.files[filename].async("string"));
+				// const course = new Course(courseName);
+				// courses.push(course);
+				courses.push(new Course(courseName));
+				const prom =  void zip.files[filename].async("string");
+				// proms.push(zip.files[filename].async("string"));
+				proms.push(prom);
 			});
 			const array = await Promise.all(proms); // Wait for all files to be processed
 
