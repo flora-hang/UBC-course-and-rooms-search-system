@@ -79,7 +79,7 @@ export default class InsightFacade implements IInsightFacade {
 		const filePath = this.dataDir + `/${id}.json`;
 		try {
 			await fsPromises.unlink(filePath);
-			this.datasets["delete"](id);
+			this.datasets.delete(id);
 			return id;
 		} catch (err) {
 			return Promise.reject(new InsightError(`Error: ${err}`));
