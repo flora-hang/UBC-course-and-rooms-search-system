@@ -189,7 +189,7 @@ export default class InsightFacade implements IInsightFacade {
 			const filteredFiles = this.filterFiles(zip);
 
 			// iterating through courses in dataset
-			const proms: any = [];
+			const proms: Promise<string>[] = [];
 			const courses: Course[] = [];
 			filteredFiles.map(async (filename: string) => {
 				const courseName = filename.split("/")[1];
