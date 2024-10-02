@@ -1,4 +1,19 @@
-import { IInsightFacade, InsightDataset, InsightDatasetKind, InsightResult } from "./IInsightFacade";
+import Dataset from "../models/Dataset";
+import Section from "../models/Section";
+import Course from "../models/Course";
+import SectionData from "../models/SectionData";
+import {
+	IInsightFacade,
+	InsightDataset,
+	InsightDatasetKind,
+	InsightResult,
+	InsightError,
+	NotFoundError,
+} from "./IInsightFacade";
+import * as fsPromises from "fs/promises";
+import fs from "fs-extra";
+import JSZip from "jszip";
+// import { json } from "stream/consumers";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -6,16 +21,69 @@ import { IInsightFacade, InsightDataset, InsightDatasetKind, InsightResult } fro
  *
  */
 export default class InsightFacade implements IInsightFacade {
+	private dataDir = "./data";
+	private datasets: Map<string, [Dataset, InsightDataset]> = new Map<string, [Dataset, InsightDataset]>();
+
+	constructor() {
+		// prob dont need constructor
+	}
+
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
-		// TODO: Remove this once you implement the methods!
-		throw new Error(
-			`InsightFacadeImpl::addDataset() is unimplemented! - id=${id}; content=${content?.length}; kind=${kind}`
-		);
+		// id validation: (reject with InsightError if invalid)
+		// - one of more of any character, except underscore
+		// - id with only whitespace is invalid
+		// - same id as an already added dataset is invalid
+		if (id.trim().length === 0 || id.includes("_") || this.datasets.has(id)) {
+			return Promise.reject(new InsightError("Invalid id"));
+		}
+
+		// kind validation:
+		// - only valid kind is sections for c1
+		if (kind !== InsightDatasetKind.Sections) {
+			return Promise.reject(new InsightError("Invalid kind"));
+		}
+
+		// parse & validate content (async)
+		const base64Regex = /^[A-Za-z0-9+/]+={0,2}$/;
+
+		// Test against the regex
+		if (!base64Regex.test(content)) {
+			return Promise.reject(new InsightError("Content not in base64 format"));
+		}
+
+		const dataset: Dataset = await this.processZip(id, content);
+
+		const total: number = dataset.getTotalSections();
+		const insight: InsightDataset = { id: id, numRows: total, kind: kind };
+		this.datasets.set(id, [dataset, insight]);
+
+		await this.saveDatasetToDisk(id); // need try catch?
+
+		// return a string array containing the ids of all currently added datasets upon a successful add
+		const fileNames = await fs.readdir(this.dataDir);
+		const ids = fileNames.map((addedId) => addedId.replace(".json", ""));
+		return ids;
 	}
 
 	public async removeDataset(id: string): Promise<string> {
-		// TODO: Remove this once you implement the methods!
-		throw new Error(`InsightFacadeImpl::removeDataset() is unimplemented! - id=${id};`);
+		// id checking
+		if (id.trim().length === 0 || id.includes("_")) {
+			return Promise.reject(new InsightError("Invalid id"));
+		}
+
+		if (!this.datasets.has(id)) {
+			return Promise.reject(new NotFoundError("Dataset not found"));
+		}
+
+		// removing dataset
+		const filePath = this.dataDir + `/${id}.json`;
+		try {
+			await fsPromises.unlink(filePath);
+			this.datasets["delete"](id);
+			return id;
+		} catch (err) {
+			return Promise.reject(new InsightError(`Error: ${err}`));
+		}
 	}
 
 	public async performQuery(query: unknown): Promise<InsightResult[]> {
@@ -24,7 +92,147 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async listDatasets(): Promise<InsightDataset[]> {
-		// TODO: Remove this once you implement the methods!
-		throw new Error(`InsightFacadeImpl::listDatasets is unimplemented!`);
+		const cachedDatasets = await fs.readdir(this.dataDir);
+		const datasetsIdArray: string[] = Array.from(this.datasets.values()).map((tuple) => tuple[1].id);
+
+		// get all of the datasets from the disk in Dataset form/type
+		const loadedDatasets: Dataset[] = await Promise.all(
+			cachedDatasets.map(async (dataset) => await this.loadDatasetFromDisk(dataset.replace(".json", "")))
+		);
+
+		let count = 0; // used for indexing in the loadedDatasets array
+
+		// looping through all datasets stored on disk to store missing datasets in map
+		for (const dataset of cachedDatasets) {
+			const datasetId: string = dataset.replace(".json", "");
+
+			// if the current this.datasets doesn't include a dataset found within the disk, add to this.datasets
+			if (!datasetsIdArray.includes(datasetId)) {
+				// creating a InsightDataset object to later add to map
+				const loadedInsightDataset: InsightDataset = {
+					id: datasetId,
+					kind: InsightDatasetKind.Sections,
+					numRows: loadedDatasets[count].getTotalSections(),
+				};
+				this.datasets.set(datasetId, [loadedDatasets[count], loadedInsightDataset]); // adding tuple of Dataset and InsightDataset to this.datasets map
+			}
+			count++;
+		}
+
+		return Array.from(this.datasets.values()).map((tuple) => tuple[1]); // returning list of InsightDataset
+	}
+
+	// saves newly added dataset to disk
+	// assumes that the dataset corresponding to the id is already in the datasets map
+	private async saveDatasetToDisk(id: string): Promise<void> {
+		const newDataset = this.datasets.get(id);
+		const file = this.dataDir + "/" + id + ".json";
+		await fs.ensureDir(this.dataDir); // could throw error
+		await fs.writeJSON(file, newDataset); // could throw error (catch in addDataset?)
+	}
+
+	// loads dataset from disk
+	// assumes that id is valid and corresponds to an existing dataset
+	private async loadDatasetFromDisk(id: string): Promise<Dataset> {
+		const file = this.dataDir + "/" + id + ".json";
+		const dataset: Dataset = await fs.readJSON(file); // could throw error
+		return dataset;
+	}
+
+	// JSZip = require("jszip");
+	// Function to validate section data
+	private validateSectionData(sectionData: SectionData): boolean {
+		const requiredFields = ["id", "Title", "Professor", "Subject", "Year", "Avg", "Pass", "Fail", "Audit"];
+
+		for (const field of requiredFields) {
+			if (!(field in sectionData)) {
+				return false; // return false
+			}
+		}
+
+		return true; // return true if all fields
+	}
+
+	private handleSections(course: Course, jsonData: SectionData[]): Course {
+		jsonData.map((sectionn: SectionData) => {
+			const {
+				id: uuid,
+				Course: id,
+				Title: title,
+				Professor: instructor,
+				Subject: dept,
+				Year: year,
+				Avg: avg,
+				Pass: pass,
+				Fail: fail,
+				Audit: audit,
+			} = sectionn;
+
+			// if sectionn is valid, then add the section
+			if (this.validateSectionData(sectionn)) {
+				// Create the section object if validation passes
+				const section = new Section(uuid, id, title, instructor, dept, year, avg, pass, fail, audit);
+				course.addSection(section);
+
+				// console.log("section added: ", id);
+			}
+		});
+		return course;
+	}
+
+	// Function to process the zip file using Promises
+	private async processZip(id: string, content: string): Promise<Dataset> {
+		const dataset = new Dataset(id);
+
+		try {
+			const zip = await JSZip.loadAsync(content, { base64: true }); // Load zip asynchronously
+			const filteredFiles = this.filterFiles(zip);
+
+			// iterating through courses in dataset
+			const proms: any = [];
+			const courses: Course[] = [];
+			filteredFiles.map(async (filename: string) => {
+				const courseName = filename.split("/")[1];
+				const course = new Course(courseName);
+				courses.push(course);
+				proms.push(zip.files[filename].async("string"));
+			});
+			const array = await Promise.all(proms); // Wait for all files to be processed
+
+			const handle: any = [];
+			array.forEach((element, index) => {
+				let jsonData: SectionData[] = [];
+				try {
+					jsonData = JSON.parse(element).result; // Assuming 'result' is an array of sections
+				} catch (_err) {
+					return; // skip this file
+				}
+				const course = courses[index];
+				handle.push(this.handleSections(course, jsonData));
+			});
+			const courseArray: Course[] = await Promise.all(handle);
+			dataset.addCourse(courseArray);
+		} catch (err) {
+			throw new InsightError(`Error processing zip file: ${(err as Error).message}`);
+		}
+
+		if (dataset.getTotalSections() === 0) {
+			return Promise.reject(new InsightError("No valid sections"));
+		}
+
+		return dataset;
+	}
+
+	private filterFiles(zip: JSZip): string[] {
+		const coursesFiles = Object.keys(zip.files).filter((filename) => filename.startsWith("courses/"));
+		const coursesFiltered: string[] = [];
+
+		for (const file of coursesFiles) {
+			if (file.split("/")[1].length !== 0 && !file.includes("_")) {
+				coursesFiltered.push(file);
+			}
+		}
+		// console.log("courses filtered: ", coursesFiltered);
+		return coursesFiltered;
 	}
 }
