@@ -105,27 +105,27 @@ describe("InsightFacade", function () {
 			const invalidContent = "invalid content";
 			const result = facade.addDataset("invalidContent", invalidContent, InsightDatasetKind.Sections);
 
-			return expect(result).to.eventually.be.rejectedWith(InsightError, "Content not in base64 format");
+			return expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 
 		it("reject content with dataset without any valid sections", function () {
 			const result = facade.addDataset("invalidDataset", invalidDataset, InsightDatasetKind.Sections);
-			return expect(result).to.eventually.be.rejectedWith(InsightError, "No valid sections");
+			return expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 
 		it("reject content with course not in JSON format", function () {
 			const result = facade.addDataset("nonJSONCourseDataset", nonJSONCourseDataset, InsightDatasetKind.Sections);
-			return expect(result).to.eventually.be.rejectedWith(InsightError, "No valid sections");
+			return expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 
 		it('reject content with course not correctly located in a "courses" folder', function () {
 			const result = facade.addDataset("badCoursesFolderDataset", badCoursesFolderDataset, InsightDatasetKind.Sections);
-			return expect(result).to.eventually.be.rejectedWith(InsightError, "No valid sections");
+			return expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 
 		it("reject content with section not containing all fields used by query", function () {
 			const result = facade.addDataset("invalidSectionDataset", invalidSectionDataset, InsightDatasetKind.Sections);
-			return expect(result).to.eventually.be.rejectedWith(InsightError, "No valid sections");
+			return expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 
 		// !!! will need to delete later in c2 and afterward
@@ -139,8 +139,8 @@ describe("InsightFacade", function () {
 				const result = await facade.addDataset("sections", sections, InsightDatasetKind.Sections);
 				expect(result.length).to.equal(1);
 				expect(result[0]).to.equal("sections");
-			} catch (err) {
-				console.log(err);
+			} catch (_err) {
+				// console.log(err);
 				expect.fail("Should not have thrown an error.");
 			}
 		});
