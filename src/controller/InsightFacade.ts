@@ -232,8 +232,98 @@ export default class InsightFacade implements IInsightFacade {
 		// console.log("courses filtered: ", coursesFiltered);
 		return coursesFiltered;
 	}
+
 	public async performQuery(query: unknown): Promise<InsightResult[]> {
-		// TODO: Remove this once you implement the methods!
-		throw new Error(`InsightFacadeImpl::performQuery() is unimplemented! - query=${query};`);
+
+		const filteredSections = this.filterSections(query.input.WHERE);
+
+    // Parse OPTIONS block: Extract columns and order field
+    const columns = query.input.OPTIONS.COLUMNS;
+    const orderField = query.input.OPTIONS.ORDER;
+
+    // Sort the filtered results if ORDER is specified
+    let sortedSections = filteredSections;
+    if (orderField) {
+        sortedSections = this.sortResults(filteredSections, orderField);
+    }
+
+    // Select the required columns
+    const finalResults = this.selectColumns(sortedSections, columns);
+
+    return finalResults;
+
+	}
+
+	public filterSections(where: any, sections: Section[]): Section[] {
+		// If WHERE block is empty, return all sections (no filtering)
+		//!!! get all sections in the dataset
+		if (Object.keys(where).length === 0) {
+			return sections;
+		}
+	
+		// Process logical operators
+		if (where.AND) {
+			return this.handleAND(where.AND, sections);
+		}
+		if (where.OR) {
+			return this.handleOR(where.OR, sections);
+		}
+		if (where.NOT) {
+			return this.handleNOT(where.NOT, sections);
+		}
+	
+		// Process comparison operators (EQ, GT, LT, IS)
+		if (where.EQ) {
+			return this.handleEQ(where.EQ, sections);
+		}
+		if (where.GT) {
+			return this.handleGT(where.GT, sections);
+		}
+		if (where.LT) {
+			return this.handleLT(where.LT, sections);
+		}
+		if (where.IS) {
+			return this.handleIS(where.IS, sections);
+		}
+	
+		// If no valid operator is found, return all sections (shouldn't happen)
+		return sections;
+	}
+
+	public handleAND(conditions: any[], sections: Section[]): Section[] {
+		return conditions.reduce((acc, condition) => {
+			return this.filterSections(condition, acc);
+		}, sections); // Apply each condition on the filtered result
+	}
+	
+	public handleOR(conditions: any[], sections: Section[]): Section[] {
+		const results = conditions.map(condition => this.filterSections(condition, sections));
+		// Merge all results (union)
+		return results.flat();
+	}
+	
+	public handleNOT(condition: any, sections: Section[]): Section[] {
+		const filteredSections = this.filterSections(condition, sections);
+		// Return sections that are NOT in the filtered set
+		return sections.filter(section => !filteredSections.includes(section));
+	}
+	public handleEQ(condition: any, sections: Section[]): Section[] {
+		const [field, value] = Object.entries(condition)[0];
+		return sections.filter(section => section[field] === value);
+	}
+	
+	public handleGT(condition: any, sections: Section[]): Section[] {
+		const [field, value] = Object.entries(condition)[0];
+		return sections.filter(section => section[field] > value);
+	}
+	
+	public handleLT(condition: any, sections: Section[]): Section[] {
+		const [field, value] = Object.entries(condition)[0];
+		return sections.filter(section => section[field] < value);
+	}
+	
+	public handleIS(condition: any, sections: Section[]): Section[] {
+		const [field, value] = Object.entries(condition)[0];
+		return sections.filter(section => section[field] === value);
 	}
 }
