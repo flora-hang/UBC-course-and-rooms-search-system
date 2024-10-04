@@ -13,6 +13,7 @@ import {
 import * as fsPromises from "fs/promises";
 import fs from "fs-extra";
 import JSZip from "jszip";
+import Query from "../models/Query";
 // import { json } from "stream/consumers";
 
 /**
@@ -239,7 +240,8 @@ export default class InsightFacade implements IInsightFacade {
 			return Promise.reject(new InsightError("Query must be an object"));
 		}
 
-		// cast query to class Query !!!
+		// cast query to class Query 
+		query = query as Query;
 
 		// validate & access query !!!
 		// - filter sections (WHERE block)

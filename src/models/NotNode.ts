@@ -1,14 +1,15 @@
 import ConditionNode from './ConditionNode'
 import Section from './Section'
 export default class NotNode extends ConditionNode {
-    private conditions: ConditionNode[];
+    private condition: ConditionNode;
 
-    constructor(conditions: ConditionNode[]) {
+    constructor(condition: ConditionNode) {
         super();
-        this.conditions = conditions;
+        this.condition = condition;
     }
     //evaluate needs tweaking
     evaluate(section: Section): boolean {
-        return this.conditions.every(cond => cond.evaluate(section));
+        return false; //stub
+        // return this.condition.(cond => cond.evaluate(section));
     }
 }
