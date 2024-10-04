@@ -13,7 +13,7 @@ import {
 import * as fsPromises from "fs/promises";
 import fs from "fs-extra";
 import JSZip from "jszip";
-import Query from "../models/Query";
+import Query from "../models/query/Query";
 // import { json } from "stream/consumers";
 
 /**
@@ -86,8 +86,6 @@ export default class InsightFacade implements IInsightFacade {
 			return Promise.reject(new InsightError(`Error: ${err}`));
 		}
 	}
-
-	
 
 	public async listDatasets(): Promise<InsightDataset[]> {
 		const cachedDatasets = await fs.readdir(this.dataDir);
@@ -236,15 +234,12 @@ export default class InsightFacade implements IInsightFacade {
 
 	public async performQuery(query: unknown): Promise<InsightResult[]> {
 		// Check if query is an object
-		if (typeof query !== 'object' || query === null) {
+		if (typeof query !== "object" || query === null) {
 			return Promise.reject(new InsightError("Query must be an object"));
 		}
 
-		// Cast query to class Query 
-		query = query as Query; 
-		// This will not throw error but trying to access properties that are not present 
-		// will throw a runtime error.
-
+		// Create a Query object
+		query = new Query(query);
 
 		// validate & access query !!!
 		// - filter sections (WHERE block)
@@ -253,60 +248,58 @@ export default class InsightFacade implements IInsightFacade {
 
 		return Promise.reject(new InsightError("Not implemented yet")); //stub
 
+		// 	const filteredSections = this.filterSections(query.input.WHERE);
 
-	// 	const filteredSections = this.filterSections(query.input.WHERE);
+		// // Parse OPTIONS block: Extract columns and order field
+		// const columns = query.input.OPTIONS.COLUMNS;
+		// const orderField = query.input.OPTIONS.ORDER;
 
-    // // Parse OPTIONS block: Extract columns and order field
-    // const columns = query.input.OPTIONS.COLUMNS;
-    // const orderField = query.input.OPTIONS.ORDER;
+		// // Sort the filtered results if ORDER is specified
+		// let sortedSections = filteredSections;
+		// if (orderField) {
+		//     sortedSections = this.sortResults(filteredSections, orderField);
+		// }
 
-    // // Sort the filtered results if ORDER is specified
-    // let sortedSections = filteredSections;
-    // if (orderField) {
-    //     sortedSections = this.sortResults(filteredSections, orderField);
-    // }
+		// // Select the required columns
+		// const finalResults = this.selectColumns(sortedSections, columns);
 
-    // // Select the required columns
-    // const finalResults = this.selectColumns(sortedSections, columns);
-
-    // return finalResults;
-
+		// return finalResults;
 	}
 
 	// public filterSections(where: any, sections: Section[]): Section[] {
-		// If WHERE block is empty, return all sections (no filtering)
-		//!!! get all sections in the dataset
-		// if (Object.keys(where).length === 0) {
-		// 	return sections;
-		// }
-	
-		// // Process logical operators
-		// if (where.AND) {
-		// 	return this.handleAND(where.AND, sections);
-		// }
-		// if (where.OR) {
-		// 	return this.handleOR(where.OR, sections);
-		// }
-		// if (where.NOT) {
-		// 	return this.handleNOT(where.NOT, sections);
-		// }
-	
-		// // Process comparison operators (EQ, GT, LT, IS)
-		// if (where.EQ) {
-		// 	return this.handleEQ(where.EQ, sections);
-		// }
-		// if (where.GT) {
-		// 	return this.handleGT(where.GT, sections);
-		// }
-		// if (where.LT) {
-		// 	return this.handleLT(where.LT, sections);
-		// }
-		// if (where.IS) {
-		// 	return this.handleIS(where.IS, sections);
-		// }
-	
-		// // If no valid operator is found, return all sections (shouldn't happen)
-		// return sections;
+	// If WHERE block is empty, return all sections (no filtering)
+	//!!! get all sections in the dataset
+	// if (Object.keys(where).length === 0) {
+	// 	return sections;
+	// }
+
+	// // Process logical operators
+	// if (where.AND) {
+	// 	return this.handleAND(where.AND, sections);
+	// }
+	// if (where.OR) {
+	// 	return this.handleOR(where.OR, sections);
+	// }
+	// if (where.NOT) {
+	// 	return this.handleNOT(where.NOT, sections);
+	// }
+
+	// // Process comparison operators (EQ, GT, LT, IS)
+	// if (where.EQ) {
+	// 	return this.handleEQ(where.EQ, sections);
+	// }
+	// if (where.GT) {
+	// 	return this.handleGT(where.GT, sections);
+	// }
+	// if (where.LT) {
+	// 	return this.handleLT(where.LT, sections);
+	// }
+	// if (where.IS) {
+	// 	return this.handleIS(where.IS, sections);
+	// }
+
+	// // If no valid operator is found, return all sections (shouldn't happen)
+	// return sections;
 	// }
 
 	// public handleAND(conditions: any[], sections: Section[]): Section[] {
@@ -314,13 +307,13 @@ export default class InsightFacade implements IInsightFacade {
 	// 		return this.filterSections(condition, acc);
 	// 	}, sections); // Apply each condition on the filtered result
 	// }
-	
+
 	// public handleOR(conditions: any[], sections: Section[]): Section[] {
 	// 	const results = conditions.map(condition => this.filterSections(condition, sections));
 	// 	// Merge all results (union)
 	// 	return results.flat();
 	// }
-	
+
 	// public handleNOT(condition: any, sections: Section[]): Section[] {
 	// 	const filteredSections = this.filterSections(condition, sections);
 	// 	// Return sections that are NOT in the filtered set
@@ -330,17 +323,17 @@ export default class InsightFacade implements IInsightFacade {
 	// 	const [field, value] = Object.entries(condition)[0];
 	// 	return sections.filter(section => section[field] === value);
 	// }
-	
+
 	// public handleGT(condition: any, sections: Section[]): Section[] {
 	// 	const [field, value] = Object.entries(condition)[0];
 	// 	return sections.filter(section => section[field] > value);
 	// }
-	
+
 	// public handleLT(condition: any, sections: Section[]): Section[] {
 	// 	const [field, value] = Object.entries(condition)[0];
 	// 	return sections.filter(section => section[field] < value);
 	// }
-	
+
 	// public handleIS(condition: any, sections: Section[]): Section[] {
 	// 	const [field, value] = Object.entries(condition)[0];
 	// 	return sections.filter(section => section[field] === value);
