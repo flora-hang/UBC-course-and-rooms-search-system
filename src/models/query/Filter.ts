@@ -1,5 +1,3 @@
-abstract class Filter {}
+// FILTER ::= LOGICCOMPARISON | MCOMPARISON | SCOMPARISON | NEGATION
+export default abstract class Filter {}
 
-export default class LogicComparison extends Filter {
-    
-}

@@ -238,8 +238,8 @@ export default class InsightFacade implements IInsightFacade {
 			return Promise.reject(new InsightError("Query must be an object"));
 		}
 
-		// Create a Query object
-		query = new Query(query);
+		// Build query object
+		query = Query.buildQuery(query);
 
 		// validate & access query !!!
 		// - filter sections (WHERE block)
