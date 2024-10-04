@@ -13,7 +13,7 @@ export default class ComparisonNode extends ConditionNode {
         this.value = comparison[this.comparisonField];
     }
 
-    evaluate(section: Section): boolean {
+    private evaluate(section: Section): boolean {
         //figure out a way to look for specific field
         const sectionValue = section.getField(this.comparisonField);
         switch (this.operation) {
