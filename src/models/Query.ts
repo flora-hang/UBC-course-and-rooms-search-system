@@ -1,8 +1,8 @@
 import ConditionNode from "./ConditionNode";
-import AndNode from "./ANDNode";
+import AndNode from "./AndNode";
 import ComparisonNode from "./ComparisonNode"
-import OrNode from "./ORNode"
-import NotNode from "./NOTNode"
+import OrNode from "./OrNode"
+import NotNode from "./NotNode"
 export default class Query {
     private where: ConditionNode;
     private columns: string[];
