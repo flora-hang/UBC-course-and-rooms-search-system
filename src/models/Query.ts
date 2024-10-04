@@ -2,6 +2,7 @@ import ConditionNode from "./ConditionNode";
 import AndNode from "./ANDNode";
 import ComparisonNode from "./ComparisonNode"
 import OrNode from "./ORNode"
+import NotNode from "./NOTNode"
 export default class Query {
     private where: ConditionNode;
     private columns: string[];
