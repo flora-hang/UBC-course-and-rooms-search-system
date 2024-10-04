@@ -34,6 +34,33 @@ export default class Section {
 		this.audit = audit;
 	}
 
+	public getField(comparisonField: string): any {
+		switch (comparisonField) {
+			case "uuid":
+				return this.getUuid();
+			case "id":
+				return this.getId();
+			case "title":
+				return this.getTitle();
+			case "instructor":
+				return this.getInstructor();
+			case "dept":
+				return this.getDept();
+			case "year":
+				return this.getYear();
+			case "avg":
+				return this.getAvg();
+			case "pass":
+				return this.getPass();
+			case "fail":
+				return this.getFail();
+			case "audit":
+				return this.getAudit();
+			default:
+				throw new Error("Error: Called getField() with an invalid comparisonField arg.");
+		}
+	}
+
 	public getUuid(): string {
 		return this.uuid;
 	}
