@@ -234,6 +234,20 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async performQuery(query: unknown): Promise<InsightResult[]> {
+		// Check if query is an object
+		if (typeof query !== 'object' || query === null) {
+			return Promise.reject(new InsightError("Query must be an object"));
+		}
+
+		// cast query to class Query !!!
+
+		// validate & access query !!!
+		// - filter sections (WHERE block)
+		// - make required columns (OPTIONS: COLUMNS)
+		// - order results (OPTIONS: ORDER)
+
+		return Promise.reject(new InsightError("Not implemented yet")); //stub
+
 
 	// 	const filteredSections = this.filterSections(query.input.WHERE);
 
@@ -254,7 +268,7 @@ export default class InsightFacade implements IInsightFacade {
 
 	}
 
-	public filterSections(where: any, sections: Section[]): Section[] {
+	// public filterSections(where: any, sections: Section[]): Section[] {
 		// If WHERE block is empty, return all sections (no filtering)
 		//!!! get all sections in the dataset
 		// if (Object.keys(where).length === 0) {
@@ -288,7 +302,7 @@ export default class InsightFacade implements IInsightFacade {
 	
 		// // If no valid operator is found, return all sections (shouldn't happen)
 		// return sections;
-	}
+	// }
 
 	// public handleAND(conditions: any[], sections: Section[]): Section[] {
 	// 	return conditions.reduce((acc, condition) => {
