@@ -11,7 +11,7 @@ export default class Query {
     }
 
     public static buildQuery(object: any): Query {
-        const WHERE = Where.buildQuery(object.WHERE); // maybe check if object.WHERE is empty?
+        const WHERE = Where.buildQuery(object.WHERE);
         const OPTIONS = Options.buildQuery(object.OPTIONS);
         return new Query(WHERE, OPTIONS);
     }

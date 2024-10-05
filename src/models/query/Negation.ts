@@ -1,4 +1,3 @@
-import WHERE from './Where';
 import Filter from './Filter';
 
 export default class Negation extends Filter {
@@ -15,7 +14,7 @@ export default class Negation extends Filter {
             throw new Error('Invalid negation');
         }
 
-        const filter = WHERE.buildQuery(object[key]); //!!! this returns a Where object
+        const filter = Filter.buildQuery(object[key]); 
 
         return new Negation(filter);
     }

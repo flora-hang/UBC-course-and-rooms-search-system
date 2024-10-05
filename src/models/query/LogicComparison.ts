@@ -1,12 +1,12 @@
-import WHERE from './Where';
 import Filter from './Filter';
+console.log("-------", Filter);
 
 export enum Logic {
     AND = 'AND',
     OR = 'OR',
 }
 
-export default class LogicComparison extends Filter{
+export default class LogicComparison extends Filter {
     public logic: Logic;
     public filters: Filter[];
 
@@ -23,7 +23,7 @@ export default class LogicComparison extends Filter{
         }
 
         const logic = key as Logic;
-        const filters = object[key].map((f: any) => WHERE.buildQuery(f)); //!!!
+        const filters = object[key].map((f: any) => Filter.buildQuery(f)); 
 
         return new LogicComparison(logic, filters);
     }
