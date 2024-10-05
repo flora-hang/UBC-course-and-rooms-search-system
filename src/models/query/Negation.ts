@@ -1,20 +1,23 @@
-import Filter from './Filter';
+import IFilter from './IFilter';
 
-export default class Negation extends Filter {
-    public filter: Filter;
+export default class Negation implements IFilter {
+    public filter: IFilter;
 
-    constructor(filter: Filter) {
-        super();
+    constructor(filter: IFilter) {
         this.filter = filter;
     }
 
-    public static buildQuery(object: any): Filter {
+    public buildQuery(object: any): IFilter {
+        throw new Error('buildQuery not implemented.', object);
+    }
+
+    public static buildQueryStatic(object: any, factory: IFilter): IFilter {
         const key = Object.keys(object)[0]; // returns 'NOT'
         if (key !== 'NOT') {
             throw new Error('Invalid negation');
         }
 
-        const filter = Filter.buildQuery(object[key]); 
+        const filter = factory.buildQuery(object[key]); 
 
         return new Negation(filter);
     }

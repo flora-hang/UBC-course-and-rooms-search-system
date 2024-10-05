@@ -238,6 +238,11 @@ export default class InsightFacade implements IInsightFacade {
 			return Promise.reject(new InsightError("Query must be an object"));
 		}
 
+		// Check if query is empty
+		if (Object.keys(query).length === 0) {
+			return Promise.reject(new InsightError("Query is empty"));
+		}
+
 		// Build query object
 		query = Query.buildQuery(query);
 
@@ -246,7 +251,7 @@ export default class InsightFacade implements IInsightFacade {
 		// - make required columns (OPTIONS: COLUMNS)
 		// - order results (OPTIONS: ORDER)
 
-		return Promise.reject(new InsightError("Not implemented yet")); //stub
+		return Promise.reject(new InsightError("Built query, rest of performQuery not implemented yet")); //stub
 
 		// 	const filteredSections = this.filterSections(query.input.WHERE);
 

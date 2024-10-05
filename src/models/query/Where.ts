@@ -1,9 +1,10 @@
-import Filter from './Filter';
+import IFilter from './IFilter';
+import FilterFactory from './FilterFactory';
 
 export default class Where {
-    public filter?: Filter;
+    public filter?: IFilter;
 
-    constructor(filter?: Filter) {
+    constructor(filter?: IFilter) {
         if (filter) { 
             this.filter = filter; 
         }
@@ -11,17 +12,18 @@ export default class Where {
 
     public static buildQuery(object: any): Where {
 
-        let filter: Filter;
+        let filter: IFilter;
 
         const key = Object.keys(object)[0]; 
 
         if (key.length === 0) {
             return new Where();
-        } else {
-            filter = Filter.buildQuery(object);
+        } else { 
+            // WHERE is not empty:
+            filter = new FilterFactory();
+            filter = filter.buildQuery(object);
+            return new Where(filter);
         }
-
-        return new Where(filter);
     }
 
 }

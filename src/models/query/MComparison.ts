@@ -1,4 +1,4 @@
-import Filter from './Filter';
+import IFilter from "./IFilter";
 
 export enum MComparator {
     LT = 'LT',
@@ -6,19 +6,22 @@ export enum MComparator {
     EQ = 'EQ'
 }
 
-export default class MComparison extends Filter {
+export default class MComparison implements IFilter {
     public mComparator: MComparator;
     public mkey: string; // mkey ::= '"' idstring '_' mfield '"'
     public value: number;
 
     constructor(mComparator: MComparator, mkey: string, value: number) {  
-        super();  
         this.mComparator = mComparator;
         this.mkey = mkey;
         this.value = value;
     }
 
-    public static buildQuery(object: any): Filter {
+    public buildQuery(object: any): IFilter {
+        throw new Error("buildQuery not implemented.", object);
+    }
+
+    public static buildQuery(object: any): IFilter {
         const key = Object.keys(object)[0]; // returns 'GT' | 'LT' | 'EQ'
         if (key !== MComparator.LT && key !== MComparator.GT && key !== MComparator.EQ) {
             throw new Error('Invalid M comparison');
