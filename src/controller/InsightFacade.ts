@@ -11,6 +11,11 @@ import {
 	NotFoundError,
 	ResultTooLargeError,
 } from "./IInsightFacade";
+import {
+	filterSections,
+	sortResults,
+	selectColumns
+} from "./PerformQueryHelpers";
 import * as fsPromises from "fs/promises";
 import fs from "fs-extra";
 import JSZip from "jszip";
@@ -259,7 +264,7 @@ export default class InsightFacade implements IInsightFacade {
 
 		// validate & access query !!!
 		// - filter sections (WHERE block)
-		const filteredSections = this.filterSections(validQuery.WHERE, dataset.getSections());
+		const filteredSections = filterSections(validQuery.WHERE, dataset.getSections());
 
 		// - check if filtered sections exceed 5000 sections limit
 		if (filteredSections.length > 5000) {
@@ -268,110 +273,16 @@ export default class InsightFacade implements IInsightFacade {
 		// - make required columns (OPTIONS: COLUMNS)
 		// - order results (OPTIONS: ORDER)
 
-		return Promise.reject(new InsightError("Built query, rest of performQuery not implemented yet")); //stub
-
 		// // Parse OPTIONS block: Extract columns and order field
-		// const columns = query.input.OPTIONS.COLUMNS;
-		// const orderField = query.input.OPTIONS.ORDER;
+		const columns = validQuery.OPTIONS.columns;
+		const orderField = validQuery.OPTIONS.order;
 
-		// // Sort the filtered results if ORDER is specified
-		// let sortedSections = filteredSections;
-		// if (orderField) {
-		//     sortedSections = this.sortResults(filteredSections, orderField);
-		// }
+		// Sort the filtered results if ORDER is specified, otherwise leave as is
+		const sortedSections = (orderField) ? sortResults(filteredSections, orderField, columns) : filteredSections;
 
 		// // Select the required columns
-		// const finalResults = this.selectColumns(sortedSections, columns);
+		const finalResults: InsightResult[] = selectColumns(sortedSections, columns);
 
-		// return finalResults;
-	}
-
-	public filterSections(where: any, sections: Section[]): Section[] {
-		// If WHERE block is empty, return all sections (no filtering)
-		// !!! get all sections in the dataset
-		if (Object.keys(where).length === 0) {
-			return sections;
-		}
-
-		// Process logical operators
-		if (where.AND) {
-			return this.handleAND(where.AND, sections);
-		}
-		if (where.OR) {
-			return this.handleOR(where.OR, sections);
-		}
-		if (where.NOT) {
-			return this.handleNOT(where.NOT, sections);
-		}
-
-		// Process comparison operators (EQ, GT, LT, IS)
-		if (where.EQ) {
-			return this.handleEQ(where.EQ, sections);
-		}
-		if (where.GT) {
-			return this.handleGT(where.GT, sections);
-		}
-		if (where.LT) {
-			return this.handleLT(where.LT, sections);
-		}
-		if (where.IS) {
-			return this.handleIS(where.IS, sections);
-		}
-
-		// If no valid operator is found, return all sections (shouldn't happen)
-		return sections;
-	}
-
-	public handleAND(conditions: any[], sections: Section[]): Section[] {
-		return conditions.reduce((acc, condition) => {
-			return this.filterSections(condition, acc);
-		}, sections); // Apply each condition on the filtered result
-	}
-
-	public handleOR(conditions: any[], sections: Section[]): Section[] {
-		const results = conditions.map((condition) => this.filterSections(condition, sections));
-		// Merge all results (union)
-		return results.flat();
-	}
-
-	public handleNOT(condition: any, sections: Section[]): Section[] {
-		const filteredSections = this.filterSections(condition, sections);
-		// Return sections that are NOT in the filtered set
-		return sections.filter((section) => !filteredSections.includes(section));
-	}
-
-	public handleEQ(condition: any, sections: Section[]): Section[] {
-		const field: string = condition.mkey.split("_")[1]; // e.g. "avg"
-		// const [field, value] = Object.entries(condition)[0];
-		return sections.filter((section) => section.getField(field) === condition.value);
-	}
-
-	public handleGT(condition: any, sections: Section[]): Section[] {
-		const field: string = condition.mkey.split("_")[1]; // e.g. "avg"
-		// const [field, value] = Object.entries(condition)[0];
-		return sections.filter((section) => section.getField(field) > condition.value);
-	}
-
-	public handleLT(condition: any, sections: Section[]): Section[] {
-		const field: string = condition.mkey.split("_")[1]; // e.g. "avg"
-		// const [field, value] = Object.entries(condition)[0];
-		return sections.filter((section) => section.getField(field) < condition.value);
-	}
-
-	public handleIS(condition: any, sections: Section[]): Section[] {
-		const field: string = condition.skey.split("_")[1]; // e.g. "avg"
-		// const [field, value] = Object.entries(condition)[0];
-		if (condition.inputString.includes("*")) {
-			if (condition.inputString.startsWith("*") && condition.inputString.endsWith("*")) {
-				return sections.filter((section) => section.getField(field).constains(condition.inputString));
-			} else if (condition.inputString.startsWith("*")) {
-				return sections.filter((section) => section.getField(field).endsWith(condition.inputString));
-			} else if (condition.inputString.endsWith("*")) {
-				return sections.filter((section) => section.getField(field).startsWith(condition.inputString));
-			} else {
-				throw new InsightError("invalid use of wildcard");
-			}
-		}
-		return sections.filter((section) => section.getField(field) === condition.value);
+		return finalResults;
 	}
 }
