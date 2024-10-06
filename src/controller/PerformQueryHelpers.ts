@@ -1,8 +1,5 @@
 import Section from "../models/Section";
-import {
-	InsightError,
-	InsightResult,
-} from "./IInsightFacade";
+import { InsightError, InsightResult } from "./IInsightFacade";
 
 export function filterSections(where: any, sections: Section[]): Section[] {
 	// If WHERE block is empty, return all sections (no filtering)
@@ -93,7 +90,6 @@ function handleIS(condition: any, sections: Section[]): Section[] {
 	return sections.filter((section) => section.getField(field) === condition.value);
 }
 
-
 function mkeyFlag(field: string): boolean {
 	switch (field) {
 		case "avg":
@@ -147,13 +143,13 @@ export function sortResults(sections: Section[], order: String, columns: String[
 export function selectColumns(sections: Section[], columns: string[]): InsightResult[] {
 	columns = columns.map((column) => column.split("_")[1]);
 
-	return sections.map(section => {
-        const selected: any = {};
-        columns.forEach(column => {
-            if (column in section) {
-                selected[column] = section.getField(column);
-            }
-        });
-        return selected;
-    });
+	return sections.map((section) => {
+		const selected: any = {};
+		columns.forEach((column) => {
+			if (column in section) {
+				selected[column] = section.getField(column);
+			}
+		});
+		return selected;
+	});
 }

@@ -11,15 +11,12 @@ import {
 	NotFoundError,
 	ResultTooLargeError,
 } from "./IInsightFacade";
-import {
-	filterSections,
-	sortResults,
-	selectColumns
-} from "./PerformQueryHelpers";
+import { filterSections, sortResults, selectColumns } from "./PerformQueryHelpers";
 import * as fsPromises from "fs/promises";
 import fs from "fs-extra";
 import JSZip from "jszip";
 import Query from "../models/query/Query";
+
 // import { json } from "stream/consumers";
 
 /**
@@ -86,7 +83,7 @@ export default class InsightFacade implements IInsightFacade {
 		const filePath = this.dataDir + `/${id}.json`;
 		try {
 			await fsPromises.unlink(filePath);
-			this.datasets["delete"](id);
+			this.datasets.delete(id);
 			return id;
 		} catch (err) {
 			return Promise.reject(new InsightError(`Error: ${err}`));
@@ -254,20 +251,18 @@ export default class InsightFacade implements IInsightFacade {
 		// access dataset id
 		const temp: string = validQuery.OPTIONS.columns[0]; // i.e. "sections_dept"
 		const id: string = temp.split("_")[0]; // i.e. "sections"
-		let dataset;
 
-		if (this.datasets.has(id)) {
-			dataset = this.datasets.get(id)[0] ?? 0;
-		} else {
+		const dataset = this.datasets.get(id);
+		if (!(dataset instanceof Dataset)) {
 			throw new InsightError("Querying section that has not been added");
 		}
 
 		// validate & access query !!!
 		// - filter sections (WHERE block)
 		const filteredSections = filterSections(validQuery.WHERE, dataset.getSections());
-
+		const maxSections = 5000;
 		// - check if filtered sections exceed 5000 sections limit
-		if (filteredSections.length > 5000) {
+		if (filteredSections.length > maxSections) {
 			throw new ResultTooLargeError("sections[] exceed size of 5000");
 		}
 		// - make required columns (OPTIONS: COLUMNS)
@@ -278,7 +273,7 @@ export default class InsightFacade implements IInsightFacade {
 		const orderField = validQuery.OPTIONS.order;
 
 		// Sort the filtered results if ORDER is specified, otherwise leave as is
-		const sortedSections = (orderField) ? sortResults(filteredSections, orderField, columns) : filteredSections;
+		const sortedSections = orderField ? sortResults(filteredSections, orderField, columns) : filteredSections;
 
 		// // Select the required columns
 		const finalResults: InsightResult[] = selectColumns(sortedSections, columns);
