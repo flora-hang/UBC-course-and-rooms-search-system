@@ -1,3 +1,4 @@
+import { InsightError } from "../../controller/IInsightFacade";
 import IFilter from "./IFilter";
 
 export enum Logic {
@@ -25,6 +26,9 @@ export default class LogicComparison implements IFilter {
         }
 
         const logic = key as Logic;
+        if (object[key].length === 0) {
+            throw new InsightError('Empty logic comparison');
+        }
         const filters = object[key].map((f: any) => factory.buildQuery(f)); 
 
         return new LogicComparison(logic, filters);

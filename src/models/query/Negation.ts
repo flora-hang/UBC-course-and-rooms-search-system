@@ -1,3 +1,4 @@
+import { InsightError } from '../../controller/IInsightFacade';
 import IFilter from './IFilter';
 
 export default class Negation implements IFilter {
@@ -16,7 +17,9 @@ export default class Negation implements IFilter {
         if (key !== 'NOT') {
             throw new Error('Invalid negation');
         }
-
+        if (!object[key] || typeof object[key] !== 'object') {
+            throw new InsightError('Empty negation');
+        }
         const filter = factory.buildQuery(object[key]); 
 
         return new Negation(filter);

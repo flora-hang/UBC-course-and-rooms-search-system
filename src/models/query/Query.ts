@@ -1,5 +1,6 @@
 import Where from "./Where";
 import Options from "./Options";
+import { InsightError } from "../../controller/IInsightFacade";
 
 export default class Query {
     public WHERE: Where;
@@ -11,6 +12,13 @@ export default class Query {
     }
 
     public static buildQuery(object: any): Query {
+        if (!object.WHERE) {
+            throw new InsightError("Query must have a WHERE block");
+        }
+        if (!object.OPTIONS) {
+            throw new InsightError("Query must have an OPTIONS block");
+        }
+        
         const WHERE = Where.buildQuery(object.WHERE);
         const OPTIONS = Options.buildQuery(object.OPTIONS);
         return new Query(WHERE, OPTIONS);

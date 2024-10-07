@@ -3,6 +3,7 @@ import LogicComparison from './LogicComparison';
 import MComparison from './MComparison';
 import SComparison from './SComparison';
 import Negation from './Negation';
+import { InsightError } from '../../controller/IInsightFacade';
 
 // FILTER ::= LOGICCOMPARISON | MCOMPARISON | SCOMPARISON | NEGATION
 export default class FilterFactory implements IFilter {
@@ -34,7 +35,7 @@ export default class FilterFactory implements IFilter {
                 filter = Negation.buildQueryStatic(object, this);
                 break;
             default:
-                throw new Error('Unknown filter type');
+                throw new InsightError('Unknown filter type');
         }
 
         return filter;
