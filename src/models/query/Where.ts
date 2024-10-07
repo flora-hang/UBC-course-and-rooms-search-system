@@ -11,12 +11,11 @@ export default class Where {
     }
 
     public static buildQuery(object: any): Where {
-
         let filter: IFilter;
 
         const key = Object.keys(object)[0]; 
 
-        if (key.length === 0) {
+        if (!key || key.length === 0) {
             return new Where();
         } else { 
             // WHERE is not empty:
