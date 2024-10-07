@@ -12,6 +12,10 @@ export default class FilterFactory implements IFilter {
         // Empty constructor
     }
 
+    public checkId(id: string): void {
+        throw new Error('checkId not implemented: ' + id);
+    }
+
     public buildQuery(object: any): IFilter {
         console.log('> FilterFactory.buildQuery()');
         let filter: IFilter;

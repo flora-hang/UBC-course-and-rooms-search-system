@@ -1,3 +1,4 @@
+import Query from "../models/query/Query";
 import Section from "../models/Section";
 import { InsightError, InsightResult } from "./IInsightFacade";
 
@@ -152,4 +153,21 @@ export function selectColumns(sections: Section[], columns: string[]): InsightRe
 		});
 		return selected;
 	});
+}
+
+// traverse query to check that the same valid id is used throughout
+export function checkIds(query: Query): string {
+	const idStrings = query.OPTIONS.columns.map((column: string) => column.split("_")[0]);
+	// check if all idStrings are the same
+	const uniqueIds = new Set(idStrings);
+	if (uniqueIds.size > 1) {
+		throw new InsightError("Multiple dataset IDs found in COLUMNS");
+	}
+	const datasetId = idStrings[0];
+	// will check that order key in columns in sort results
+	if (query.OPTIONS.order && query.OPTIONS.order.split("_")[0] !== datasetId) {
+		throw new InsightError("Multiple dataset IDs found in ORDER");
+	}
+	query.WHERE.checkId(datasetId);
+	return datasetId;
 }

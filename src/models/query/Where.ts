@@ -24,7 +24,12 @@ export default class Where {
             filter = filter.buildQuery(object);
             return new Where(filter);
         }
-        
+    }
+
+    public checkId(id: string): void {
+        if (this.filter) {
+            this.filter.checkId(id);
+        } 
     }
 
 

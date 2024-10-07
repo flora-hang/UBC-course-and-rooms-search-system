@@ -10,13 +10,18 @@ export enum SField {
 }
 
 export default class SComparison implements IFilter {
-    private static id: string; //!!! see MComparison.ts for explanation
     public skey: string; // skey ::= '"' idstring '_' sfield '"'
     public inputString: string;
 
     constructor(skey: string, inputString: string) {    
         this.skey = skey;
         this.inputString = inputString;
+    }
+
+    public checkId(id: string): void {
+        if (this.skey.split('_')[0] !== id) {
+            throw new InsightError('Cannot query from multiple datasets');
+        }
     }
 
     public buildQuery(object: any): IFilter {
@@ -39,15 +44,7 @@ export default class SComparison implements IFilter {
         if (parts.length !== numParts) {
             throw new InsightError('Invalid skey format');
         }
-        //---------------------------------------
-        if (!this.id && parts[0].length > 0) { // no id yet
-            this.id = parts[0];
-        } else { // id already exist, check that it's the same
-            if (this.id !== parts[0]) {
-                throw new InsightError('Cannot query from multiple datasets');
-            }
-        }
-        //---------------------------------------
+
         // check that mfield is valid
         if (!(parts[1] in SField)) {
             throw new InsightError('Invalid sfield');

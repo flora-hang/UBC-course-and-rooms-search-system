@@ -11,7 +11,7 @@ import {
 	NotFoundError,
 	ResultTooLargeError,
 } from "./IInsightFacade";
-import { filterSections, sortResults, selectColumns } from "./PerformQueryHelpers";
+import { filterSections, sortResults, selectColumns, checkIds } from "./PerformQueryHelpers";
 import * as fsPromises from "fs/promises";
 import fs from "fs-extra";
 import JSZip from "jszip";
@@ -247,23 +247,17 @@ export default class InsightFacade implements IInsightFacade {
 		}
 
 		// Build query object
-		const validQuery = Query.buildQuery(query); 
+		const validQuery = Query.buildQuery(query);
 		console.log("> built query");
 
-		// traverse query to check that the same valid id is used throughout
-		// !!!
+		const id = checkIds(validQuery);
 
-
-		// access dataset id
-		const temp: string = validQuery.OPTIONS.columns[0]; // i.e. "sections_dept"
-		const id: string = temp.split("_")[0]; // i.e. "sections"
-
-		const dataset = this.datasets.get(id);
-		if (!(dataset instanceof Dataset)) {
+		const data = this.datasets.get(id);
+		if (!data) {
 			throw new InsightError("Querying section that has not been added");
 		}
+		const dataset = data[0];
 
-		// validate & access query !!!
 		// - filter sections (WHERE block)
 		const filteredSections = filterSections(validQuery.WHERE, dataset.getSections());
 		const maxSections = 5000;

@@ -16,7 +16,6 @@ export enum MField {
 }
 
 export default class MComparison implements IFilter {
-    private static id?: string; //!!! want to check that the query is only querying from one existing dataset
     public mComparator: MComparator;
     public mkey: string; // mkey ::= '"' idstring '_' mfield '"'
     public value: number;
@@ -25,6 +24,12 @@ export default class MComparison implements IFilter {
         this.mComparator = mComparator;
         this.mkey = mkey;
         this.value = value;
+    }
+
+    public checkId(id: string): void {
+        if (this.mkey.split('_')[0] !== id) {
+            throw new InsightError('Cannot query from multiple datasets');
+        }
     }
 
     public buildQuery(object: any): IFilter {
@@ -49,13 +54,7 @@ export default class MComparison implements IFilter {
         if (parts.length !== numParts) {
             throw new InsightError('Invalid mkey format');
         }
-        if (!this.id && parts[0].length > 0) { // no id yet
-            this.id = parts[0];
-        } else { // id already exist, check that it's the same
-            if (this.id !== parts[0]) {
-                throw new InsightError('Cannot query from multiple datasets');
-            }
-        }
+       
         // check that mfield is valid
         if (!(parts[1] in MField)) {
             throw new InsightError('Invalid mfield');
