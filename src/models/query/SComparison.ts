@@ -24,6 +24,7 @@ export default class SComparison implements IFilter {
     }
 
     public static buildQuery(object: any): IFilter {
+        console.log('> SComparison.buildQuery()');
         const key = Object.keys(object)[0]; // returns 'IS'
         if (key !== 'IS') {
             throw new Error('Invalid logic comparison');
@@ -55,7 +56,10 @@ export default class SComparison implements IFilter {
         if (typeof inputString !== 'string') {
             throw new InsightError('inputString must be a string');
         }
-        //!!! deal with wildcards *
+        
+        if (inputString.slice(1, -1).includes('*')) {
+            throw new InsightError('invalid inputString with * in the middle');
+        }
 
         return new SComparison(skey, inputString);
     }

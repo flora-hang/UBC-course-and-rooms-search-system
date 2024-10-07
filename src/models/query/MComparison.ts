@@ -32,6 +32,7 @@ export default class MComparison implements IFilter {
     }
 
     public static buildQuery(object: any): IFilter {
+        console.log('> MComparison.buildQuery()');
         const key = Object.keys(object)[0]; // returns 'GT' | 'LT' | 'EQ'
         if (key !== MComparator.LT && key !== MComparator.GT && key !== MComparator.EQ) {
             throw new Error('Invalid M comparison');

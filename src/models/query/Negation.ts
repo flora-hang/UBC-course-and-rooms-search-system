@@ -13,6 +13,7 @@ export default class Negation implements IFilter {
     }
 
     public static buildQueryStatic(object: any, factory: IFilter): IFilter {
+        console.log('> Negation.buildQueryStatic()');
         const key = Object.keys(object)[0]; // returns 'NOT'
         if (key !== 'NOT') {
             throw new Error('Invalid negation');

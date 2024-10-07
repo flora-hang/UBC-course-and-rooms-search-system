@@ -247,7 +247,13 @@ export default class InsightFacade implements IInsightFacade {
 		}
 
 		// Build query object
-		const validQuery = Query.buildQuery(query); // I made it a new object to I can call on it
+		const validQuery = Query.buildQuery(query); 
+		console.log("> built query");
+
+		// traverse query to check that the same valid id is used throughout
+		// !!!
+
+
 		// access dataset id
 		const temp: string = validQuery.OPTIONS.columns[0]; // i.e. "sections_dept"
 		const id: string = temp.split("_")[0]; // i.e. "sections"

@@ -11,6 +11,7 @@ export default class Where {
     }
 
     public static buildQuery(object: any): Where {
+        console.log('> Where.buildQuery()');
         let filter: IFilter;
 
         const key = Object.keys(object)[0]; 
@@ -23,6 +24,7 @@ export default class Where {
             filter = filter.buildQuery(object);
             return new Where(filter);
         }
+        
     }
 
 

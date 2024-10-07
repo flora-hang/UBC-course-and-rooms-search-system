@@ -14,6 +14,7 @@ export default class Options {
     }
 
     public static buildQuery(object: any): Options {
+        console.log('> Options.buildQuery()');
         if (!object.COLUMNS) {
             throw new InsightError('no COLUMNS in OPTIONS');
         }
