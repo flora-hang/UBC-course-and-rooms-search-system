@@ -251,6 +251,7 @@ export default class InsightFacade implements IInsightFacade {
 		console.log("> built query");
 
 		const id = checkIds(validQuery);
+		console.log("> checked ids");
 
 		const data = this.datasets.get(id);
 		if (!data) {

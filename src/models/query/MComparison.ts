@@ -37,7 +37,7 @@ export default class MComparison implements IFilter {
     }
 
     public static buildQuery(object: any): IFilter {
-        console.log('> MComparison.buildQuery()');
+        console.log('> MComparison.buildQuery(): ', object);
         const key = Object.keys(object)[0]; // returns 'GT' | 'LT' | 'EQ'
         if (key !== MComparator.LT && key !== MComparator.GT && key !== MComparator.EQ) {
             throw new Error('Invalid M comparison');
@@ -46,6 +46,9 @@ export default class MComparison implements IFilter {
 
         if (!object[key] || Object.keys(object[key]).length === 0) {
             throw new InsightError('M comparison must have a mkey and value');
+        }
+        if (Object.keys(object[key]).length > 1) {
+            throw new InsightError('Invalid MComparison: more than one key');
         }
 
         const mkey = Object.keys(object[key])[0]; // e.g. returns "sections_avg"

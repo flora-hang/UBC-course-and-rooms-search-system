@@ -37,6 +37,9 @@ export default class SComparison implements IFilter {
         if (!object[key] || Object.keys(object[key]).length === 0) {
             throw new InsightError('S comparison must have a mkey and value');
         }
+        if (Object.keys(object[key]).length > 1) {
+            throw new InsightError('Invalid SComparison: more than one key');
+        }
 
         const skey = Object.keys(object[key])[0];
         const parts = skey.split('_');

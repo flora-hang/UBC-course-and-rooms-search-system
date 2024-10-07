@@ -1,5 +1,6 @@
 import IFilter from './IFilter';
 import FilterFactory from './FilterFactory';
+import { InsightError } from '../../controller/IInsightFacade';
 
 export default class Where {
     public filter?: IFilter;
@@ -11,9 +12,12 @@ export default class Where {
     }
 
     public static buildQuery(object: any): Where {
-        console.log('> Where.buildQuery()');
+        console.log('> Where.buildQuery():', object);
         let filter: IFilter;
 
+        if (Object.keys(object).length > 1) {
+            throw new InsightError('Invalid WHERE: more than one filter');
+        }
         const key = Object.keys(object)[0]; 
 
         if (!key || key.length === 0) {

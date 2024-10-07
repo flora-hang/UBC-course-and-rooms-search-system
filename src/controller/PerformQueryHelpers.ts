@@ -164,10 +164,11 @@ export function checkIds(query: Query): string {
 		throw new InsightError("Multiple dataset IDs found in COLUMNS");
 	}
 	const datasetId = idStrings[0];
-	// will check that order key in columns in sort results
-	if (query.OPTIONS.order && query.OPTIONS.order.split("_")[0] !== datasetId) {
-		throw new InsightError("Multiple dataset IDs found in ORDER");
-	}
+
+	// order key in columns checked in sortResults
+	// if (query.OPTIONS.order && query.OPTIONS.order.split("_")[0] !== datasetId) {
+	// 	throw new InsightError("Multiple dataset IDs found in ORDER");
+	// }
 	query.WHERE.checkId(datasetId);
 	return datasetId;
 }
