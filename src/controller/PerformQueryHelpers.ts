@@ -189,13 +189,12 @@ export function sortResults(sections: Section[], order: String, columns: String[
 }
 
 export function selectColumns(sections: Section[], columns: string[]): InsightResult[] {
-	columns = columns.map((column) => column.split("_")[1]);
-
 	return sections.map((section) => {
 		const selected: any = {};
 		columns.forEach((column) => {
-			if (column in section) {
-				selected[column] = section.getField(column);
+			const columnNameWithoutDatasetID: string = column.split("_")[1];
+			if (columnNameWithoutDatasetID in section) {
+				selected[column] = section.getField(columnNameWithoutDatasetID);
 			}
 		});
 		return selected;
