@@ -42,12 +42,12 @@ export function filterSections(where: any, sections: Section[], id: string): Sec
 	}
 
 	if (where.filter.mComparator === "GT") {
-		// console.log("been in GT");
+		console.log("been in GT");
 		return handleGT(where.filter, sections, id);
 	}
 
 	if (where.filter.mComparator === "LT") {
-		// console.log("been in LT");
+		console.log("been in LT");
 		return handleLT(where.filter, sections, id);
 	}
 
@@ -117,32 +117,33 @@ function handleLT(condition: any, sections: Section[], id: string): Section[] {
 
 function handleIS(condition: any, sections: Section[], id: string): Section[] {
 	const field: string = condition.skey.split("_")[1]; // e.g. "avg"
-	console.log("%s\n", field);
+
 	const ID: string = condition.skey.split("_")[0];
-	console.log("%s\n", ID);
+
 	if (ID !== id) {
 		throw new InsightError("id does not match");
 	}
-	console.log("%s\n", condition.inputString);
+
 	let ret;
 	if (condition.inputString.includes("*")) {
 		if (condition.inputString.startsWith("*") && condition.inputString.endsWith("*")) {
 			const str = condition.inputString.substring(1, condition.inputString.length - 1);
 			ret = sections.filter((section) => section.getField(field).includes(str));
+			return ret;
 		} else if (condition.inputString.startsWith("*")) {
 			const str = condition.inputString.substring(1, condition.inputString.length);
-			console.log("%s\n", str);
 			ret = sections.filter((section) => section.getField(field).endsWith(str));
+			return ret;
 		} else if (condition.inputString.endsWith("*")) {
 			const str = condition.inputString.substring(0, condition.inputString.length - 1);
 			ret = sections.filter((section) => section.getField(field).startsWith(str));
+			return ret;
 		} else {
 			throw new InsightError("invalid use of wildcard");
 		}
 	}
 
 	ret = sections.filter((section) => section.getField(field) === condition.inputString);
-	console.log("%d\n", ret.length);
 	return ret;
 }
 
@@ -162,23 +163,6 @@ function mkeyFlag(field: string): boolean {
 			return false;
 	}
 }
-
-// function skeyFlag(field: string): boolean {
-// 	switch (field) {
-// 		case "dept":
-// 			return true;
-// 		case "id":
-// 			return true;
-// 		case "instructor":
-// 			return true;
-// 		case "title":
-// 			return true;
-// 		case "uuid":
-// 			return true;
-// 		default:
-// 			return false;
-// 	}
-// }
 
 export function sortResults(sections: Section[], order: String, columns: String[]): Section[] {
 	// check if order is in columns, if not throw error
