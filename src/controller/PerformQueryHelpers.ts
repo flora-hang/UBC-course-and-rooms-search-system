@@ -7,43 +7,53 @@ export function filterSections(where: any, sections: Section[], id: string): Sec
 	// If WHERE block is empty, return all sections (no filtering)
 	// !!! get all sections in the dataset
 	console.log("been in filteredSections");
-	if (Object.keys(where).length === 0) {
+	console.log("%s\n", where);
+	if (where.filter === undefined) {
 		return sections;
 	}
+
 	// console.log("%d\n", sections.length);
 	// Process logical operators
 	if (where.filter.logic === "AND") {
-		console.log("num sections (AND): %d\n", sections.length);
+		// console.log("num sections (AND): %d\n", sections.length);
 		console.log("%s\n", where.filter.filters);
 
+		console.log("been in AND");
 		return handleAND(where.filter.filters, sections, id);
 	}
 	if (where.filter.logic === "OR") {
-		console.log("num sections (OR): %d\n", sections.length);
-		console.log("%s\n", where.filter.filters);
+		// console.log("num sections (OR): %d\n", sections.length);
+		// console.log("%s\n", where.filter.filters);
+		// console.log("been in OR");
 		// console.log("num sections (OR): %d\n", sections.length);
 		return handleOR(where.filter.filters, sections, id);
 	}
 	if (where.filter instanceof Negation) {
+		// console.log("been in NOT");
 		// console.log("num sections (NOT): %d\n", sections.length);
 		return handleNOT(where.filter, sections, id);
 	}
 
 	// Process comparison operators (EQ, GT, LT, IS)
 	if (where.filter.mComparator === "EQ") {
-		console.log("num sections (EQ): %d\n", sections.length);
+		// console.log("been in EQ");
+		// console.log("num sections (EQ): %d\n", sections.length);
 		return handleEQ(where.filter, sections, id);
 	}
 
 	if (where.filter.mComparator === "GT") {
+		// console.log("been in GT");
 		return handleGT(where.filter, sections, id);
 	}
 
 	if (where.filter.mComparator === "LT") {
+		// console.log("been in LT");
 		return handleLT(where.filter, sections, id);
 	}
+
 	// console.log(" %s\n", where.filter);
 	if ("skey" in where.filter) {
+		// console.log("been in IS");
 		return handleIS(where.filter, sections, id);
 	}
 
@@ -53,6 +63,7 @@ export function filterSections(where: any, sections: Section[], id: string): Sec
 
 function handleAND(conditions: any[], sections: Section[], id: string): Section[] {
 	let results: Section[] = sections;
+	console.log("%s\n", conditions);
 	for (const condition of conditions) {
 		results = filterSections(condition, results, id);
 	}
@@ -117,7 +128,6 @@ function handleIS(condition: any, sections: Section[], id: string): Section[] {
 	if (condition.inputString.includes("*")) {
 		if (condition.inputString.startsWith("*") && condition.inputString.endsWith("*")) {
 			const str = condition.inputString.substring(1, condition.inputString.length - 1);
-			console.log("%s\n", str);
 			ret = sections.filter((section) => section.getField(field).includes(str));
 		} else if (condition.inputString.startsWith("*")) {
 			const str = condition.inputString.substring(1, condition.inputString.length);
@@ -125,14 +135,12 @@ function handleIS(condition: any, sections: Section[], id: string): Section[] {
 			ret = sections.filter((section) => section.getField(field).endsWith(str));
 		} else if (condition.inputString.endsWith("*")) {
 			const str = condition.inputString.substring(0, condition.inputString.length - 1);
-			console.log("%s\n", str);
 			ret = sections.filter((section) => section.getField(field).startsWith(str));
 		} else {
 			throw new InsightError("invalid use of wildcard");
 		}
 	}
-	// let string = "geob";
-	// let bool = string.endsWith("")
+
 	ret = sections.filter((section) => section.getField(field) === condition.inputString);
 	console.log("%d\n", ret.length);
 	return ret;
