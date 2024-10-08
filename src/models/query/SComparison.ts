@@ -18,11 +18,11 @@ export default class SComparison implements IFilter {
         this.inputString = inputString;
     }
 
-    public checkId(id: string): void {
-        if (this.skey.split('_')[0] !== id) {
-            throw new InsightError('Cannot query from multiple datasets');
-        }
-    }
+    // public checkId(id: string): void {
+    //     if (this.skey.split('_')[0] !== id) {
+    //         throw new InsightError('Cannot query from multiple datasets');
+    //     }
+    // }
 
     public buildQuery(object: any): IFilter {
         throw new Error("buildQuery not implemented.", object);

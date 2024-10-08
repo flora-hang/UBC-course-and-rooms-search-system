@@ -15,11 +15,11 @@ export default class LogicComparison implements IFilter {
         this.filters = filters;
     }
 
-    public checkId(id: string): void {
-        for (const filter of this.filters) {
-            filter.checkId(id);
-        }
-    }
+    // public checkId(id: string): void {
+    //     for (const filter of this.filters) {
+    //         filter.checkId(id);
+    //     }
+    // }
 
     public buildQuery(object: any): IFilter {
         throw new Error('buildQuery not implemented.', object);

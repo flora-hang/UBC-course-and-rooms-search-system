@@ -8,9 +8,9 @@ export default class Negation implements IFilter {
         this.filter = filter;
     }
 
-    public checkId(id: string): void {
-        this.filter.checkId(id);
-    }
+    // public checkId(id: string): void {
+    //     this.filter.checkId(id);
+    // }
 
     public buildQuery(object: any): IFilter {
         throw new Error('buildQuery not implemented.', object);

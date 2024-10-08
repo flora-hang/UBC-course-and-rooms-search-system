@@ -26,11 +26,11 @@ export default class MComparison implements IFilter {
         this.value = value;
     }
 
-    public checkId(id: string): void {
-        if (this.mkey.split('_')[0] !== id) {
-            throw new InsightError('Cannot query from multiple datasets');
-        }
-    }
+    // public checkId(id: string): void {
+    //     if (this.mkey.split('_')[0] !== id) {
+    //         throw new InsightError('Cannot query from multiple datasets');
+    //     }
+    // }
 
     public buildQuery(object: any): IFilter {
         throw new Error("buildQuery not implemented.", object);

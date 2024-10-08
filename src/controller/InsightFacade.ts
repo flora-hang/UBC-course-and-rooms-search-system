@@ -83,7 +83,7 @@ export default class InsightFacade implements IInsightFacade {
 		const filePath = this.dataDir + `/${id}.json`;
 		try {
 			await fsPromises.unlink(filePath);
-			this.datasets["delete"](id); // .delete
+			this.datasets.delete(id); // .delete
 			return id;
 		} catch (err) {
 			return Promise.reject(new InsightError(`Error: ${err}`));
@@ -258,9 +258,13 @@ export default class InsightFacade implements IInsightFacade {
 			throw new InsightError("Querying section that has not been added");
 		}
 		const dataset = data[0];
+		console.log("num sections: %d\n", dataset.getTotalSections());
 
+		console.log("num sections: %d\n", dataset.getSections().length);
 		// - filter sections (WHERE block)
-		const filteredSections = filterSections(validQuery.WHERE, dataset.getSections());
+		const filteredSections = filterSections(validQuery.WHERE, dataset.getSections(), id);
+		console.log("num sections: %d\n", filteredSections.length);
+
 		const maxSections = 5000;
 		// - check if filtered sections exceed 5000 sections limit
 		if (filteredSections.length > maxSections) {

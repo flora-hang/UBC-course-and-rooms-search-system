@@ -30,11 +30,11 @@ export default class Where {
         }
     }
 
-    public checkId(id: string): void {
-        if (this.filter) {
-            this.filter.checkId(id);
-        } 
-    }
+    // public checkId(id: string): void {
+    //     if (this.filter) {
+    //         this.filter.checkId(id);
+    //     } 
+    // }
 
 
 }

@@ -16,6 +16,7 @@ export default class Query {
         if (!object.WHERE) {
             throw new InsightError("Query must have a WHERE block");
         }
+        
         if (!object.OPTIONS) {
             throw new InsightError("Query must have an OPTIONS block");
         }

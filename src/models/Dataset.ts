@@ -26,9 +26,9 @@ export default class Dataset {
 		return this.Courses;
 	}
 	public getSections(): Section[] {
-		const sections: Section[] = [];
+		let sections: Section[] = [];
 		for (const course of this.Courses) {
-			sections.concat(course.getSections());
+			sections = sections.concat(course.getSections());
 		}
 		return sections;
 	}
