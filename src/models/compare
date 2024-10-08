@@ -1,58 +1,4 @@
-{
-	"title": "not an EBNF key",
-	"input": {
-		"WHERE": {
-			"AND": [
-				{
-					"OR": [
-						{
-							"IS": {
-								"sections_dept": "cpsc"
-							}
-						},
-						{
-							"AND": [
-								{
-									"GT": {
-										"sections_avg": 94.9
-									}
-								},
-								{
-									"NOT": {
-										"LT": {
-											"sections_avg": 90
-										}
-									}
-								}
-							]
-						}
-					]
-				},
-				{
-					"EQ": {
-						"sections_avg": 95
-					}
-				}
-			]
-		},
-		"OPTIONS": {
-			"COLUMNS": [
-				"sections_uuid",
-				"sections_id",
-				"sections_title",
-				"sections_instructor",
-				"sections_dept",
-				"sections_year",
-				"sections_avg",
-				"sections_pass",
-				"sections_fail",
-				"sections_audit"
-			],
-			"ORDER": "sections_avg"
-		}
-	},
-	"errorExpected": false,
-	"expected": [
+[
 		{
 			"sections_uuid": "88881",
 			"sections_id": "570",
@@ -546,4 +492,3 @@
 			"sections_audit": 0
 		}
 	]
-}

@@ -262,7 +262,7 @@ export default class InsightFacade implements IInsightFacade {
 
 		console.log("num sections: %d\n", dataset.getSections().length);
 		// - filter sections (WHERE block)
-		const filteredSections = filterSections(validQuery.WHERE, dataset.getSections(), id);
+		const filteredSections = filterSections(validQuery.WHERE.filter, dataset.getSections(), id);
 		console.log("num sections: %d\n", filteredSections.length);
 
 		const maxSections = 5000;

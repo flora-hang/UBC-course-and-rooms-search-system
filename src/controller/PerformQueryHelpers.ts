@@ -7,54 +7,56 @@ export function filterSections(where: any, sections: Section[], id: string): Sec
 	// If WHERE block is empty, return all sections (no filtering)
 	// !!! get all sections in the dataset
 	console.log("been in filteredSections");
-	console.log("%s\n", where);
-	if (where.filter === undefined) {
+
+	if (where === undefined) {
 		return sections;
 	}
 
 	// console.log("%d\n", sections.length);
 	// Process logical operators
-	if (where.filter.logic === "AND") {
+	if (where.logic === "AND") {
 		// console.log("num sections (AND): %d\n", sections.length);
-		console.log("%s\n", where.filter.filters);
 
 		console.log("been in AND");
-		return handleAND(where.filter.filters, sections, id);
+		return handleAND(where.filters, sections, id);
 	}
-	if (where.filter.logic === "OR") {
+	// console.log("been outside of OR");
+	if (where.logic === "OR") {
 		// console.log("num sections (OR): %d\n", sections.length);
 		// console.log("%s\n", where.filter.filters);
-		// console.log("been in OR");
+		console.log("been in OR");
 		// console.log("num sections (OR): %d\n", sections.length);
-		return handleOR(where.filter.filters, sections, id);
+		return handleOR(where.filters, sections, id);
 	}
-	if (where.filter instanceof Negation) {
-		// console.log("been in NOT");
+	// console.log("been outside of NOT");
+	if (where instanceof Negation) {
+		console.log("been in NOT");
 		// console.log("num sections (NOT): %d\n", sections.length);
-		return handleNOT(where.filter, sections, id);
+		return handleNOT(where, sections, id);
 	}
-
+	// console.log("been outside of EQ");
 	// Process comparison operators (EQ, GT, LT, IS)
-	if (where.filter.mComparator === "EQ") {
-		// console.log("been in EQ");
+	if (where.mComparator === "EQ") {
+		console.log("been in EQ");
 		// console.log("num sections (EQ): %d\n", sections.length);
-		return handleEQ(where.filter, sections, id);
+		return handleEQ(where, sections, id);
 	}
-
-	if (where.filter.mComparator === "GT") {
+	// console.log("been outside of GT");
+	if (where.mComparator === "GT") {
 		console.log("been in GT");
-		return handleGT(where.filter, sections, id);
+		return handleGT(where, sections, id);
 	}
-
-	if (where.filter.mComparator === "LT") {
+	// console.log("been outside of LT");
+	if (where.mComparator === "LT") {
 		console.log("been in LT");
-		return handleLT(where.filter, sections, id);
+		return handleLT(where, sections, id);
 	}
 
 	// console.log(" %s\n", where.filter);
-	if ("skey" in where.filter) {
-		// console.log("been in IS");
-		return handleIS(where.filter, sections, id);
+	// console.log("been outside of IS");
+	if ("skey" in where) {
+		console.log("been in IS");
+		return handleIS(where, sections, id);
 	}
 
 	// If no valid operator is found, return all sections (shouldn't happen)
@@ -77,8 +79,8 @@ function handleOR(conditions: any[], sections: Section[], id: string): Section[]
 }
 
 function handleNOT(condition: any, sections: Section[], id: string): Section[] {
-	console.log("%s\n", condition);
-	const filteredSections = filterSections(condition, sections, id);
+	console.log("handleNOT: %s\n", condition);
+	const filteredSections = filterSections(condition.filter, sections, id);
 	// Return sections that are NOT in the filtered set
 	return sections.filter((section) => !filteredSections.includes(section));
 }
