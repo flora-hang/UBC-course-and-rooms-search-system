@@ -282,7 +282,7 @@ export default class InsightFacade implements IInsightFacade {
 
 		// // Select the required columns
 		const finalResults: InsightResult[] = selectColumns(sortedSections, columns);
-
+		console.log(finalResults);
 		return finalResults;
 	}
 }

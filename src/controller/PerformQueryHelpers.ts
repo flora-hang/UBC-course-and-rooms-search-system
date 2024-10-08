@@ -26,7 +26,7 @@ export function filterSections(where: any, sections: Section[], id: string): Sec
 	}
 	if (where.filter instanceof Negation) {
 		// console.log("num sections (NOT): %d\n", sections.length);
-		return handleNOT(where.filter.filters, sections, id);
+		return handleNOT(where.filter, sections, id);
 	}
 
 	// Process comparison operators (EQ, GT, LT, IS)
@@ -66,6 +66,7 @@ function handleOR(conditions: any[], sections: Section[], id: string): Section[]
 }
 
 function handleNOT(condition: any, sections: Section[], id: string): Section[] {
+	console.log("%s\n", condition);
 	const filteredSections = filterSections(condition, sections, id);
 	// Return sections that are NOT in the filtered set
 	return sections.filter((section) => !filteredSections.includes(section));
