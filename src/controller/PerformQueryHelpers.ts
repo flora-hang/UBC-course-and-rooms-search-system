@@ -12,12 +12,7 @@ export function filterSections(where: any, sections: Section[], id: string): Sec
 		return sections;
 	}
 
-	// console.log("%d\n", sections.length);
-	// Process logical operators
 	if (where.logic === "AND") {
-		// console.log("num sections (AND): %d\n", sections.length);
-
-		console.log("been in AND");
 		return handleAND(where.filters, sections, id);
 	}
 	// console.log("been outside of OR");
@@ -64,18 +59,34 @@ export function filterSections(where: any, sections: Section[], id: string): Sec
 }
 
 function handleAND(conditions: any[], sections: Section[], id: string): Section[] {
+	console.log("handleAND");
 	let results: Section[] = sections;
-	console.log("%s\n", conditions);
+
 	for (const condition of conditions) {
 		results = filterSections(condition, results, id);
+		console.log("handleAnd: %d\n", results.length);
 	}
 	// Merge all results (union)
 	return results;
 }
 function handleOR(conditions: any[], sections: Section[], id: string): Section[] {
+	console.log("handleOR");
 	const results = conditions.map((condition) => filterSections(condition, sections, id));
-	// Merge all results (union)
-	return results.flat();
+	const newSections = results.flat();
+	console.log("newSections: %d\n", newSections.length);
+	const seen = new Set<any>(); // Set to store unique field values
+
+	const ret = newSections.filter((section) => {
+		const value = section.getUuid();
+		if (seen.has(value)) {
+			return false; // Skip duplicate sections
+		} else {
+			seen.add(value);
+			return true; // Keep the unique section
+		}
+	});
+	console.log("newSections 2: %d\n", ret.length);
+	return ret;
 }
 
 function handleNOT(condition: any, sections: Section[], id: string): Section[] {
@@ -86,12 +97,14 @@ function handleNOT(condition: any, sections: Section[], id: string): Section[] {
 }
 
 function handleEQ(condition: any, sections: Section[], id: string): Section[] {
+	console.log("handleEQ");
 	const field: string = condition.mkey.split("_")[1]; // e.g. "avg"
 	const ID: string = condition.mkey.split("_")[0];
 	if (ID !== id) {
 		throw new InsightError("id does not match");
 	}
-	return sections.filter((section) => section.getField(field) === condition.value);
+	const ret = sections.filter((section) => section.getField(field) === condition.value);
+	return ret;
 }
 
 function handleGT(condition: any, sections: Section[], id: string): Section[] {
@@ -114,7 +127,9 @@ function handleLT(condition: any, sections: Section[], id: string): Section[] {
 	if (ID !== id) {
 		throw new InsightError("id does not match");
 	}
-	return sections.filter((section) => section.getField(field) < condition.value);
+	const ret = sections.filter((section) => section.getField(field) < condition.value);
+	console.log("handleLT: %d\n", ret.length);
+	return ret;
 }
 
 function handleIS(condition: any, sections: Section[], id: string): Section[] {
@@ -146,6 +161,7 @@ function handleIS(condition: any, sections: Section[], id: string): Section[] {
 	}
 
 	ret = sections.filter((section) => section.getField(field) === condition.inputString);
+	console.log("handleIS: %d\n", ret.length);
 	return ret;
 }
 
@@ -175,6 +191,7 @@ export function sortResults(sections: Section[], order: String, columns: String[
 	const field: string = order.split("_")[1];
 	if (mkeyFlag(field)) {
 		sections.sort((a, b) => a.getField(field) - b.getField(field));
+		// sections.sort((a, b) => a.getDept().localeCompare(b.getDept()));
 	} else {
 		sections.sort((a, b) => a.getField(field).localeCompare(b.getField(field)));
 	}

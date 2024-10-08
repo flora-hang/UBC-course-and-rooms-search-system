@@ -100,4 +100,10 @@ export default class Section {
 	public getAudit(): number {
 		return this.audit;
 	}
+	// // Override equals method to compare instances
+	// equals(other: Section): boolean {
+	// 	if (this === other) return true;
+	// 	if (other == null || this.constructor !== other.constructor) return false;
+	// 	return this.uuid === other.uuid;
+	// }
 }
