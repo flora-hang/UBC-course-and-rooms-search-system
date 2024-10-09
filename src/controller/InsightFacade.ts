@@ -248,22 +248,22 @@ export default class InsightFacade implements IInsightFacade {
 
 		// Build query object
 		const validQuery = Query.buildQuery(query);
-		console.log("> built query");
+		// console.log("> built query");
 
 		const id = checkIds(validQuery);
-		console.log("> checked ids");
+		// console.log("> checked ids");
 
 		const data = this.datasets.get(id);
 		if (!data) {
 			throw new InsightError("Querying section that has not been added");
 		}
 		const dataset = data[0];
-		console.log("num sections: %d\n", dataset.getTotalSections());
+		// console.log("num sections: %d\n", dataset.getTotalSections());
 
-		console.log("num sections: %d\n", dataset.getSections().length);
+		// console.log("num sections: %d\n", dataset.getSections().length);
 		// - filter sections (WHERE block)
 		const filteredSections = filterSections(validQuery.WHERE.filter, dataset.getSections(), id);
-		console.log("num sections: %d\n", filteredSections.length);
+		// console.log("num sections: %d\n", filteredSections.length);
 
 		const maxSections = 5000;
 		// - check if filtered sections exceed 5000 sections limit
@@ -282,7 +282,7 @@ export default class InsightFacade implements IInsightFacade {
 
 		// // Select the required columns
 		const finalResults: InsightResult[] = selectColumns(sortedSections, columns);
-		console.log(finalResults);
+		// console.log(finalResults);
 		return finalResults;
 	}
 }

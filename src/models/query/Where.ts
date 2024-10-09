@@ -12,7 +12,7 @@ export default class Where {
 	}
 
 	public static buildQuery(object: any): Where {
-		console.log("> Where.buildQuery():", object);
+		// console.log("> Where.buildQuery():", object);
 		let filter: IFilter;
 
 		if (Object.keys(object).length > 1) {

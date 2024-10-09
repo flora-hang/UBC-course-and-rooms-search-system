@@ -29,7 +29,7 @@ export default class SComparison implements IFilter {
 	}
 
 	public static buildQuery(object: any): IFilter {
-		console.log("> SComparison.buildQuery()");
+		// console.log("> SComparison.buildQuery()");
 		const key = Object.keys(object)[0]; // returns 'IS'
 		if (key !== "IS") {
 			throw new Error("Invalid logic comparison");

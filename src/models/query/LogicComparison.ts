@@ -26,7 +26,7 @@ export default class LogicComparison implements IFilter {
 	}
 
 	public static buildQueryStatic(object: any, factory: IFilter): IFilter {
-		console.log("> LogicComparison.buildQueryStatic()");
+		// console.log("> LogicComparison.buildQueryStatic()");
 		const key = Object.keys(object)[0]; // returns 'AND' | 'OR'
 		if (key !== Logic.AND && key !== Logic.OR) {
 			throw new Error("Invalid logic comparison");

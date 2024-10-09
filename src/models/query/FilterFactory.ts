@@ -16,7 +16,7 @@ export default class FilterFactory implements IFilter {
 	// }
 
 	public buildQuery(object: any): IFilter {
-		console.log("> FilterFactory.buildQuery()");
+		// console.log("> FilterFactory.buildQuery()");
 		let filter: IFilter;
 
 		const key = Object.keys(object)[0];
