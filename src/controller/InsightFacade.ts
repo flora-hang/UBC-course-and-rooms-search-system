@@ -85,7 +85,6 @@ export default class InsightFacade implements IInsightFacade {
 			await fsPromises.unlink(filePath);
 
 			this.datasets.delete(id); // .delete
-	
 
 			return id;
 		} catch (err) {
