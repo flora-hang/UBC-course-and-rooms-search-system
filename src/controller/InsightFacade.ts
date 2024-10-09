@@ -25,7 +25,7 @@ import Query from "../models/query/Query";
  *
  */
 export default class InsightFacade implements IInsightFacade {
-	private loadedData: boolean = false;
+	// private loadedData: boolean = false;
 	private dataDir = "./data/datasets";
 	private insightFile = "./data/insights.json";
 	private insights: Map<string, InsightDataset> = new Map<string, InsightDataset>();
@@ -34,9 +34,7 @@ export default class InsightFacade implements IInsightFacade {
 	private datasets: Map<string, [Dataset, InsightDataset]> = new Map<string, [Dataset, InsightDataset]>();
 
 	constructor() {
-		// !!!
-		// make map with id, Dataset: null, InsightDataset
-		// or check that the map has already been loaded before each function
+		// empty constructor
 	}
 
 	// load insights from disk (only load id and InsightDataset, set Dataset to null)
@@ -48,10 +46,10 @@ export default class InsightFacade implements IInsightFacade {
 			this.insights = new Map<string, InsightDataset>(Object.entries(insights));
 			// console.log("> loadedData: ", this.loadedData);
 			// console.log("> > insights: ", this.insights);
-		} catch (err) {
+		} catch (_err) {
 			this.insights = new Map<string, InsightDataset>();
 		}
-		this.loadedData = true; //sus
+		// this.loadedData = true; //sus
 	}
 
 	private async saveInsights(): Promise<void> {
@@ -63,10 +61,10 @@ export default class InsightFacade implements IInsightFacade {
 		try {
 			await fs.writeJSON(this.insightFile, insightObject);
 			// console.log("> Insights saved to disk ---------------");
-		} catch (err) {
+		} catch (_err) {
 			// console.log("error saving insights: ", err);
 		}
-		
+
 		// console.log("> finished writeJSON---------------");
 	}
 
@@ -302,6 +300,8 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async performQuery(query: unknown): Promise<InsightResult[]> {
+		await this.loadInsights();
+
 		// Check if query is an object
 		if (typeof query !== "object" || query === null) {
 			return Promise.reject(new InsightError("Query must be an object"));
@@ -317,13 +317,28 @@ export default class InsightFacade implements IInsightFacade {
 		// console.log("> built query");
 
 		const id = checkIds(validQuery);
-		// console.log("> checked ids");
-
-		const data = this.datasets.get(id);
-		if (!data) {
+		if (!this.insights.has(id)) {
 			throw new InsightError("Querying section that has not been added");
 		}
-		const dataset = data[0];
+		// console.log("> checked ids");
+		let dataset: Dataset;
+
+		if (!this.datas.has(id)) {
+			dataset = await this.loadDatasetFromDisk(id);
+			this.datas.set(id, dataset);
+		} else {
+			const data = this.datas.get(id);
+			if (!data) {
+				throw new InsightError("Dataset not found");
+			}
+			dataset = data;
+		}
+
+		// console.log("> loaded dataset to this.datas: ", this.datas);
+
+		// const dataset = this.datas.get(id);
+
+		// const dataset = data[0];
 		// console.log("num sections: %d\n", dataset.getTotalSections());
 
 		// console.log("num sections: %d\n", dataset.getSections().length);

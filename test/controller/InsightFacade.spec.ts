@@ -214,7 +214,7 @@ describe("InsightFacade", function () {
 		});
 	});
 
-	describe.only("cachingProgress", function () {
+	describe("cachingProgress", function () {
 		beforeEach(function () {
 			// facade = new InsightFacade();
 		});
@@ -232,7 +232,7 @@ describe("InsightFacade", function () {
 				await facade2.addDataset("one", oneValidSection, InsightDatasetKind.Sections);
 				expect.fail("Should not have added the same dataset twice.");
 			} catch (err) {
-				console.log(err);
+				// console.log(err);
 				expect(err).to.be.instanceOf(InsightError);
 			}
 		});
@@ -245,7 +245,7 @@ describe("InsightFacade", function () {
 				const facade2 = new InsightFacade();
 				expect(await facade2.listDatasets()).to.deep.equal(expected);
 			} catch (_err) {
-				console.log(_err);
+				// console.log(_err);
 				expect.fail("Should not have thrown an error.");
 			}
 		});
