@@ -30,8 +30,7 @@ export default class InsightFacade implements IInsightFacade {
 	private insightFile = "./data/insights.json";
 	private insights: Map<string, InsightDataset> = new Map<string, InsightDataset>();
 	private datas: Map<string, Dataset> = new Map<string, Dataset>();
-
-	private datasets: Map<string, [Dataset, InsightDataset]> = new Map<string, [Dataset, InsightDataset]>();
+	// private datasets: Map<string, [Dataset, InsightDataset]> = new Map<string, [Dataset, InsightDataset]>();
 
 	constructor() {
 		// empty constructor
@@ -39,33 +38,19 @@ export default class InsightFacade implements IInsightFacade {
 
 	// load insights from disk (only load id and InsightDataset, set Dataset to null)
 	private async loadInsights(): Promise<void> {
-		//!!!
-		// const file = this.insightDir + "/insights.json";
 		try {
 			const insights = await fs.readJSON(this.insightFile);
 			this.insights = new Map<string, InsightDataset>(Object.entries(insights));
-			// console.log("> loadedData: ", this.loadedData);
-			// console.log("> > insights: ", this.insights);
 		} catch (_err) {
 			this.insights = new Map<string, InsightDataset>();
 		}
-		// this.loadedData = true; //sus
+		// this.loadedData = true;
 	}
 
 	private async saveInsights(): Promise<void> {
-		//!!!
-		// console.log("saving insights: ", this.insights);
-		// const file = this.insightDir + "/insights.json";
 		await fs.ensureDir("./data");
 		const insightObject = Object.fromEntries(this.insights);
-		try {
-			await fs.writeJSON(this.insightFile, insightObject);
-			// console.log("> Insights saved to disk ---------------");
-		} catch (_err) {
-			// console.log("error saving insights: ", err);
-		}
-
-		// console.log("> finished writeJSON---------------");
+		await fs.writeJSON(this.insightFile, insightObject);
 	}
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
@@ -102,13 +87,8 @@ export default class InsightFacade implements IInsightFacade {
 		const insight = dataset.getInsight();
 		this.insights.set(id, insight);
 
-		// const total: number = dataset.getTotalSections();
-		// const insight: InsightDataset = { id: id, numRows: total, kind: kind };
-		// this.datasets.set(id, [dataset, insight]);
-
-		await this.saveDatasetToDisk(id); // need try catch?
+		await this.saveDatasetToDisk(id);
 		await this.saveInsights();
-		// console.log("after saving insights: ", this.insights);
 
 		// return a string array containing the ids of all currently added datasets upon a successful add
 		const fileNames = await fs.readdir(this.dataDir);
@@ -323,6 +303,7 @@ export default class InsightFacade implements IInsightFacade {
 		// console.log("> checked ids");
 		let dataset: Dataset;
 
+		// if dataset is not in memory, load it from disk
 		if (!this.datas.has(id)) {
 			dataset = await this.loadDatasetFromDisk(id);
 			this.datas.set(id, dataset);
@@ -333,10 +314,6 @@ export default class InsightFacade implements IInsightFacade {
 			}
 			dataset = data;
 		}
-
-		// console.log("> loaded dataset to this.datas: ", this.datas);
-
-		// const dataset = this.datas.get(id);
 
 		// const dataset = data[0];
 		// console.log("num sections: %d\n", dataset.getTotalSections());
