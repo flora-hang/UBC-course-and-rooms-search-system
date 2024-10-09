@@ -214,6 +214,71 @@ describe("InsightFacade", function () {
 		});
 	});
 
+	describe("cachingProgress", function () {
+		beforeEach(function () {
+			// facade = new InsightFacade();
+		});
+
+		afterEach(async function () {
+			await clearDisk();
+		});
+
+		it("reject: facade2 should not add dataset already added by facade1", async function () {
+			try {
+				const facade1 = new InsightFacade();
+				await facade1.addDataset("one", oneValidSection, InsightDatasetKind.Sections);
+				// expect(facade1).to.equal(["one"]);
+				const facade2 = new InsightFacade();
+				await facade2.addDataset("one", oneValidSection, InsightDatasetKind.Sections);
+				expect.fail("Should not have added the same dataset twice.");
+			} catch (err) {
+				// console.log(err);
+				expect(err).to.be.instanceOf(InsightError);
+			}
+		});
+
+		it("fulfill: facade2 should be able to access dataset already added by facade1", async function () {
+			try {
+				const facade1 = new InsightFacade();
+				await facade1.addDataset("one", oneValidSection, InsightDatasetKind.Sections);
+				const expected = await facade1.listDatasets();
+				const facade2 = new InsightFacade();
+				expect(await facade2.listDatasets()).to.deep.equal(expected);
+			} catch (_err) {
+				// console.log(_err);
+				expect.fail("Should not have thrown an error.");
+			}
+		});
+
+		it("reject: facade2 should not remove dataset already removed by facade1", async function () {
+			try {
+				const facade1 = new InsightFacade();
+				await facade1.addDataset("one", oneValidSection, InsightDatasetKind.Sections);
+				// expect(facade1).to.equal(["one"]);
+				await facade1.removeDataset("one");
+				const facade2 = new InsightFacade();
+				await facade2.removeDataset("one");
+				expect.fail("Should not have removed the same dataset twice.");
+			} catch (err) {
+				expect(err).to.be.instanceOf(NotFoundError);
+			}
+		});
+
+		it("fulfill: facade2 should not list dataset already removed by facade1", async function () {
+			try {
+				const facade1 = new InsightFacade();
+				await facade1.addDataset("one", oneValidSection, InsightDatasetKind.Sections);
+				// expect(facade1).to.equal(["one"]);
+				await facade1.removeDataset("one");
+				const facade2 = new InsightFacade();
+				const result = await facade2.listDatasets();
+				expect(result.length).to.equal(0);
+			} catch (_err) {
+				expect.fail("Should not have thrown an error.");
+			}
+		});
+	});
+
 	describe("PerformQuery", function () {
 		/**
 		 * Loads the TestQuery specified in the test name and asserts the behaviour of performQuery.

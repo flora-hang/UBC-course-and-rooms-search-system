@@ -1,3 +1,4 @@
+import { InsightDataset, InsightDatasetKind } from "../controller/IInsightFacade";
 import Course from "./Course";
 import Section from "./Section";
 export default class Dataset {
@@ -25,11 +26,20 @@ export default class Dataset {
 	public getCourses(): Course[] {
 		return this.Courses;
 	}
+
 	public getSections(): Section[] {
 		let sections: Section[] = [];
 		for (const course of this.Courses) {
 			sections = sections.concat(course.getSections());
 		}
 		return sections;
+	}
+
+	public getInsight(): InsightDataset {
+		return {
+			id: this.ID,
+			kind: InsightDatasetKind.Sections,
+			numRows: this.getTotalSections(),
+		};
 	}
 }

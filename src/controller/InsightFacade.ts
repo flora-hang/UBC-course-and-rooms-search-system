@@ -25,19 +25,46 @@ import Query from "../models/query/Query";
  *
  */
 export default class InsightFacade implements IInsightFacade {
-	private dataDir = "./data";
-	private datasets: Map<string, [Dataset, InsightDataset]> = new Map<string, [Dataset, InsightDataset]>();
+	// private loadedData: boolean = false;
+	private dataDir = "./data/datasets";
+	private insightFile = "./data/insights.json";
+	private insights: Map<string, InsightDataset> = new Map<string, InsightDataset>();
+	private datas: Map<string, Dataset> = new Map<string, Dataset>();
+	// private datasets: Map<string, [Dataset, InsightDataset]> = new Map<string, [Dataset, InsightDataset]>();
 
 	constructor() {
-		// prob dont need constructor
+		// empty constructor
+	}
+
+	// load insights from disk (only load id and InsightDataset, set Dataset to null)
+	private async loadInsights(): Promise<void> {
+		try {
+			const insights = await fs.readJSON(this.insightFile);
+			this.insights = new Map<string, InsightDataset>(Object.entries(insights));
+		} catch (_err) {
+			this.insights = new Map<string, InsightDataset>();
+		}
+		// this.loadedData = true;
+	}
+
+	private async saveInsights(): Promise<void> {
+		await fs.ensureDir("./data");
+		const insightObject = Object.fromEntries(this.insights);
+		await fs.writeJSON(this.insightFile, insightObject);
 	}
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
+		// if (!this.loadedData) {
+		// 	await this.loadInsights();
+		// }
+		await this.loadInsights();
+
 		// id validation: (reject with InsightError if invalid)
 		// - one of more of any character, except underscore
 		// - id with only whitespace is invalid
 		// - same id as an already added dataset is invalid
-		if (id.trim().length === 0 || id.includes("_") || this.datasets.has(id)) {
+		// console.log("addDatasets > insights: ", this.insights); //
+		if (id.trim().length === 0 || id.includes("_") || this.insights.has(id)) {
 			return Promise.reject(new InsightError("Invalid id"));
 		}
 
@@ -56,12 +83,12 @@ export default class InsightFacade implements IInsightFacade {
 		}
 
 		const dataset: Dataset = await this.processZip(id, content);
+		this.datas.set(id, dataset);
+		const insight = dataset.getInsight();
+		this.insights.set(id, insight);
 
-		const total: number = dataset.getTotalSections();
-		const insight: InsightDataset = { id: id, numRows: total, kind: kind };
-		this.datasets.set(id, [dataset, insight]);
-
-		await this.saveDatasetToDisk(id); // need try catch?
+		await this.saveDatasetToDisk(id);
+		await this.saveInsights();
 
 		// return a string array containing the ids of all currently added datasets upon a successful add
 		const fileNames = await fs.readdir(this.dataDir);
@@ -70,12 +97,18 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async removeDataset(id: string): Promise<string> {
+		// if (!this.loadedData) {
+		// 	await this.loadInsights();
+		// }
+		await this.loadInsights();
+
 		// id checking
 		if (id.trim().length === 0 || id.includes("_")) {
 			return Promise.reject(new InsightError("Invalid id"));
 		}
 
-		if (!this.datasets.has(id)) {
+		// console.log("remove: insights: ", this.insights);
+		if (!this.insights.has(id)) {
 			return Promise.reject(new NotFoundError("Dataset not found"));
 		}
 
@@ -84,7 +117,9 @@ export default class InsightFacade implements IInsightFacade {
 		try {
 			await fsPromises.unlink(filePath);
 
-			this.datasets.delete(id); // .delete
+			this.datas.delete(id);
+			this.insights.delete(id);
+			await this.saveInsights();
 
 			return id;
 		} catch (err) {
@@ -93,40 +128,47 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async listDatasets(): Promise<InsightDataset[]> {
-		const cachedDatasets = await fs.readdir(this.dataDir);
-		const datasetsIdArray: string[] = Array.from(this.datasets.values()).map((tuple) => tuple[1].id);
+		// if (!this.loadedData) {
+		// 	await this.loadInsights();
+		// }
+		await this.loadInsights();
 
-		// get all of the datasets from the disk in Dataset form/type
-		const loadedDatasets: Dataset[] = await Promise.all(
-			cachedDatasets.map(async (dataset) => await this.loadDatasetFromDisk(dataset.replace(".json", "")))
-		);
+		return Array.from(this.insights.values());
 
-		let count = 0; // used for indexing in the loadedDatasets array
+		// const cachedDatasets = await fs.readdir(this.dataDir);
+		// const datasetsIdArray: string[] = Array.from(this.datasets.values()).map((tuple) => tuple[1].id);
 
-		// looping through all datasets stored on disk to store missing datasets in map
-		for (const dataset of cachedDatasets) {
-			const datasetId: string = dataset.replace(".json", "");
+		// // get all of the datasets from the disk in Dataset form/type
+		// const loadedDatasets: Dataset[] = await Promise.all(
+		// 	cachedDatasets.map(async (dataset) => await this.loadDatasetFromDisk(dataset.replace(".json", "")))
+		// );
 
-			// if the current this.datasets doesn't include a dataset found within the disk, add to this.datasets
-			if (!datasetsIdArray.includes(datasetId)) {
-				// creating a InsightDataset object to later add to map
-				const loadedInsightDataset: InsightDataset = {
-					id: datasetId,
-					kind: InsightDatasetKind.Sections,
-					numRows: loadedDatasets[count].getTotalSections(),
-				};
-				this.datasets.set(datasetId, [loadedDatasets[count], loadedInsightDataset]); // adding tuple of Dataset and InsightDataset to this.datasets map
-			}
-			count++;
-		}
+		// let count = 0; // used for indexing in the loadedDatasets array
 
-		return Array.from(this.datasets.values()).map((tuple) => tuple[1]); // returning list of InsightDataset
+		// // looping through all datasets stored on disk to store missing datasets in map
+		// for (const dataset of cachedDatasets) {
+		// 	const datasetId: string = dataset.replace(".json", "");
+
+		// 	// if the current this.datasets doesn't include a dataset found within the disk, add to this.datasets
+		// 	if (!datasetsIdArray.includes(datasetId)) {
+		// 		// creating a InsightDataset object to later add to map
+		// 		const loadedInsightDataset: InsightDataset = {
+		// 			id: datasetId,
+		// 			kind: InsightDatasetKind.Sections,
+		// 			numRows: loadedDatasets[count].getTotalSections(),
+		// 		};
+		// 		this.datasets.set(datasetId, [loadedDatasets[count], loadedInsightDataset]); // adding tuple of Dataset and InsightDataset to this.datasets map
+		// 	}
+		// 	count++;
+		// }
+
+		// return Array.from(this.datasets.values()).map((tuple) => tuple[1]); // returning list of InsightDataset
 	}
 
 	// saves newly added dataset to disk
 	// assumes that the dataset corresponding to the id is already in the datasets map
 	private async saveDatasetToDisk(id: string): Promise<void> {
-		const newDataset = this.datasets.get(id);
+		const newDataset = this.datas.get(id);
 		const file = this.dataDir + "/" + id + ".json";
 		await fs.ensureDir(this.dataDir); // could throw error
 		await fs.writeJSON(file, newDataset); // could throw error (catch in addDataset?)
@@ -238,6 +280,8 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async performQuery(query: unknown): Promise<InsightResult[]> {
+		await this.loadInsights();
+
 		// Check if query is an object
 		if (typeof query !== "object" || query === null) {
 			return Promise.reject(new InsightError("Query must be an object"));
@@ -253,13 +297,25 @@ export default class InsightFacade implements IInsightFacade {
 		// console.log("> built query");
 
 		const id = checkIds(validQuery);
-		// console.log("> checked ids");
-
-		const data = this.datasets.get(id);
-		if (!data) {
+		if (!this.insights.has(id)) {
 			throw new InsightError("Querying section that has not been added");
 		}
-		const dataset = data[0];
+		// console.log("> checked ids");
+		let dataset: Dataset;
+
+		// if dataset is not in memory, load it from disk
+		if (!this.datas.has(id)) {
+			dataset = await this.loadDatasetFromDisk(id);
+			this.datas.set(id, dataset);
+		} else {
+			const data = this.datas.get(id);
+			if (!data) {
+				throw new InsightError("Dataset not found");
+			}
+			dataset = data;
+		}
+
+		// const dataset = data[0];
 		// console.log("num sections: %d\n", dataset.getTotalSections());
 
 		// console.log("num sections: %d\n", dataset.getSections().length);
