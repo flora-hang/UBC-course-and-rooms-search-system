@@ -227,24 +227,25 @@ describe("InsightFacade", function () {
 			try {
 				const facade1 = new InsightFacade();
 				await facade1.addDataset("one", oneValidSection, InsightDatasetKind.Sections);
-				expect(facade1).to.equal("one");
+				// expect(facade1).to.equal(["one"]);
 				const facade2 = new InsightFacade();
 				await facade2.addDataset("one", oneValidSection, InsightDatasetKind.Sections);
 				expect.fail("Should not have added the same dataset twice.");
 			} catch (err) {
+				console.log(err);
 				expect(err).to.be.instanceOf(InsightError);
 			}
 		});
 
-		it("fulfill: facade2 should should be able to access dataset already added by  facade1", async function () {
+		it("fulfill: facade2 should be able to access dataset already added by facade1", async function () {
 			try {
 				const facade1 = new InsightFacade();
 				await facade1.addDataset("one", oneValidSection, InsightDatasetKind.Sections);
-				expect(facade1).to.equal("one");
 				const expected = await facade1.listDatasets();
 				const facade2 = new InsightFacade();
-				expect(facade2.listDatasets()).to.deep.equal(expected);
+				expect(await facade2.listDatasets()).to.deep.equal(expected);
 			} catch (_err) {
+				console.log(_err);
 				expect.fail("Should not have thrown an error.");
 			}
 		});
@@ -253,7 +254,7 @@ describe("InsightFacade", function () {
 			try {
 				const facade1 = new InsightFacade();
 				await facade1.addDataset("one", oneValidSection, InsightDatasetKind.Sections);
-				expect(facade1).to.equal("one");
+				// expect(facade1).to.equal(["one"]);
 				await facade1.removeDataset("one");
 				const facade2 = new InsightFacade();
 				await facade2.removeDataset("one");
@@ -267,7 +268,7 @@ describe("InsightFacade", function () {
 			try {
 				const facade1 = new InsightFacade();
 				await facade1.addDataset("one", oneValidSection, InsightDatasetKind.Sections);
-				expect(facade1).to.equal("one");
+				// expect(facade1).to.equal(["one"]);
 				await facade1.removeDataset("one");
 				const facade2 = new InsightFacade();
 				const result = await facade2.listDatasets();
