@@ -9,10 +9,14 @@ import {
 	InsightResult,
 	InsightError,
 	NotFoundError,
+	ResultTooLargeError,
 } from "./IInsightFacade";
+import { filterSections, sortResults, selectColumns, checkIds } from "./PerformQueryHelpers";
 import * as fsPromises from "fs/promises";
 import fs from "fs-extra";
 import JSZip from "jszip";
+import Query from "../models/query/Query";
+
 // import { json } from "stream/consumers";
 
 /**
@@ -79,16 +83,14 @@ export default class InsightFacade implements IInsightFacade {
 		const filePath = this.dataDir + `/${id}.json`;
 		try {
 			await fsPromises.unlink(filePath);
-			this.datasets.delete(id);
+
+			this.datasets.delete(id); // .delete
+	
+
 			return id;
 		} catch (err) {
 			return Promise.reject(new InsightError(`Error: ${err}`));
 		}
-	}
-
-	public async performQuery(query: unknown): Promise<InsightResult[]> {
-		// TODO: Remove this once you implement the methods!
-		throw new Error(`InsightFacadeImpl::performQuery() is unimplemented! - query=${query};`);
 	}
 
 	public async listDatasets(): Promise<InsightDataset[]> {
@@ -234,5 +236,56 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		// console.log("courses filtered: ", coursesFiltered);
 		return coursesFiltered;
+	}
+
+	public async performQuery(query: unknown): Promise<InsightResult[]> {
+		// Check if query is an object
+		if (typeof query !== "object" || query === null) {
+			return Promise.reject(new InsightError("Query must be an object"));
+		}
+
+		// Check if query is empty
+		if (Object.keys(query).length === 0) {
+			return Promise.reject(new InsightError("Query is empty"));
+		}
+
+		// Build query object
+		const validQuery = Query.buildQuery(query);
+		// console.log("> built query");
+
+		const id = checkIds(validQuery);
+		// console.log("> checked ids");
+
+		const data = this.datasets.get(id);
+		if (!data) {
+			throw new InsightError("Querying section that has not been added");
+		}
+		const dataset = data[0];
+		// console.log("num sections: %d\n", dataset.getTotalSections());
+
+		// console.log("num sections: %d\n", dataset.getSections().length);
+		// - filter sections (WHERE block)
+		const filteredSections = filterSections(validQuery.WHERE.filter, dataset.getSections(), id);
+		// console.log("num sections: %d\n", filteredSections.length);
+
+		const maxSections = 5000;
+		// - check if filtered sections exceed 5000 sections limit
+		if (filteredSections.length > maxSections) {
+			throw new ResultTooLargeError("sections[] exceed size of 5000");
+		}
+		// - make required columns (OPTIONS: COLUMNS)
+		// - order results (OPTIONS: ORDER)
+
+		// // Parse OPTIONS block: Extract columns and order field
+		const columns = validQuery.OPTIONS.columns;
+		const orderField = validQuery.OPTIONS.order;
+
+		// Sort the filtered results if ORDER is specified, otherwise leave as is
+		const sortedSections = orderField ? sortResults(filteredSections, orderField, columns) : filteredSections;
+
+		// // Select the required columns
+		const finalResults: InsightResult[] = selectColumns(sortedSections, columns);
+		// console.log(finalResults);
+		return finalResults;
 	}
 }

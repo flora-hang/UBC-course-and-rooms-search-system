@@ -1,5 +1,5 @@
 import Course from "./Course";
-
+import Section from "./Section";
 export default class Dataset {
 	private readonly ID: string;
 	private Courses: Course[];
@@ -24,5 +24,12 @@ export default class Dataset {
 
 	public getCourses(): Course[] {
 		return this.Courses;
+	}
+	public getSections(): Section[] {
+		let sections: Section[] = [];
+		for (const course of this.Courses) {
+			sections = sections.concat(course.getSections());
+		}
+		return sections;
 	}
 }
