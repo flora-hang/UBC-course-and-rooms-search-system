@@ -145,14 +145,17 @@ function handleIS(condition: any, sections: Section[], id: string): Section[] {
 	if (condition.inputString.includes("*")) {
 		if (condition.inputString.startsWith("*") && condition.inputString.endsWith("*")) {
 			const str = condition.inputString.substring(1, condition.inputString.length - 1);
+			checkWildcardAgain(str);
 			ret = sections.filter((section) => section.getField(field).includes(str));
 			return ret;
 		} else if (condition.inputString.startsWith("*")) {
 			const str = condition.inputString.substring(1, condition.inputString.length);
+			checkWildcardAgain(str);
 			ret = sections.filter((section) => section.getField(field).endsWith(str));
 			return ret;
 		} else if (condition.inputString.endsWith("*")) {
 			const str = condition.inputString.substring(0, condition.inputString.length - 1);
+			checkWildcardAgain(str);
 			ret = sections.filter((section) => section.getField(field).startsWith(str));
 			return ret;
 		} else {
@@ -163,6 +166,12 @@ function handleIS(condition: any, sections: Section[], id: string): Section[] {
 	ret = sections.filter((section) => section.getField(field) === condition.inputString);
 	// console.log("handleIS: %d\n", ret.length);
 	return ret;
+}
+
+function checkWildcardAgain(str: string): void {
+	if (str.includes("*")) {
+		throw new InsightError("* in the middle");
+	} 
 }
 
 function mkeyFlag(field: string): boolean {
