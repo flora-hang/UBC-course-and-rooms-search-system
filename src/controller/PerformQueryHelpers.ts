@@ -171,7 +171,7 @@ function handleIS(condition: any, sections: Section[], id: string): Section[] {
 function checkWildcardAgain(str: string): void {
 	if (str.includes("*")) {
 		throw new InsightError("* in the middle");
-	} 
+	}
 }
 
 function mkeyFlag(field: string): boolean {
