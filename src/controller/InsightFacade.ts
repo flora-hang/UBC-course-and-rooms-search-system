@@ -1,7 +1,7 @@
-import Dataset from "../models/Dataset";
-import Section from "../models/Section";
-import Course from "../models/Course";
-import SectionData from "../models/SectionData";
+import Dataset from "../models/sections/Dataset";
+import Section from "../models/sections/Section";
+import Course from "../models/sections/Course";
+import SectionData from "../models/sections/SectionData";
 import {
 	IInsightFacade,
 	InsightDataset,
@@ -58,11 +58,22 @@ export default class InsightFacade implements IInsightFacade {
 		}
 
 		// kind validation:
-		// - only valid kind is sections for c1
-		if (kind !== InsightDatasetKind.Sections) {
+		// - Sections or Rooms
+		if (kind === InsightDatasetKind.Sections) {
+			return this.addSectionsDataset(id, content);
+		} else if (kind === InsightDatasetKind.Rooms) {
+			return this.addRoomsDataset(id, content);
+		} else {
 			return Promise.reject(new InsightError("Invalid kind"));
 		}
+	}
 
+	private async addRoomsDataset(id: string, content: string): Promise<string[]> {
+		// TODO: Implement this method
+		return Promise.reject(new InsightError("Not yet implemented"));
+	}
+
+	private async addSectionsDataset(id: string, content: string): Promise<string[]> {
 		// parse & validate content (async)
 		const base64Regex = /^[A-Za-z0-9+/]+={0,2}$/;
 

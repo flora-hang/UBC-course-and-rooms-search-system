@@ -1,6 +1,6 @@
 import Negation from "../models/query/Negation";
 import Query from "../models/query/Query";
-import Section from "../models/Section";
+import Section from "../models/sections/Section";
 import { InsightError, InsightResult } from "./IInsightFacade";
 
 export function filterSections(where: any, sections: Section[], id: string): Section[] {

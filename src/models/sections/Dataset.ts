@@ -1,4 +1,4 @@
-import { InsightDataset, InsightDatasetKind } from "../controller/IInsightFacade";
+import { InsightDataset, InsightDatasetKind } from "../../controller/IInsightFacade";
 import Course from "./Course";
 import Section from "./Section";
 export default class Dataset {
