@@ -12,7 +12,6 @@ export default class Query {
 	}
 
 	public static buildQuery(object: any): Query {
-		// console.log("> Query.buildQuery()");
 		if (!object.WHERE) {
 			throw new InsightError("Query must have a WHERE block");
 		}

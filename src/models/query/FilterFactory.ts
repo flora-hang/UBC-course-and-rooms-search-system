@@ -7,16 +7,7 @@ import { InsightError } from "../../controller/IInsightFacade";
 
 // FILTER ::= LOGICCOMPARISON | MCOMPARISON | SCOMPARISON | NEGATION
 export default class FilterFactory implements IFilter {
-	constructor() {
-		// Empty constructor
-	}
-
-	// public checkId(id: string): void {
-	//     const Id = id;
-	// }
-
 	public buildQuery(object: any): IFilter {
-		// console.log("> FilterFactory.buildQuery()");
 		let filter: IFilter;
 
 		const key = Object.keys(object)[0];

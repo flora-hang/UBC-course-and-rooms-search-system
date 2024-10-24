@@ -25,16 +25,10 @@ import Query from "../models/query/Query";
  *
  */
 export default class InsightFacade implements IInsightFacade {
-	// private loadedData: boolean = false;
 	private dataDir = "./data/datasets";
 	private insightFile = "./data/insights.json";
 	private insights: Map<string, InsightDataset> = new Map<string, InsightDataset>();
 	private datas: Map<string, Dataset> = new Map<string, Dataset>();
-	// private datasets: Map<string, [Dataset, InsightDataset]> = new Map<string, [Dataset, InsightDataset]>();
-
-	constructor() {
-		// empty constructor
-	}
 
 	// load insights from disk (only load id and InsightDataset, set Dataset to null)
 	private async loadInsights(): Promise<void> {
@@ -44,7 +38,6 @@ export default class InsightFacade implements IInsightFacade {
 		} catch (_err) {
 			this.insights = new Map<string, InsightDataset>();
 		}
-		// this.loadedData = true;
 	}
 
 	private async saveInsights(): Promise<void> {
@@ -54,16 +47,12 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
-		// if (!this.loadedData) {
-		// 	await this.loadInsights();
-		// }
 		await this.loadInsights();
 
 		// id validation: (reject with InsightError if invalid)
 		// - one of more of any character, except underscore
 		// - id with only whitespace is invalid
 		// - same id as an already added dataset is invalid
-		// console.log("addDatasets > insights: ", this.insights); //
 		if (id.trim().length === 0 || id.includes("_") || this.insights.has(id)) {
 			return Promise.reject(new InsightError("Invalid id"));
 		}
@@ -97,9 +86,6 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async removeDataset(id: string): Promise<string> {
-		// if (!this.loadedData) {
-		// 	await this.loadInsights();
-		// }
 		await this.loadInsights();
 
 		// id checking
@@ -128,41 +114,8 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async listDatasets(): Promise<InsightDataset[]> {
-		// if (!this.loadedData) {
-		// 	await this.loadInsights();
-		// }
 		await this.loadInsights();
-
 		return Array.from(this.insights.values());
-
-		// const cachedDatasets = await fs.readdir(this.dataDir);
-		// const datasetsIdArray: string[] = Array.from(this.datasets.values()).map((tuple) => tuple[1].id);
-
-		// // get all of the datasets from the disk in Dataset form/type
-		// const loadedDatasets: Dataset[] = await Promise.all(
-		// 	cachedDatasets.map(async (dataset) => await this.loadDatasetFromDisk(dataset.replace(".json", "")))
-		// );
-
-		// let count = 0; // used for indexing in the loadedDatasets array
-
-		// // looping through all datasets stored on disk to store missing datasets in map
-		// for (const dataset of cachedDatasets) {
-		// 	const datasetId: string = dataset.replace(".json", "");
-
-		// 	// if the current this.datasets doesn't include a dataset found within the disk, add to this.datasets
-		// 	if (!datasetsIdArray.includes(datasetId)) {
-		// 		// creating a InsightDataset object to later add to map
-		// 		const loadedInsightDataset: InsightDataset = {
-		// 			id: datasetId,
-		// 			kind: InsightDatasetKind.Sections,
-		// 			numRows: loadedDatasets[count].getTotalSections(),
-		// 		};
-		// 		this.datasets.set(datasetId, [loadedDatasets[count], loadedInsightDataset]); // adding tuple of Dataset and InsightDataset to this.datasets map
-		// 	}
-		// 	count++;
-		// }
-
-		// return Array.from(this.datasets.values()).map((tuple) => tuple[1]); // returning list of InsightDataset
 	}
 
 	// saves newly added dataset to disk
@@ -170,15 +123,15 @@ export default class InsightFacade implements IInsightFacade {
 	private async saveDatasetToDisk(id: string): Promise<void> {
 		const newDataset = this.datas.get(id);
 		const file = this.dataDir + "/" + id + ".json";
-		await fs.ensureDir(this.dataDir); // could throw error
-		await fs.writeJSON(file, newDataset); // could throw error (catch in addDataset?)
+		await fs.ensureDir(this.dataDir);
+		await fs.writeJSON(file, newDataset);
 	}
 
 	// loads dataset from disk
 	// assumes that id is valid and corresponds to an existing dataset
 	private async loadDatasetFromDisk(id: string): Promise<Dataset> {
 		const file = this.dataDir + "/" + id + ".json";
-		const dataset: Dataset = await fs.readJSON(file); // could throw error
+		const dataset: Dataset = await fs.readJSON(file);
 		return dataset;
 	}
 
@@ -216,8 +169,6 @@ export default class InsightFacade implements IInsightFacade {
 				// Create the section object if validation passes
 				const section = new Section(uuid, id, title, instructor, dept, year, avg, pass, fail, audit);
 				course.addSection(section);
-
-				// console.log("section added: ", id);
 			}
 		});
 		return course;
@@ -275,7 +226,6 @@ export default class InsightFacade implements IInsightFacade {
 				coursesFiltered.push(file);
 			}
 		}
-		// console.log("courses filtered: ", coursesFiltered);
 		return coursesFiltered;
 	}
 
@@ -294,13 +244,11 @@ export default class InsightFacade implements IInsightFacade {
 
 		// Build query object
 		const validQuery = Query.buildQuery(query);
-		// console.log("> built query");
 
 		const id = checkIds(validQuery);
 		if (!this.insights.has(id)) {
 			throw new InsightError("Querying section that has not been added");
 		}
-		// console.log("> checked ids");
 		let dataset: Dataset;
 
 		// if dataset is not in memory, load it from disk
@@ -315,21 +263,13 @@ export default class InsightFacade implements IInsightFacade {
 			dataset = data;
 		}
 
-		// const dataset = data[0];
-		// console.log("num sections: %d\n", dataset.getTotalSections());
-
-		// console.log("num sections: %d\n", dataset.getSections().length);
-		// - filter sections (WHERE block)
 		const filteredSections = filterSections(validQuery.WHERE.filter, dataset.getSections(), id);
-		// console.log("num sections: %d\n", filteredSections.length);
 
 		const maxSections = 5000;
 		// - check if filtered sections exceed 5000 sections limit
 		if (filteredSections.length > maxSections) {
 			throw new ResultTooLargeError("sections[] exceed size of 5000");
 		}
-		// - make required columns (OPTIONS: COLUMNS)
-		// - order results (OPTIONS: ORDER)
 
 		// // Parse OPTIONS block: Extract columns and order field
 		const columns = validQuery.OPTIONS.columns;
@@ -340,7 +280,6 @@ export default class InsightFacade implements IInsightFacade {
 
 		// // Select the required columns
 		const finalResults: InsightResult[] = selectColumns(sortedSections, columns);
-		// console.log(finalResults);
 		return finalResults;
 	}
 }

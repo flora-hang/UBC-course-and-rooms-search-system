@@ -15,18 +15,11 @@ export default class LogicComparison implements IFilter {
 		this.filters = filters;
 	}
 
-	// public checkId(id: string): void {
-	//     for (const filter of this.filters) {
-	//         filter.checkId(id);
-	//     }
-	// }
-
 	public buildQuery(object: any): IFilter {
 		throw new Error("buildQuery not implemented.", object);
 	}
 
 	public static buildQueryStatic(object: any, factory: IFilter): IFilter {
-		// console.log("> LogicComparison.buildQueryStatic()");
 		const key = Object.keys(object)[0]; // returns 'AND' | 'OR'
 		if (key !== Logic.AND && key !== Logic.OR) {
 			throw new Error("Invalid logic comparison");

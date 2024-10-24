@@ -14,7 +14,6 @@ export default class Options {
 	}
 
 	public static buildQuery(object: any): Options {
-		// console.log("> Options.buildQuery()");
 		if (!object.COLUMNS) {
 			throw new InsightError("no COLUMNS in OPTIONS");
 		}
@@ -34,9 +33,6 @@ export default class Options {
 			if (parts.length !== numParts) {
 				throw new InsightError("Invalid column format");
 			}
-
-			// check that id is valid???
-			// !!!
 
 			// check that parts[1] is either a mfield or sfield
 			if (!(parts[1] in MField) && !(parts[1] in SField)) {

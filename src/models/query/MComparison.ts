@@ -26,18 +26,11 @@ export default class MComparison implements IFilter {
 		this.value = value;
 	}
 
-	// public checkId(id: string): void {
-	//     if (this.mkey.split('_')[0] !== id) {
-	//         throw new InsightError('Cannot query from multiple datasets');
-	//     }
-	// }
-
 	public buildQuery(object: any): IFilter {
 		throw new Error("buildQuery not implemented.", object);
 	}
 
 	public static buildQuery(object: any): IFilter {
-		// console.log("> MComparison.buildQuery(): ", object);
 		const key = Object.keys(object)[0]; // returns 'GT' | 'LT' | 'EQ'
 		if (key !== MComparator.LT && key !== MComparator.GT && key !== MComparator.EQ) {
 			throw new Error("Invalid M comparison");
