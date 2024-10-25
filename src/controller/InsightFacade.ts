@@ -1,4 +1,4 @@
-import Dataset from "../models/sections/Dataset";
+import Dataset from "../models/sections/SectionsDataset";
 import Section from "../models/sections/Section";
 import Course from "../models/sections/Course";
 import SectionData from "../models/sections/SectionData";
@@ -216,7 +216,7 @@ export default class InsightFacade implements IInsightFacade {
 				handle.push(this.handleSections(course, jsonData));
 			});
 			const courseArray: Course[] = await Promise.all(handle);
-			dataset.addCourse(courseArray);
+			dataset.addCourses(courseArray);
 		} catch (err) {
 			throw new InsightError(`Error processing zip file: ${(err as Error).message}`);
 		}
