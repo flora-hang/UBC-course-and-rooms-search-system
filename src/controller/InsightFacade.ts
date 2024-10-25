@@ -1,4 +1,4 @@
-import Dataset from "../models/sections/SectionsDataset";
+import SectionsDataset from "../models/sections/SectionsDataset";
 import Section from "../models/sections/Section";
 import Course from "../models/sections/Course";
 import SectionData from "../models/sections/SectionData";
@@ -16,6 +16,8 @@ import * as fsPromises from "fs/promises";
 import fs from "fs-extra";
 import JSZip from "jszip";
 import Query from "../models/query/Query";
+import { Dataset } from "../models/Dataset";
+import RoomsDataset from "../models/rooms/RoomsDataset";
 
 // import { json } from "stream/consumers";
 
@@ -28,6 +30,7 @@ export default class InsightFacade implements IInsightFacade {
 	private dataDir = "./data/datasets";
 	private insightFile = "./data/insights.json";
 	private insights: Map<string, InsightDataset> = new Map<string, InsightDataset>();
+	// private datas: Map<string, SectionsDataset> = new Map<string, SectionsDataset>();
 	private datas: Map<string, Dataset> = new Map<string, Dataset>();
 
 	// load insights from disk (only load id and InsightDataset, set Dataset to null)
@@ -82,7 +85,7 @@ export default class InsightFacade implements IInsightFacade {
 			return Promise.reject(new InsightError("Content not in base64 format"));
 		}
 
-		const dataset: Dataset = await this.processZip(id, content);
+		const dataset: SectionsDataset = await this.processZip(id, content);
 		this.datas.set(id, dataset);
 		const insight = dataset.getInsight();
 		this.insights.set(id, insight);
@@ -91,9 +94,7 @@ export default class InsightFacade implements IInsightFacade {
 		await this.saveInsights();
 
 		// return a string array containing the ids of all currently added datasets upon a successful add
-		const fileNames = await fs.readdir(this.dataDir);
-		const ids = fileNames.map((addedId) => addedId.replace(".json", ""));
-		return ids;
+		return Array.from(this.insights.keys());
 	}
 
 	public async removeDataset(id: string): Promise<string> {
@@ -186,8 +187,8 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	// Function to process the zip file using Promises
-	private async processZip(id: string, content: string): Promise<Dataset> {
-		const dataset = new Dataset(id);
+	private async processZip(id: string, content: string): Promise<SectionsDataset> {
+		const dataset = new SectionsDataset(id);
 
 		try {
 			const zip = await JSZip.loadAsync(content, { base64: true }); // Load zip asynchronously
@@ -274,6 +275,21 @@ export default class InsightFacade implements IInsightFacade {
 			dataset = data;
 		}
 
+		if (dataset.getKind() === InsightDatasetKind.Sections) {
+			return await this.querySectionsDataset(validQuery, dataset as SectionsDataset);
+		} else {
+			// query RoomsDataset
+			return await this.queryRoomsDataset(validQuery, dataset as RoomsDataset);
+		}
+	}
+
+	private async queryRoomsDataset(validQuery: Query, dataset: RoomsDataset): Promise<InsightResult[]> {
+		return Promise.reject(new InsightError("Not yet implemented"));
+		// TODO: Implement this method
+	}
+
+	private async querySectionsDataset(validQuery: Query, dataset: SectionsDataset): Promise<InsightResult[]> {
+		const id = dataset.getId();
 		const filteredSections = filterSections(validQuery.WHERE.filter, dataset.getSections(), id);
 
 		const maxSections = 5000;

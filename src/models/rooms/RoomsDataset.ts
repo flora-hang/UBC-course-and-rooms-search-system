@@ -1,12 +1,15 @@
 import { InsightDataset, InsightDatasetKind } from "../../controller/IInsightFacade";
+import { Dataset } from "../Dataset";
 import Building from "./Building";
 import Room from "./Room";
 
-export default class RoomsDataset {
+export default class RoomsDataset extends Dataset {
     private readonly id: string;
+    private readonly kind: InsightDatasetKind = InsightDatasetKind.Rooms;
     private buildings: Building[];
 
     constructor(id: string) {
+        super();
         this.id = id;
         this.buildings = [];
     }
@@ -17,6 +20,10 @@ export default class RoomsDataset {
 
     public getId(): string {
         return this.id;
+    }
+
+    public getKind(): InsightDatasetKind {
+        return this.kind;
     }
 
     public getTotalRooms(): number {

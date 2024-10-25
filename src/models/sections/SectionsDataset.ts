@@ -1,13 +1,16 @@
 import { InsightDataset, InsightDatasetKind } from "../../controller/IInsightFacade";
+import { Dataset } from "../Dataset";
 import Course from "./Course";
 import Section from "./Section";
 
-export default class Dataset {
-	private readonly ID: string;
+export default class SectionsDataset extends Dataset {
+	private readonly id: string;
+	private readonly kind: InsightDatasetKind = InsightDatasetKind.Sections;
 	private Courses: Course[];
 
 	constructor(id: string) {
-		this.ID = id;
+		super();
+		this.id = id;
 		this.Courses = [];
 	}
 
@@ -16,7 +19,11 @@ export default class Dataset {
 	}
 
 	public getId(): string {
-		return this.ID;
+		return this.id;
+	}
+
+	public getKind(): InsightDatasetKind {
+		return this.kind;
 	}
 
 	public getTotalSections(): number {
@@ -39,7 +46,7 @@ export default class Dataset {
 
 	public getInsight(): InsightDataset {
 		return {
-			id: this.ID,
+			id: this.id,
 			kind: InsightDatasetKind.Sections,
 			numRows: this.getTotalSections(),
 		};
