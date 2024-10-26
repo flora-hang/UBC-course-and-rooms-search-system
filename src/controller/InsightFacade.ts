@@ -88,8 +88,16 @@ export default class InsightFacade implements IInsightFacade {
 		if (!base64Regex.test(content)) {
 			return Promise.reject(new InsightError("Content not in base64 format"));
 		}
-		
-		return Promise.reject(new InsightError("Not yet implemented"));
+		const dataset: RoomsDataset = await this.extractRoomData(id, content);
+		this.datas.set(id, dataset);
+		const insight = dataset.getInsight();
+		this.insights.set(id, insight);
+
+		await this.saveDatasetToDisk(id);
+		await this.saveInsights();
+
+		// return a string array containing the ids of all currently added datasets upon a successful add
+		return Array.from(this.insights.keys());
 	}
 	// Decode the base64 zip file and parse HTML for buildings and rooms
 /**
