@@ -35,9 +35,10 @@ describe("InsightFacade", function () {
 	let badCoursesFolderDataset: string;
 	let invalidSectionDataset: string;
 	let oneValidSection: string;
-
+	let rooms: string;
 	before(async function () {
 		// This block runs once and loads the datasets.
+		rooms = await getContentFromArchives("campus.zip");
 		sections = await getContentFromArchives("pair.zip");
 		fakeSections = await getContentFromArchives("fakepair.zip"); // has two extra sections w/ avg === 65
 		validDataset = await getContentFromArchives("validDataset.zip");
@@ -139,6 +140,16 @@ describe("InsightFacade", function () {
 				const result = await facade.addDataset("sections", sections, InsightDatasetKind.Sections);
 				expect(result.length).to.equal(1);
 				expect(result[0]).to.equal("sections");
+			} catch (_err) {
+				// console.log(err);
+				expect.fail("Should not have thrown an error.");
+			}
+		});
+		it("should add roomsDataset (campus.zip)", async function () {
+			try {
+				const result = await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
+				expect(result.length).to.equal(1);
+				expect(result[0]).to.equal("rooms");
 			} catch (_err) {
 				// console.log(err);
 				expect.fail("Should not have thrown an error.");
