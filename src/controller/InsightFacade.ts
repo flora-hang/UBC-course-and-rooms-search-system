@@ -435,7 +435,7 @@ private findLinkElement(cell: any): any {
 
 		// // Parse OPTIONS block: Extract columns and order field
 		const columns = validQuery.OPTIONS.columns;
-		const orderField = validQuery.OPTIONS.order;
+		const orderField = validQuery.OPTIONS.sort?.anyKey;
 
 		// Sort the filtered results if ORDER is specified, otherwise leave as is
 		const sortedSections = orderField ? sortResults(filteredSections, orderField, columns) : filteredSections;

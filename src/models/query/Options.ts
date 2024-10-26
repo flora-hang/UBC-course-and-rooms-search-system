@@ -1,15 +1,16 @@
 import { InsightError } from "../../controller/IInsightFacade";
 import { MField } from "./MComparison";
 import { SField } from "./SComparison";
+import Sort from "./Sort";
 
 export default class Options {
 	public columns: string[];
-	public order?: string;
+	public sort?: Sort;
 
-	constructor(columns: string[], order?: string) {
+	constructor(columns: string[], sort?: Sort) {
 		this.columns = columns;
-		if (order) {
-			this.order = order;
+		if (sort) {
+			this.sort = sort;
 		}
 	}
 
@@ -40,9 +41,10 @@ export default class Options {
 			}
 		}
 
-		if ("ORDER" in object) {
-			const order = object.ORDER;
-			return new Options(columns, order);
+		if ("ORDER" in object) { //!!!
+			// const order = object.ORDER;
+			const sort: Sort = Sort.buildQuery(object.ORDER);
+			return new Options(columns, sort);
 		} else {
 			return new Options(columns);
 		}
