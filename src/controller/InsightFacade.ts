@@ -2,6 +2,8 @@ import SectionsDataset from "../models/sections/SectionsDataset";
 import Section from "../models/sections/Section";
 import Course from "../models/sections/Course";
 import SectionData from "../models/sections/SectionData";
+import Building from "../models/rooms/Building";
+import Room from "../models/rooms/Room";
 import {
 	IInsightFacade,
 	InsightDataset,
@@ -18,7 +20,7 @@ import JSZip from "jszip";
 import Query from "../models/query/Query";
 import { Dataset } from "../models/Dataset";
 import RoomsDataset from "../models/rooms/RoomsDataset";
-
+import parse5 from "parse5";
 // import { json } from "stream/consumers";
 
 /**
@@ -26,6 +28,13 @@ import RoomsDataset from "../models/rooms/RoomsDataset";
  * Method documentation is in IInsightFacade
  *
  */
+interface Node {
+    nodeName: string;
+    tagName?: string;
+    childNodes?: Node[];
+    value?: string;
+}
+
 export default class InsightFacade implements IInsightFacade {
 	private dataDir = "./data/datasets";
 	private insightFile = "./data/insights.json";
@@ -73,9 +82,135 @@ export default class InsightFacade implements IInsightFacade {
 
 	private async addRoomsDataset(id: string, content: string): Promise<string[]> {
 		// TODO: Implement this method
+		const base64Regex = /^[A-Za-z0-9+/]+={0,2}$/;
+
+		// Test against the regex
+		if (!base64Regex.test(content)) {
+			return Promise.reject(new InsightError("Content not in base64 format"));
+		}
+		
 		return Promise.reject(new InsightError("Not yet implemented"));
 	}
+	// Decode the base64 zip file and parse HTML for buildings and rooms
+/**
+ * Parses and extracts room data from campus.zip and populates the RoomsDataset.
+ * @param zipContent - Base64 encoded zip file content.
+ * @param datasetId - The ID for the RoomsDataset.
+ * @returns A RoomsDataset populated with Building and Room data.
+ */
+private async extractRoomData(zipContent: string, datasetId: string): Promise<RoomsDataset> {
+    const zip = await JSZip.loadAsync(Buffer.from(zipContent, 'base64'));
+    const dataset = new RoomsDataset(datasetId);
 
+    // Step 1: Parse the index.htm file for building information
+    const indexFile = zip.file('index.htm');
+    if (!indexFile) throw new Error("Error: index.htm not found in zip file.");
+
+    const indexContent = await indexFile.async('text');
+    const document = parse5.parse(indexContent);
+
+    // Step 2: Find the building table in index.htm
+    const buildings = await this.parseBuildingTable(document, zip);
+    dataset.addBuildings(buildings);
+
+    return dataset;
+}
+
+// Helper function to find the building table and extract building information.
+private async parseBuildingTable(document: any, zip: JSZip): Promise<Building[]> {
+    const buildings: Building[] = [];
+    const buildingTable = this.findTableWithClass(document, 'views-field-title');
+
+    if (!buildingTable) {
+        throw new Error("Error: Could not find building table in index.htm.");
+    }
+
+    // Traverse rows in the building table
+    for (const row of this.findAllElements(buildingTable, 'tr')) {
+        const titleCell = this.findElementWithClass(row, 'views-field-title');
+        const addressCell = this.findElementWithClass(row, 'views-field-field-building-address');
+        const link = this.findLinkElement(titleCell);
+
+        if (link) {
+            const shortname = this.getTextContent(titleCell);
+            const fullname = this.getTextContent(link);
+            const address = this.getTextContent(addressCell);
+            const building = new Building(fullname, shortname, address);
+
+            const buildingFile = zip.file(link.attrs.href);
+            if (buildingFile) {
+                const buildingContent = await buildingFile.async('text');
+                this.parseRoomTable(building, parse5.parse(buildingContent));
+            }
+
+            if (building.hasValidRoom()) {
+                buildings.push(building);
+            }
+        }
+    }
+
+    return buildings;
+}
+
+// Helper function to parse the room table for a given building.
+private parseRoomTable(building: Building, document: any): void {
+    const roomTable = this.findTableWithClass(document, 'views-field-room-number');
+    if (!roomTable) return;
+
+    for (const row of this.findAllElements(roomTable, 'tr')) {
+        const roomNumber = this.getTextContent(this.findElementWithClass(row, 'views-field-room-number'));
+        const seatsText = this.getTextContent(this.findElementWithClass(row, 'views-field-room-capacity'));
+        const seats = parseInt(seatsText, 10) || 0;
+        const type = this.getTextContent(this.findElementWithClass(row, 'views-field-room-type'));
+        const furniture = this.getTextContent(this.findElementWithClass(row, 'views-field-room-furniture'));
+        const link = this.findLinkElement(row)?.attrs.href || '';
+
+        if (roomNumber) {
+            const room = new Room(building.getShortname(), roomNumber, seats, type, furniture, link);
+            building.addRoom(room);
+        }
+    }
+}
+
+// Utility function to find a table by looking for a specific class on any <td> element within the table.
+private findTableWithClass(root: any, className: string): any {
+    for (const table of this.findAllElements(root, 'table')) {
+        if (this.findElementWithClass(table, className)) {
+            return table;
+        }
+    }
+    return null;
+}
+
+// Utility to get the text content of an HTML element
+private getTextContent(element: any): string {
+    return element?.childNodes?.[0]?.value?.trim() || '';
+}
+
+// Helper to find a specific element with a class name.
+private findElementWithClass(root: any, className: string): any {
+    return this.findAllElements(root, 'td').find((td) =>
+        td.attrs?.some((attr: any) => attr.name === 'class' && attr.value.includes(className))
+    );
+}
+
+// Helper to find all elements of a certain tag
+private findAllElements(root: any, tagName: string): any[] {
+    const elements: any[] = [];
+    const stack = [root];
+    while (stack.length) {
+        const node = stack.pop();
+        if (node.tagName === tagName) elements.push(node);
+        stack.push(...(node.childNodes || []));
+    }
+    return elements;
+}
+
+// Helper to find a link element within a cell
+private findLinkElement(cell: any): any {
+    return cell && this.findAllElements(cell, 'a').find((a) => a.attrs.some((attr: any) => attr.name === 'href'));
+}
+	
 	private async addSectionsDataset(id: string, content: string): Promise<string[]> {
 		// parse & validate content (async)
 		const base64Regex = /^[A-Za-z0-9+/]+={0,2}$/;
