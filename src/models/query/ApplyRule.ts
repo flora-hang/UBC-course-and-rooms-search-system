@@ -16,4 +16,13 @@ export default class ApplyRule {
         this.applyToken = applyToken;
         this.key = key;
     }
+
+    public static buildQuery(object: any): ApplyRule {
+        const applyKey = Object.keys(object)[0];
+        const nestedObject = object[applyKey];
+        const applyToken = Object.keys(nestedObject)[0] as ApplyToken;
+        const key = nestedObject[applyToken];
+
+        return new ApplyRule(applyKey, applyToken, key);
+    }
 }

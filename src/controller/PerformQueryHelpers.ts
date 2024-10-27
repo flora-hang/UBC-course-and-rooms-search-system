@@ -223,7 +223,8 @@ export function selectColumns(sections: Section[], columns: string[]): InsightRe
 
 // traverse query to check that the same valid id is used throughout
 export function checkIds(query: Query): string {
-	const idStrings = query.OPTIONS.columns.map((column: string) => column.split("_")[0]);
+	const columnsWithUnderscore = query.OPTIONS.columns.filter((column: string) => column.includes("_"));
+	const idStrings = columnsWithUnderscore.map((column: string) => column.split("_")[0]);
 	// check if all idStrings are the same
 	const uniqueIds = new Set(idStrings);
 	if (uniqueIds.size > 1) {

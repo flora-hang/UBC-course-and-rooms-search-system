@@ -424,5 +424,9 @@ describe("InsightFacade", function () {
 		it("[valid/noResults.json] valid query that has zero results", checkQuery);
 		it("[valid/negativeNumberFilter.json] negative number in WHERE under LT", checkQuery);
 		it("[valid/zeroCharacterFilter.json] zero character in string under IS filter", checkQuery);
+
+		// new tests for C2
+		it("[valid/simpleQueryTransformations.json] simple query transformations", checkQuery);
+		it("[valid/roomsQueryExample.json] rooms query example from spec", checkQuery);
 	});
 });
