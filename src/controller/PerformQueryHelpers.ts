@@ -3,6 +3,7 @@ import Query from "../models/query/Query";
 import Section from "../models/sections/Section";
 import Room from "../models/rooms/Room";
 import { InsightError, InsightResult } from "./IInsightFacade";
+import ApplyRule, { useApply } from "../models/query/ApplyRule";
 
 export function filterItems(where: any, items: Section[] | Room[], id: string): (Section | Room)[] {
 	// If WHERE block is empty, return all items (no filtering)
@@ -193,6 +194,39 @@ function mkeyFlag(field: string): boolean {
 	}
 }
 
+// TODO: this function might cause errors tbh
+export function groupItems(items: Section[] | Room[], groups: String[]): (Section | Room)[][] {
+	const groupedItemsMap: { [key: string]: (Section | Room)[] } = {};
+	items.forEach((item) => {
+		const keyParts = groups.map(group => (item as any)[group]);
+		const key = keyParts.join("_");
+
+		if (!groupedItemsMap[key]) {
+			groupedItemsMap[key] = [];
+		}
+		groupedItemsMap[key].push(item);
+		// groups.map((group) => {
+		// 	const field: string = group.split("_")[1];
+		// 	if (!groupedItemsMap.has(field)) {
+		// 		groupedItemsMap[field] = [item];
+		// 	} else {
+		// 		groupedItemsMap[field].push(item);
+		// 	}
+		// })
+	});
+
+	return Object.values(groupedItemsMap);;
+}
+
+export function applyItems(groupedItems: (Section | Room)[][], applyRules: ApplyRule[]): Section[] | Room[] {
+	groupedItems.forEach((groupItem) => {
+		applyRules.forEach((applyRule) => {
+			const {applyKey, applyToken, key} = applyRule;
+			groupItem[applyKey] = useApply(applyToken, key, groupItem);
+		})
+	});
+}
+
 export function sortResults(items: Section[] | Room[], order: String, columns: String[]): Section[] | Room[] {
 	// check if order is in columns, if not throw error
 	if (!columns.includes(order)) {
@@ -236,3 +270,4 @@ export function checkIds(query: Query): string {
 	// order key in columns checked in sortResults
 	return datasetId;
 }
+

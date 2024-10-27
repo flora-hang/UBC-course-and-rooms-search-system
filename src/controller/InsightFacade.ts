@@ -13,7 +13,7 @@ import {
 	NotFoundError,
 	ResultTooLargeError,
 } from "./IInsightFacade";
-import { filterSections, sortResults, selectColumns, checkIds } from "./PerformQueryHelpers";
+import { filterItems, sortResults, selectColumns, checkIds, groupItems } from "./PerformQueryHelpers";
 import { extractRoomData } from "./addDatasetHelper";
 import * as fsPromises from "fs/promises";
 import fs from "fs-extra";
@@ -97,7 +97,7 @@ export default class InsightFacade implements IInsightFacade {
 		// return a string array containing the ids of all currently added datasets upon a successful add
 		return Array.from(this.insights.keys());
 	}
-	
+
 	private async addSectionsDataset(id: string, content: string): Promise<string[]> {
 		// parse & validate content (async)
 		const base64Regex = /^[A-Za-z0-9+/]+={0,2}$/;
@@ -297,38 +297,63 @@ export default class InsightFacade implements IInsightFacade {
 			dataset = data;
 		}
 
-		if (dataset.getKind() === InsightDatasetKind.Sections) {
-			return await this.querySectionsDataset(validQuery, dataset as SectionsDataset);
-		} else {
+		// if (dataset.getKind() === InsightDatasetKind.Sections) {
+			return await this.queryItemsDataset(validQuery, dataset as SectionsDataset | RoomsDataset);
+		// } else {
 			// query RoomsDataset
-			return await this.queryRoomsDataset(validQuery, dataset as RoomsDataset);
-		}
+			// return await this.queryRoomsDataset(validQuery, dataset as RoomsDataset);
+		// }
 	}
 
-	private async queryRoomsDataset(validQuery: Query, dataset: RoomsDataset): Promise<InsightResult[]> {
-		return Promise.reject(new InsightError("Not yet implemented"));
-		// TODO: Implement this method
-	}
-
-	private async querySectionsDataset(validQuery: Query, dataset: SectionsDataset): Promise<InsightResult[]> {
+	private async queryItemsDataset(validQuery: Query, dataset: SectionsDataset | RoomsDataset): Promise<InsightResult[]> {
 		const id = dataset.getId();
-		const filteredSections = filterSections(validQuery.WHERE.filter, dataset.getSections(), id);
+
+		let items: Section[] | Room[] = null as unknown as Section[] | Room[];
+		if (dataset instanceof SectionsDataset) {
+			items = dataset.getSections();
+		} else if (dataset instanceof RoomsDataset) {
+			items = dataset.getRooms();
+		}
+
+		const filteredItems = filterItems(validQuery.WHERE.filter, items, id) as Section[];
 
 		const maxSections = 5000;
 		// - check if filtered sections exceed 5000 sections limit
-		if (filteredSections.length > maxSections) {
+		if (filteredItems.length > maxSections) {
 			throw new ResultTooLargeError("sections[] exceed size of 5000");
 		}
 
-		// // Parse OPTIONS block: Extract columns and order field
+		// Parse OPTIONS block: Extract columns and order field
 		const columns = validQuery.OPTIONS.columns;
 		const orderField = validQuery.OPTIONS.sort?.anyKey;
+		// Parse TRANSFORMATIONS block: Extract group and apply field
+		const groups = validQuery.TRANSFORMATIONS?.group;
+		const apply = validQuery.TRANSFORMATIONS?.apply;
 
-		// Sort the filtered results if ORDER is specified, otherwise leave as is
-		const sortedSections = orderField ? sortResults(filteredSections, orderField, columns) : filteredSections;
+		// group the items together
+		if (validQuery.TRANSFORMATIONS && !groups) {
+			throw new InsightError("Transformations must have a GROUP block");
+		} else if (validQuery.TRANSFORMATIONS && !apply) {
+			throw new InsightError("Transformations must have an APPLY block");
+		}
+
+		// group the filtered results into specific groups
+		const groupedItems = groups ? groupItems(filteredItems, groups) : null;
+		// apply specified APPLYTOKENs if given
+		const applyItems = apply ? applyItems(groupedItems, apply) : null;
+
+		// TODO: add new sort functionality
+		// IF TRANSFORMATION block and SORT given: sort the group items
+		// ELSE IF only SORT given and TRANSFORMATION block not given: sort the filtered items
+		// ELSE: return filtered items
+		const sortedItems = orderField ?
+			(groups && apply) ?
+				sortResults(applyItems as Section[] | Room[], orderField, columns)
+				: sortResults(filteredItems, orderField, columns)
+			: filteredItems;
 
 		// // Select the required columns
-		const finalResults: InsightResult[] = selectColumns(sortedSections, columns);
+		const finalResults: InsightResult[] = selectColumns(sortedItems, columns);
 		return finalResults;
 	}
 }
