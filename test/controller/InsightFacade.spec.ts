@@ -444,7 +444,7 @@ describe("InsightFacade", function () {
 		it("[invalid/invalidKeyTypeInApply.json] invalid key type in APPLY", checkQuery);
 		it("[valid/nonNumericKeyForCount.json] non-numeric key for COUNT", checkQuery);
 		it("[invalid/duplicateApplyKey.json] duplicate APPLY key", checkQuery);
-		it("[valid/validCount.json] valid query using COUNT", checkQuery);	
+		it("[valid/validCount.json] valid query using COUNT", checkQuery);
 		it("[invalid/columnKeyNotInGroup.json] column key not in GROUP", checkQuery);
 		it("[invalid/columnKeyNotInApply.json] column key not in APPLY", checkQuery);
 		it("[invalid/sortKeyNotInColumns.json] sort key not in COLUMNS", checkQuery);

@@ -97,7 +97,7 @@ export default class InsightFacade implements IInsightFacade {
 		// return a string array containing the ids of all currently added datasets upon a successful add
 		return Array.from(this.insights.keys());
 	}
-	
+
 	private async addSectionsDataset(id: string, content: string): Promise<string[]> {
 		// parse & validate content (async)
 		const base64Regex = /^[A-Za-z0-9+/]+={0,2}$/;

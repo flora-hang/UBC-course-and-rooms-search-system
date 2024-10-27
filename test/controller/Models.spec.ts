@@ -21,19 +21,14 @@ describe("Building", function () {
 
 describe("Query", function () {
 	it("test query models", async function () {
-		const expectedColumns: string[] = [
-			"sections_title",
-			"overallAvg"
-		  ];
-		const expectedGroup: string[] = [
-			"sections_title"
-		  ];
+		const expectedColumns: string[] = ["sections_title", "overallAvg"];
+		const expectedGroup: string[] = ["sections_title"];
 		const expectedApply: ApplyRule[] = [new ApplyRule("overallAvg", ApplyToken.AVG, "sections_avg")];
-		const { input, expected, errorExpected } = await loadTestQuery("[valid/simpleQueryTransformations.json]");
+		const { input } = await loadTestQuery("[valid/simpleQueryTransformations.json]");
 
 		const query = Query.buildQuery(input);
 		expect(query.OPTIONS.columns).to.deep.equal(expectedColumns);
 		expect(query.TRANSFORMATIONS?.GROUP).to.deep.equal(expectedGroup);
 		expect(query.TRANSFORMATIONS?.APPLY).to.deep.equal(expectedApply);
-	})
+	});
 });
