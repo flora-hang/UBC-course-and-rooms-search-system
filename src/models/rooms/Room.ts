@@ -6,7 +6,7 @@ export default class Room {
     private readonly furniture: string; // The room furniture
     private readonly href: string; // The link to the full details online
 
-    constructor(building: string, roomNumber: string, numSeats: number, 
+    constructor(building: string, roomNumber: string, numSeats: number,
         roomType: string, roomFurniture: string, link: string) {
         this.number = roomNumber;
         this.name = building + "_" + roomNumber;
@@ -34,6 +34,10 @@ export default class Room {
                 throw new Error("Error: Called getField() with an invalid comparisonField arg.");
         }
     }
+
+	public getUniqueIdentifier(): string {
+		return this.getName();
+	}
 
     public getNumber(): string {
         return this.number;

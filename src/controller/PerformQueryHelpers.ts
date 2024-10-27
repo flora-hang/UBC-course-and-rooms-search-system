@@ -1,19 +1,20 @@
 import Negation from "../models/query/Negation";
 import Query from "../models/query/Query";
 import Section from "../models/sections/Section";
+import Room from "../models/rooms/Room";
 import { InsightError, InsightResult } from "./IInsightFacade";
 
-export function filterSections(where: any, sections: Section[], id: string): Section[] {
-	// If WHERE block is empty, return all sections (no filtering)
-	// !!! get all sections in the dataset
-	// console.log("been in filteredSections");
+export function filterItems(where: any, items: Section[] | Room[], id: string): (Section | Room)[] {
+	// If WHERE block is empty, return all items (no filtering)
+	// !!! get all items in the dataset
+	// console.log("been in filteredItems");
 
 	if (where === undefined) {
-		return sections;
+		return items;
 	}
 
 	if (where.logic === "AND") {
-		return handleAND(where.filters, sections, id);
+		return handleAND(where.filters, items, id);
 	}
 	// console.log("been outside of OR");
 	if (where.logic === "OR") {
@@ -21,63 +22,63 @@ export function filterSections(where: any, sections: Section[], id: string): Sec
 		// console.log("%s\n", where.filter.filters);
 		// console.log("been in OR");
 		// console.log("num sections (OR): %d\n", sections.length);
-		return handleOR(where.filters, sections, id);
+		return handleOR(where.filters, items, id);
 	}
 	// console.log("been outside of NOT");
 	if (where instanceof Negation) {
 		// console.log("been in NOT");
 		// console.log("num sections (NOT): %d\n", sections.length);
-		return handleNOT(where, sections, id);
+		return handleNOT(where, items, id);
 	}
 	// console.log("been outside of EQ");
 	// Process comparison operators (EQ, GT, LT, IS)
 	if (where.mComparator === "EQ") {
 		// console.log("been in EQ");
 		// console.log("num sections (EQ): %d\n", sections.length);
-		return handleEQ(where, sections, id);
+		return handleEQ(where, items, id);
 	}
 	// console.log("been outside of GT");
 	if (where.mComparator === "GT") {
 		// console.log("been in GT");
-		return handleGT(where, sections, id);
+		return handleGT(where, items, id);
 	}
 	// console.log("been outside of LT");
 	if (where.mComparator === "LT") {
 		// console.log("been in LT");
-		return handleLT(where, sections, id);
+		return handleLT(where, items, id);
 	}
 
 	// console.log(" %s\n", where.filter);
 	// console.log("been outside of IS");
 	if ("skey" in where) {
 		// console.log("been in IS");
-		return handleIS(where, sections, id);
+		return handleIS(where, items, id);
 	}
 
 	// If no valid operator is found, return all sections (shouldn't happen)
-	return sections;
+	return items;
 }
 
-function handleAND(conditions: any[], sections: Section[], id: string): Section[] {
+function handleAND(conditions: any[], items: Section[] | Room[], id: string): (Section | Room)[] {
 	// console.log("handleAND");
-	let results: Section[] = sections;
+	let results = items;
 
 	for (const condition of conditions) {
-		results = filterSections(condition, results, id);
+		results = filterItems(condition, results, id) as Section[] | Room[];
 		// console.log("handleAnd: %d\n", results.length);
 	}
 	// Merge all results (union)
 	return results;
 }
-function handleOR(conditions: any[], sections: Section[], id: string): Section[] {
+function handleOR(conditions: any[], items: Section[] | Room[], id: string): (Section | Room)[] {
 	// console.log("handleOR");
-	const results = conditions.map((condition) => filterSections(condition, sections, id));
-	const newSections = results.flat();
+	const results = conditions.map((condition) => filterItems(condition, items, id));
+	const newItems = results.flat();
 	// console.log("newSections: %d\n", newSections.length);
 	const seen = new Set<any>(); // Set to store unique field values
 
-	const ret = newSections.filter((section) => {
-		const value = section.getUuid();
+	const ret = newItems.filter((item) => {
+		const value = item.getUniqueIdentifier();
 		if (seen.has(value)) {
 			return false; // Skip duplicate sections
 		} else {
@@ -85,29 +86,30 @@ function handleOR(conditions: any[], sections: Section[], id: string): Section[]
 			return true; // Keep the unique section
 		}
 	});
-	// console.log("newSections 2: %d\n", ret.length);
+	// console.log("newitems 2: %d\n", ret.length);
 	return ret;
+
 }
 
-function handleNOT(condition: any, sections: Section[], id: string): Section[] {
+function handleNOT(condition: any, items: Section[] | Room[], id: string): (Section | Room)[] {
 	// console.log("handleNOT: %s\n", condition);
-	const filteredSections = filterSections(condition.filter, sections, id);
+	const filteredItems = filterItems(condition.filter, items, id);
 	// Return sections that are NOT in the filtered set
-	return sections.filter((section) => !filteredSections.includes(section));
+	return items.filter((item) => !filteredItems.includes(item as Section & Room));
 }
 
-function handleEQ(condition: any, sections: Section[], id: string): Section[] {
+function handleEQ(condition: any, items: Section[] | Room[], id: string): (Section | Room)[] {
 	// console.log("handleEQ");
 	const field: string = condition.mkey.split("_")[1]; // e.g. "avg"
 	const ID: string = condition.mkey.split("_")[0];
 	if (ID !== id) {
 		throw new InsightError("id does not match");
 	}
-	const ret = sections.filter((section) => section.getField(field) === condition.value);
+	const ret = items.filter((item) => item.getField(field) === condition.value);
 	return ret;
 }
 
-function handleGT(condition: any, sections: Section[], id: string): Section[] {
+function handleGT(condition: any, items: Section[] | Room[], id: string): (Section | Room)[] {
 	const field: string = condition.mkey.split("_")[1]; // e.g. "avg"
 	// console.log("%s\n", field);
 	const ID: string = condition.mkey.split("_")[0];
@@ -116,23 +118,23 @@ function handleGT(condition: any, sections: Section[], id: string): Section[] {
 		throw new InsightError("id does not match");
 	}
 	// console.log("%d\n", condition.value);
-	const ret = sections.filter((section) => section.getField(field) > condition.value);
+	const ret = items.filter((item) => item.getField(field) > condition.value);
 	// console.log("%d\n", ret.length);
 	return ret;
 }
 
-function handleLT(condition: any, sections: Section[], id: string): Section[] {
+function handleLT(condition: any, items: Section[] | Room[], id: string): (Section | Room)[] {
 	const field: string = condition.mkey.split("_")[1]; // e.g. "avg"
 	const ID: string = condition.mkey.split("_")[0];
 	if (ID !== id) {
 		throw new InsightError("id does not match");
 	}
-	const ret = sections.filter((section) => section.getField(field) < condition.value);
+	const ret = items.filter((item) => item.getField(field) < condition.value);
 	// console.log("handleLT: %d\n", ret.length);
 	return ret;
 }
 
-function handleIS(condition: any, sections: Section[], id: string): Section[] {
+function handleIS(condition: any, items: Section[] | Room[], id: string): (Section | Room)[] {
 	const field: string = condition.skey.split("_")[1]; // e.g. "avg"
 
 	const ID: string = condition.skey.split("_")[0];
@@ -146,24 +148,24 @@ function handleIS(condition: any, sections: Section[], id: string): Section[] {
 		if (condition.inputString.startsWith("*") && condition.inputString.endsWith("*")) {
 			const str = condition.inputString.substring(1, condition.inputString.length - 1);
 			checkWildcardAgain(str);
-			ret = sections.filter((section) => section.getField(field).includes(str));
+			ret = items.filter((item) => item.getField(field).includes(str));
 			return ret;
 		} else if (condition.inputString.startsWith("*")) {
 			const str = condition.inputString.substring(1, condition.inputString.length);
 			checkWildcardAgain(str);
-			ret = sections.filter((section) => section.getField(field).endsWith(str));
+			ret = items.filter((item) => item.getField(field).endsWith(str));
 			return ret;
 		} else if (condition.inputString.endsWith("*")) {
 			const str = condition.inputString.substring(0, condition.inputString.length - 1);
 			checkWildcardAgain(str);
-			ret = sections.filter((section) => section.getField(field).startsWith(str));
+			ret = items.filter((item) => item.getField(field).startsWith(str));
 			return ret;
 		} else {
 			throw new InsightError("invalid use of wildcard");
 		}
 	}
 
-	ret = sections.filter((section) => section.getField(field) === condition.inputString);
+	ret = items.filter((item) => item.getField(field) === condition.inputString);
 	// console.log("handleIS: %d\n", ret.length);
 	return ret;
 }
@@ -191,7 +193,7 @@ function mkeyFlag(field: string): boolean {
 	}
 }
 
-export function sortResults(sections: Section[], order: String, columns: String[]): Section[] {
+export function sortResults(items: Section[] | Room[], order: String, columns: String[]): Section[] | Room[] {
 	// check if order is in columns, if not throw error
 	if (!columns.includes(order)) {
 		throw new InsightError("ORDER key must be in COLUMNS");
@@ -199,22 +201,22 @@ export function sortResults(sections: Section[], order: String, columns: String[
 
 	const field: string = order.split("_")[1];
 	if (mkeyFlag(field)) {
-		sections.sort((a, b) => a.getField(field) - b.getField(field));
-		// sections.sort((a, b) => a.getDept().localeCompare(b.getDept()));
+		items.sort((a, b) => a.getField(field) - b.getField(field));
+		// items.sort((a, b) => a.getDept().localeCompare(b.getDept()));
 	} else {
-		sections.sort((a, b) => a.getField(field).localeCompare(b.getField(field)));
+		items.sort((a, b) => a.getField(field).localeCompare(b.getField(field)));
 	}
 
-	return sections;
+	return items;
 }
 
-export function selectColumns(sections: Section[], columns: string[]): InsightResult[] {
-	return sections.map((section) => {
+export function selectColumns(items: Section[] | Room[], columns: string[]): InsightResult[] {
+	return items.map((item) => {
 		const selected: any = {};
 		columns.forEach((column) => {
 			const columnNameWithoutDatasetID: string = column.split("_")[1];
-			if (columnNameWithoutDatasetID in section) {
-				selected[column] = section.getField(columnNameWithoutDatasetID);
+			if (columnNameWithoutDatasetID in item) {
+				selected[column] = item.getField(columnNameWithoutDatasetID);
 			}
 		});
 		return selected;

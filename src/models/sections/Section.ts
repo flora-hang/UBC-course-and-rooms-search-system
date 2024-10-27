@@ -61,6 +61,10 @@ export default class Section {
 		}
 	}
 
+	public getUniqueIdentifier(): string {
+		return this.getUuid();
+	}
+
 	public getUuid(): string {
 		return this.uuid;
 	}
