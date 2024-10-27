@@ -129,12 +129,6 @@ describe("InsightFacade", function () {
 			return expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 
-		// !!! will need to delete later in c2 and afterward
-		it('reject kind parameter if is "rooms"', function () {
-			const result = facade.addDataset("validDataset", validDataset, InsightDatasetKind.Rooms);
-			return expect(result).to.eventually.be.rejectedWith(InsightError, "Invalid kind");
-		});
-
 		it("should fulfill with large valid dataset (pair.zip)", async function () {
 			try {
 				const result = await facade.addDataset("sections", sections, InsightDatasetKind.Sections);
@@ -195,6 +189,16 @@ describe("InsightFacade", function () {
 			const result = facade.removeDataset("sections");
 			return expect(result).to.eventually.be.rejectedWith(NotFoundError);
 		});
+
+		it("remove a valid rooms dataset", async function () {
+			await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
+			const result = await facade.removeDataset("rooms");
+			const datasets = await facade.listDatasets();
+			if (datasets.length !== 0) {
+				expect.fail("Dataset should be empty");
+			}
+			return expect(result).to.deep.equal("rooms");
+		});
 	});
 
 	describe("ListDataset", function () {
@@ -226,10 +230,6 @@ describe("InsightFacade", function () {
 	});
 
 	describe("cachingProgress", function () {
-		beforeEach(function () {
-			// facade = new InsightFacade();
-		});
-
 		afterEach(async function () {
 			await clearDisk();
 		});
@@ -285,6 +285,19 @@ describe("InsightFacade", function () {
 				const result = await facade2.listDatasets();
 				expect(result.length).to.equal(0);
 			} catch (_err) {
+				expect.fail("Should not have thrown an error.");
+			}
+		});
+
+		it("fulfill: facade2 should be able to access rooms dataset already added by facade1", async function () {
+			try {
+				const facade1 = new InsightFacade();
+				await facade1.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
+				const expected = await facade1.listDatasets();
+				const facade2 = new InsightFacade();
+				expect(await facade2.listDatasets()).to.deep.equal(expected);
+			} catch (_err) {
+				// console.log(_err);
 				expect.fail("Should not have thrown an error.");
 			}
 		});
@@ -352,7 +365,7 @@ describe("InsightFacade", function () {
 
 		// Examples demonstrating how to test performQuery using the JSON Test Queries.
 		// The relative path to the query file must be given in square brackets.
-		it("[valid/simple.json] SELECT dept, avg WHERE avg > 97", checkQuery); // given case
+		it("[valid/simple.json] SELECT dept, avg WHERE avg > 97", checkQuery); // given case, will fail because of ordering
 		it("[valid/complex.json] complex query", checkQuery);
 		it("[valid/moreComplex.json] more complex query", checkQuery);
 		it("[valid/validWildcard.json] *InputString*", checkQuery);
@@ -362,7 +375,7 @@ describe("InsightFacade", function () {
 		it("[valid/validNot.json] valid NOT", checkQuery);
 		it("[valid/validIs.json] valid IS", checkQuery);
 		// it("[valid/validWithOrder.json] valid with ORDER", checkQuery);
-		it("[valid/everythingMadness.json] use everything", checkQuery);
+		it("[valid/everythingMadness.json] use everything", checkQuery); // will fail because of ordering
 
 		it("[invalid/missingQuery.json] Query missing", checkQuery);
 		it("[invalid/stringQuery.json] Query is String", checkQuery);
@@ -428,5 +441,13 @@ describe("InsightFacade", function () {
 		// new tests for C2
 		it("[valid/simpleQueryTransformations.json] simple query transformations", checkQuery);
 		it("[valid/roomsQueryExample.json] rooms query example from spec", checkQuery);
+		it("[invalid/invalidKeyTypeInApply.json] invalid key type in APPLY", checkQuery);
+		it("[valid/nonNumericKeyForCount.json] non-numeric key for COUNT", checkQuery);
+		it("[invalid/duplicateApplyKey.json] duplicate APPLY key", checkQuery);
+		it("[valid/validCount.json] valid query using COUNT", checkQuery);	
+		it("[invalid/columnKeyNotInGroup.json] column key not in GROUP", checkQuery);
+		it("[invalid/columnKeyNotInApply.json] column key not in APPLY", checkQuery);
+		it("[invalid/sortKeyNotInColumns.json] sort key not in COLUMNS", checkQuery);
+		it("[valid/useLatLonSumQuery.json] valid query that uses lat, lon, and SUM", checkQuery);
 	});
 });
