@@ -278,6 +278,8 @@ export default class InsightFacade implements IInsightFacade {
 
 		// Build query object
 		const validQuery = Query.buildQuery(query);
+		// not neccessarily valid
+		// e.g. using a sections key in a rooms dataset
 
 		const id = checkIds(validQuery);
 		if (!this.insights.has(id)) {
@@ -296,6 +298,8 @@ export default class InsightFacade implements IInsightFacade {
 			}
 			dataset = data;
 		}
+
+		// do dataset.getKind() and then check that all the keys in query are valid for that kind?
 
 		if (dataset.getKind() === InsightDatasetKind.Sections) {
 			return await this.querySectionsDataset(validQuery, dataset as SectionsDataset);

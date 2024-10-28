@@ -233,5 +233,5 @@ export function checkIds(query: Query): string {
 	const datasetId = idStrings[0];
 
 	// order key in columns checked in sortResults
-	return datasetId;
+	return datasetId; //!!! check that this still works
 }

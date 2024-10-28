@@ -438,16 +438,20 @@ describe("InsightFacade", function () {
 		it("[valid/negativeNumberFilter.json] negative number in WHERE under LT", checkQuery);
 		it("[valid/zeroCharacterFilter.json] zero character in string under IS filter", checkQuery);
 
-		// new tests for C2
-		it("[valid/simpleQueryTransformations.json] simple query transformations", checkQuery);
-		it("[valid/roomsQueryExample.json] rooms query example from spec", checkQuery);
-		it("[invalid/invalidKeyTypeInApply.json] invalid key type in APPLY", checkQuery);
-		it("[valid/nonNumericKeyForCount.json] non-numeric key for COUNT", checkQuery);
-		it("[invalid/duplicateApplyKey.json] duplicate APPLY key", checkQuery);
-		it("[valid/validCount.json] valid query using COUNT", checkQuery);
-		it("[invalid/columnKeyNotInGroup.json] column key not in GROUP", checkQuery);
-		it("[invalid/columnKeyNotInApply.json] column key not in APPLY", checkQuery);
-		it("[invalid/sortKeyNotInColumns.json] sort key not in COLUMNS", checkQuery);
-		it("[valid/useLatLonSumQuery.json] valid query that uses lat, lon, and SUM", checkQuery);
+		describe.only("C2: tests for new query functionality", function () {
+			it("[valid/simpleQueryTransformations.json] simple query transformations", checkQuery);
+			it("[valid/roomsQueryExample.json] rooms query example from spec", checkQuery);
+			it("[invalid/invalidKeyTypeInApply.json] invalid key type in APPLY", checkQuery);
+			it("[valid/nonNumericKeyForCount.json] non-numeric key for COUNT", checkQuery);
+			it("[invalid/duplicateApplyKey.json] duplicate APPLY key", checkQuery);
+			it("[valid/validCount.json] valid query using COUNT", checkQuery);
+			it("[invalid/columnKeyNotInGroup.json] column key not in GROUP", checkQuery);
+			it("[invalid/columnKeyNotInApply.json] column key not in APPLY", checkQuery);
+			it("[invalid/sortKeyNotInColumns.json] sort key not in COLUMNS", checkQuery);
+			it("[valid/useLatLonSumQuery.json] valid query that uses lat, lon, and SUM", checkQuery);
+			it("[invalid/sectionsUsingRoomsKey.json] sections query using rooms key", checkQuery);
+			it("[invalid/roomsUsingSectionsKey.json] rooms query using sections key", checkQuery);
+			it("[invalid/diffDatasetIdInApply.json] different dataset id in APPLY", checkQuery);
+		});
 	});
 });
