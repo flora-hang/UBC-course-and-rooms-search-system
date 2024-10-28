@@ -438,7 +438,7 @@ describe("InsightFacade", function () {
 		it("[valid/negativeNumberFilter.json] negative number in WHERE under LT", checkQuery);
 		it("[valid/zeroCharacterFilter.json] zero character in string under IS filter", checkQuery);
 
-		describe.only("C2: tests for new query functionality", function () {
+		describe("C2: tests for new query functionality", function () {
 			it("[valid/simpleQueryTransformations.json] simple query transformations", checkQuery);
 			it("[valid/roomsQueryExample.json] rooms query example from spec", checkQuery);
 			it("[invalid/invalidKeyTypeInApply.json] invalid key type in APPLY", checkQuery);

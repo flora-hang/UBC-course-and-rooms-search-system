@@ -1,4 +1,4 @@
-import { InsightError, InsightResult } from "./IInsightFacade";
+import { InsightError } from "./IInsightFacade";
 import Room from "../models/rooms/Room";
 import RoomsDataset from "../models/rooms/RoomsDataset";
 import JSZip from "jszip";
@@ -12,18 +12,25 @@ import Building from "../models/rooms/Building";
  * @returns A RoomsDataset populated with Building and Room data.
  */
 export async function extractRoomData(zipContent: string, datasetId: string): Promise<RoomsDataset> {
-	const zip = await JSZip.loadAsync(Buffer.from(zipContent, "base64"));
-	const dataset = new RoomsDataset(datasetId);
+	console.log("9");
+	const Zip = new JSZip();
 
+	const zip = await Zip.loadAsync(zipContent, { base64: true });
+	console.log("8");
+	const dataset = new RoomsDataset(datasetId);
+	console.log("3");
 	// Step 1: Parse the index.htm file for building information
-	const indexFile = zip.file("index.htm");
+	console.log(zip.file(1));
+	const indexFile = zip.file("data/campus/index.htm");
+	console.log("4");
 	if (!indexFile) {
-		throw new Error("Error: index.htm not found in zip file.");
+		throw new InsightError("Error: index.htm not found in zip file.");
 	}
 
 	const indexContent = await indexFile.async("text");
+	console.log("5");
 	const document = parse5.parse(indexContent);
-
+	console.log("6");
 	// Step 2: Find the building table in index.htm
 	const buildings = await parseBuildingTable(document, zip);
 	dataset.addBuildings(buildings);
@@ -34,14 +41,17 @@ export async function extractRoomData(zipContent: string, datasetId: string): Pr
 // Helper function to find the building table and extract building information.
 async function parseBuildingTable(document: any, zip: JSZip): Promise<Building[]> {
 	const buildings: Building[] = [];
-	const buildingTable = findTableWithClass(document, "views-field-title");
-
+	console.log("1");
+	const buildingTable = findAllElements(document, "tbody"); // is this the tag?
+	console.log("2");
+	const parseThis: any = [];
 	if (!buildingTable) {
 		throw new InsightError("Error: Could not find building table in index.htm.");
 	}
 
 	// Traverse rows in the building table
-	for (const row of findAllElements(buildingTable, "tr")) {
+	const table = findAllElements(buildingTable, "tr");
+	for (const row of table) {
 		const titleCell = findElementWithClass(row, "views-field-title");
 		const addressCell = findElementWithClass(row, "views-field-field-building-address");
 		const link = findLinkElement(titleCell);
@@ -53,23 +63,31 @@ async function parseBuildingTable(document: any, zip: JSZip): Promise<Building[]
 			const building = new Building(fullname, shortname, address);
 
 			const buildingFile = zip.file(link.attrs.href);
+
 			if (buildingFile) {
-				const buildingContent = await buildingFile.async("text");
-				parseRoomTable(building, parse5.parse(buildingContent));
+				parseThis.push([buildingFile.async("text"), building]);
+				//const buildingContent = await buildingFile.async("text");
+				//parseRoomTable(building, parse5.parse(buildingContent));
 			}
 
-			if (building.hasValidRoom()) {
-				buildings.push(building);
-			}
+			// if (building.hasValidRoom()) {
+			// 	buildings.push(building);
+			// }
 		}
 	}
-
+	const array = await Promise.all(parseThis);
+	for (const buildingContent of array) {
+		parseRoomTable(buildingContent[1], parse5.parse(buildingContent[0]));
+		if (buildingContent[1].hasValidRoom()) {
+			buildings.push(buildingContent[1]);
+		}
+	}
 	return buildings;
 }
 
 // Helper function to parse the room table for a given building.
 function parseRoomTable(building: Building, document: any): void {
-	const roomTable = findTableWithClass(document, "views-field-room-number");
+	const roomTable = findAllElements(document, "tbody");
 	if (!roomTable) {
 		return;
 	}
@@ -90,14 +108,14 @@ function parseRoomTable(building: Building, document: any): void {
 }
 
 // Utility function to find a table by looking for a specific class on any <td> element within the table.
-function findTableWithClass(root: any, className: string): any {
-	for (const table of findAllElements(root, "table")) {
-		if (findElementWithClass(table, className)) {
-			return table;
-		}
-	}
-	return null;
-}
+// function findTableWithClass(root: any, className: string): any {
+// 	for (const table of findAllElements(root, "table")) {
+// 		if (findElementWithClass(table, className)) {
+// 			return table;
+// 		}
+// 	}
+// 	return null;
+// }
 
 // Utility to get the text content of an HTML element
 function getTextContent(element: any): string {

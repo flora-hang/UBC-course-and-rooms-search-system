@@ -2,8 +2,7 @@ import SectionsDataset from "../models/sections/SectionsDataset";
 import Section from "../models/sections/Section";
 import Course from "../models/sections/Course";
 import SectionData from "../models/sections/SectionData";
-import Building from "../models/rooms/Building";
-import Room from "../models/rooms/Room";
+
 import {
 	IInsightFacade,
 	InsightDataset,
@@ -83,7 +82,8 @@ export default class InsightFacade implements IInsightFacade {
 		if (!base64Regex.test(content)) {
 			return Promise.reject(new InsightError("Content not in base64 format"));
 		}
-		const dataset: RoomsDataset = await extractRoomData(id, content);
+		console.log("7");
+		const dataset: RoomsDataset = await extractRoomData(content, id);
 		if (dataset.getTotalRooms() === 0) {
 			throw new InsightError("no valid rooms in dataset");
 		}
@@ -305,14 +305,15 @@ export default class InsightFacade implements IInsightFacade {
 			return await this.querySectionsDataset(validQuery, dataset as SectionsDataset);
 		} else {
 			// query RoomsDataset
-			return await this.queryRoomsDataset(validQuery, dataset as RoomsDataset);
+			return await this.querySectionsDataset(validQuery, dataset as SectionsDataset); ///!!!
 		}
 	}
 
-	private async queryRoomsDataset(validQuery: Query, dataset: RoomsDataset): Promise<InsightResult[]> {
-		return Promise.reject(new InsightError("Not yet implemented"));
-		// TODO: Implement this method
-	}
+	// private async queryRoomsDataset(validQuery: Query, dataset: RoomsDataset): Promise<InsightResult[]> {
+	// 	if (validQuery)
+	// 	return Promise.reject(new InsightError("Not yet implemented"));
+	// 	// TODO: Implement this method
+	// }
 
 	private async querySectionsDataset(validQuery: Query, dataset: SectionsDataset): Promise<InsightResult[]> {
 		const id = dataset.getId();

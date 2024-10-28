@@ -17,13 +17,14 @@ module.exports = {
 	extends: ["plugin:descriptive/all", "prettier"],
 	overrides: [
 		{
-			files: ["**/*.spec.ts"],
+			files: ["**/*.spec.ts", "**/*.ts"],
 			rules: {
 				"descriptive/max-lines": "off",
 				// describe functions exceed this limit easily
 				"descriptive/max-lines-per-function": "off",
 				// describe/it have 3 additional callbacks (if they want to have two nested describes)
 				"descriptive/max-nested-callbacks": ["error", 3 + 2],
+				"descriptive/dot-notation": 0,
 			},
 		},
 	],
