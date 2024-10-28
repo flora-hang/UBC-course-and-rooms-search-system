@@ -1,7 +1,7 @@
 import Decimal from "decimal.js";
-import Section from "../sections/Section";
-import Room from "../rooms/Room";
 import { InsightError } from "../../controller/IInsightFacade";
+
+const ROUNDING_PRECISION = 2;
 
 export enum ApplyToken {
     MAX = "MAX",
@@ -23,24 +23,33 @@ export default class ApplyRule {
     }
 }
 
-export function useApply(
-	applyToken: ApplyToken,
-	key: string,
-	groupItem: (Section | Room)[]
-): number {
-	const field: string = key.split("_")[1];
+export function useApply(resultItem: any, applyKey: string, applyToken: ApplyToken, values: any[]): void {
 	switch (applyToken) {
-		case "MAX":
-			return Math.max(...groupItem.map(item => item.getField(field)));
-		case "MIN":
-			return Math.min(...groupItem.map(item => item.getField(field)));
-		case "AVG":
-			return groupItem.map(item => item.getField(field)).reduce((sum, curr) => sum + curr, 0) / groupItem.length;
-		case "COUNT":
-			return groupItem.reduce(count => count++, 0);
-		case "SUM":
-			return groupItem.map(item => item.getField(field)).reduce((sum, curr) => sum + curr, 0);
+		case 'MAX': {
+			resultItem[applyKey] = Math.max(...values); // Get the maximum value
+			break;
+		}
+		case 'MIN': {
+			resultItem[applyKey] = Math.min(...values); // Get the minimum value
+			break;
+		}
+		case 'AVG': {
+			const total = values.reduce((sum, val) => Decimal.add(sum, new Decimal(val)), new Decimal(0));
+			const avg = total.toNumber() / values.length;
+			resultItem[applyKey] = Number(avg.toFixed(ROUNDING_PRECISION)); // Round to two decimal places
+			break;
+		}
+		case 'SUM': {
+			const sum = values.reduce((acc, val) => acc + val, 0);
+			resultItem[applyKey] = Number(sum.toFixed(ROUNDING_PRECISION)); // Round to two decimal places
+			break;
+		}
+		case 'COUNT': {
+			const uniqueCount = new Set(values).size; // Count unique occurrences
+			resultItem[applyKey] = uniqueCount;
+			break;
+		}
 		default:
-			throw new InsightError("Invalid transformation operator");
+			throw new InsightError(`Unsupported applyToken: ${applyToken}`);
 	}
 }

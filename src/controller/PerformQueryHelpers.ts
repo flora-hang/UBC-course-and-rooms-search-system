@@ -196,35 +196,48 @@ function mkeyFlag(field: string): boolean {
 
 // TODO: this function might cause errors tbh
 export function groupItems(items: Section[] | Room[], groups: String[]): (Section | Room)[][] {
-	const groupedItemsMap: { [key: string]: (Section | Room)[] } = {};
+	const groupedItemsMap: Record<string, (Section | Room)[]> = {};
 	items.forEach((item) => {
-		const keyParts = groups.map(group => (item as any)[group]);
-		const key = keyParts.join("_");
-
+		const key = groups.map(group => (
+			(item as any)[group.split("_")[1]])
+		).join("_");
 		if (!groupedItemsMap[key]) {
-			groupedItemsMap[key] = [];
+			groupedItemsMap[key] = [item];
+		} else {
+			groupedItemsMap[key].push(item);
 		}
-		groupedItemsMap[key].push(item);
-		// groups.map((group) => {
-		// 	const field: string = group.split("_")[1];
-		// 	if (!groupedItemsMap.has(field)) {
-		// 		groupedItemsMap[field] = [item];
-		// 	} else {
-		// 		groupedItemsMap[field].push(item);
-		// 	}
-		// })
+
 	});
 
-	return Object.values(groupedItemsMap);;
+	return Object.values(groupedItemsMap);
 }
 
-export function applyItems(groupedItems: (Section | Room)[][], applyRules: ApplyRule[]): Section[] | Room[] {
-	groupedItems.forEach((groupItem) => {
-		applyRules.forEach((applyRule) => {
-			const {applyKey, applyToken, key} = applyRule;
-			groupItem[applyKey] = useApply(applyToken, key, groupItem);
-		})
-	});
+export function applyFunctionItems(
+	groupedItems: (Section | Room)[][],
+	applyRules: ApplyRule[]
+): (Section | Room)[] {
+    if (!groupItems) {
+		throw new InsightError("group key error");
+	}
+
+	const results: any[] = []; // To store the results of the calculations
+
+    for (const group of groupedItems) {
+		const resultItem: any = {}; // To hold the result for the current group
+
+        applyRules.forEach((rule) => {
+            const { applyKey, applyToken, key } = rule;
+
+            // Extract values from the group based on the key
+            const values = group.map(item => (item as any)[key]);
+
+            useApply(resultItem, applyKey, applyToken, values)
+        });
+
+        results.push(resultItem); // Add the result item to results array
+	}
+
+    return results;
 }
 
 export function sortResults(items: Section[] | Room[], order: String, columns: String[]): Section[] | Room[] {
@@ -233,14 +246,41 @@ export function sortResults(items: Section[] | Room[], order: String, columns: S
 		throw new InsightError("ORDER key must be in COLUMNS");
 	}
 
-	const field: string = order.split("_")[1];
-	if (mkeyFlag(field)) {
-		items.sort((a, b) => a.getField(field) - b.getField(field));
-		// items.sort((a, b) => a.getDept().localeCompare(b.getDept()));
-	} else {
-		items.sort((a, b) => a.getField(field).localeCompare(b.getField(field)));
-	}
+	if (order instanceof String) { // if order is just something like: 'ORDER: ' ANYKEY
+		const field: string = order.split("_")[1];
+		if (mkeyFlag(field)) {
+			items.sort((a, b) => a.getField(field) - b.getField(field));
+		} else {
+			items.sort((a, b) => a.getField(field).localeCompare(b.getField(field)));
+		}
+	} else { // if order is something like: 'ORDER: { dir:'  DIRECTION ', keys: [ ' ANYKEY_LIST '] }'
+		const {dir, keys} = order;
 
+		if (!Array.isArray(keys)) {
+            throw new InsightError("ORDER keys must be an array");
+        }
+		if (dir !== "DOWN" && dir !== "UP") {
+			throw new InsightError("DIR key must be \"UP\" or \"DOWN\"");
+		}
+
+		items.sort((a, b) => {
+            for (const key of keys as string[]) {
+                const {aValue, bValue} = {aValue: a.getField(key), bValue: b.getField(key)};
+
+                let comparison = 0;
+
+                if (mkeyFlag(key)) {
+                    comparison = aValue - bValue; // Numeric comparison
+                } else {
+                    comparison = aValue.localeCompare(bValue); // String comparison
+                }
+
+                // If comparison is not equal, return based on direction
+				return (comparison !== 0) ? (dir === "UP" ? comparison : -comparison) : 0;
+            }
+            return 0; // If all keys are equal
+        });
+	}
 	return items;
 }
 

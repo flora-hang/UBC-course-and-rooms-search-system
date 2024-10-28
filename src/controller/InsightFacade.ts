@@ -13,7 +13,7 @@ import {
 	NotFoundError,
 	ResultTooLargeError,
 } from "./IInsightFacade";
-import { filterItems, sortResults, selectColumns, checkIds, groupItems } from "./PerformQueryHelpers";
+import { filterItems, sortResults, selectColumns, checkIds, groupItems, applyFunctionItems } from "./PerformQueryHelpers";
 import { extractRoomData } from "./addDatasetHelper";
 import * as fsPromises from "fs/promises";
 import fs from "fs-extra";
@@ -21,6 +21,7 @@ import JSZip from "jszip";
 import Query from "../models/query/Query";
 import { Dataset } from "../models/Dataset";
 import RoomsDataset from "../models/rooms/RoomsDataset";
+import { Direction } from "../models/query/Sort";
 
 // import { json } from "stream/consumers";
 
@@ -315,7 +316,7 @@ export default class InsightFacade implements IInsightFacade {
 			items = dataset.getRooms();
 		}
 
-		const filteredItems = filterItems(validQuery.WHERE.filter, items, id) as Section[];
+		const filteredItems = filterItems(validQuery.WHERE.filter, items, id) as Section[] | Room[];
 
 		const maxSections = 5000;
 		// - check if filtered sections exceed 5000 sections limit
@@ -325,7 +326,14 @@ export default class InsightFacade implements IInsightFacade {
 
 		// Parse OPTIONS block: Extract columns and order field
 		const columns = validQuery.OPTIONS.columns;
-		const orderField = validQuery.OPTIONS.sort?.anyKey;
+		const orderField = !validQuery.OPTIONS.sort?.anyKey ?
+				{"dir": validQuery.OPTIONS.sort?.dir, "keys": validQuery.OPTIONS.sort?.keys }
+				:validQuery.OPTIONS.sort?.anyKey;
+
+		if (!validQuery.OPTIONS.sort?.dir || !validQuery.OPTIONS.sort?.keys) {
+			throw new InsightError("Order is incorrect");
+		}
+
 		// Parse TRANSFORMATIONS block: Extract group and apply field
 		const groups = validQuery.TRANSFORMATIONS?.group;
 		const apply = validQuery.TRANSFORMATIONS?.apply;
@@ -340,7 +348,7 @@ export default class InsightFacade implements IInsightFacade {
 		// group the filtered results into specific groups
 		const groupedItems = groups ? groupItems(filteredItems, groups) : null;
 		// apply specified APPLYTOKENs if given
-		const applyItems = apply ? applyItems(groupedItems, apply) : null;
+		const applyItems = apply ? applyFunctionItems(groupedItems as (Section | Room)[][], apply) : null;
 
 		// TODO: add new sort functionality
 		// IF TRANSFORMATION block and SORT given: sort the group items
@@ -348,8 +356,8 @@ export default class InsightFacade implements IInsightFacade {
 		// ELSE: return filtered items
 		const sortedItems = orderField ?
 			(groups && apply) ?
-				sortResults(applyItems as Section[] | Room[], orderField, columns)
-				: sortResults(filteredItems, orderField, columns)
+				sortResults(applyItems as Section[] | Room[], orderField as any, columns)
+				: sortResults(filteredItems, orderField as any, columns)
 			: filteredItems;
 
 		// // Select the required columns
