@@ -5,7 +5,6 @@ import Room from "../models/rooms/Room";
 import Item from "../models/query/Item";
 import { InsightError, InsightResult } from "./IInsightFacade";
 import ApplyRule, { useApply } from "../models/query/ApplyRule";
-import Sort from "../models/query/Sort";
 
 export function filterItems(where: any, items: Item[], id: string): Item[] {
 	// If WHERE block is empty, return all items (no filtering)
@@ -87,7 +86,6 @@ function handleOR(conditions: any[], items: Item[], id: string): Item[] {
 		}
 	});
 	return ret;
-
 }
 
 function handleNOT(condition: any, items: Item[], id: string): Item[] {
@@ -194,24 +192,18 @@ function mkeyFlag(field: string): boolean {
 export function groupItems(items: Item[], groups: String[]): any {
 	const groupedItemsMap: Record<string, Item[]> = {};
 	items.forEach((item) => {
-		const key = groups.map(group => (
-			(item as any)[group.split("_")[1]])
-		).join("_");
+		const key = groups.map((group) => (item as any)[group.split("_")[1]]).join("_");
 		if (!groupedItemsMap[key]) {
 			groupedItemsMap[key] = [item];
 		} else {
 			groupedItemsMap[key].push(item);
 		}
-
 	});
 
 	return Object.values(groupedItemsMap);
 }
 
-export function applyFunctionItems(
-	groupedItems: (Section | Room)[][],
-	applyRules: ApplyRule[]
-): (Section | Room)[] {
+export function applyFunctionItems(groupedItems: (Section | Room)[][], applyRules: ApplyRule[]): (Section | Room)[] {
 	if (!groupItems) {
 		throw new InsightError("group key error");
 	}
@@ -225,9 +217,9 @@ export function applyFunctionItems(
 			const { applyKey, applyToken, key } = rule;
 
 			// Extract values from the group based on the key
-			const values = group.map(item => (item as any)[key]);
+			const values = group.map((item) => (item as any)[key]);
 
-			useApply(resultItem, applyKey, applyToken, values)
+			useApply(resultItem, applyKey, applyToken, values);
 		});
 
 		results.push(resultItem); // Add the result item to results array
@@ -249,14 +241,15 @@ export function sortResults(items: Item[], order: String, columns: String[]): It
 		} else {
 			items.sort((a, b) => a.getField(field).localeCompare(b.getField(field)));
 		}
-	} else { // if order is something like: 'ORDER: { dir:'  DIRECTION ', keys: [ ' ANYKEY_LIST '] }'
+	} else {
+		// if order is something like: 'ORDER: { dir:'  DIRECTION ', keys: [ ' ANYKEY_LIST '] }'
 		const { dir, keys } = order as any;
 
 		if (!Array.isArray(keys)) {
 			throw new InsightError("ORDER keys must be an array");
 		}
 		if (dir !== "DOWN" && dir !== "UP") {
-			throw new InsightError("DIR key must be \"UP\" or \"DOWN\"");
+			throw new InsightError('DIR key must be "UP" or "DOWN"');
 		}
 
 		items.sort((a, b) => {
@@ -272,7 +265,7 @@ export function sortResults(items: Item[], order: String, columns: String[]): It
 				}
 
 				// If comparison is not equal, return based on direction
-				return (comparison !== 0) ? (dir === "UP" ? comparison : -comparison) : 0;
+				return comparison !== 0 ? (dir === "UP" ? comparison : -comparison) : 0;
 			}
 			return 0; // If all keys are equal
 		});
@@ -307,4 +300,3 @@ export function checkIds(query: Query): string {
 	// order key in columns checked in sortResults
 	return datasetId; //!!! check that this still works
 }
-
