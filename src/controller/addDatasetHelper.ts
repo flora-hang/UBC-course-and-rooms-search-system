@@ -75,20 +75,17 @@ function parseBuildingTableRows(
 		}
 
 		const codeCell = findElementWithClass(columns, "views-field-field-building-code");
-		const titleCell = findElementWithClass(columns, "views-field-title");
+		// const titleCell = findElementWithClass(columns, "views-field-title");
 		const addressCell = findElementWithClass(columns, "views-field-field-building-address");
-		const link = findLinkElement(titleCell);
+		const link = findLinkElement(findElementWithClass(columns, "views-field-title"));
 
 		if (link) {
-			const shortname = getTextContent(codeCell);
-			const fullname = getTextContent(link);
-			const address = getTextContent(addressCell);
+			// const shortname = getTextContent(codeCell);
+			// const fullname = getTextContent(link);
+			// const address = getTextContent(addressCell);
 			// console.log("", shortname, " | ", fullname, " | ", address);
-			const building = new Building(fullname, shortname, address);
-			// building.getLat();
-			// building.getLon();
-			// console.log("Lat: %d", building.getLat());
-			// console.log("Lon: %d", building.getLon());
+			const building = new Building(getTextContent(link), getTextContent(codeCell), getTextContent(addressCell));
+
 			let href;
 			for (const attr of link.attrs) {
 				if (attr.name === "href") {

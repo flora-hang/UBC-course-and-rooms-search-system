@@ -27,7 +27,7 @@ describe("InsightFacade", function () {
 
 	// Declare datasets used in tests. You should add more datasets like this!
 	let sections: string;
-	let fakeSections: string;
+	// let fakeSections: string;
 	let validDataset: string;
 	let invalidDataset: string;
 	let nonJSONCourseDataset: string;
@@ -40,7 +40,7 @@ describe("InsightFacade", function () {
 		// This block runs once and loads the datasets.
 		rooms = await getContentFromArchives("campus.zip");
 		sections = await getContentFromArchives("pair.zip");
-		fakeSections = await getContentFromArchives("fakepair.zip"); // has two extra sections w/ avg === 65
+		// fakeSections = await getContentFromArchives("fakepair.zip"); // has two extra sections w/ avg === 65
 		validDataset = await getContentFromArchives("validDataset.zip");
 		invalidDataset = await getContentFromArchives("invalidDataset.zip");
 		nonJSONCourseDataset = await getContentFromArchives("nonJSONCourseDataset.zip");
@@ -366,7 +366,7 @@ describe("InsightFacade", function () {
 			// Add the datasets to InsightFacade once.
 			// Will *fail* if there is a problem reading ANY dataset.
 			const loadDatasetPromises: Promise<string[]>[] = [
-				facade.addDataset("sections", fakeSections, InsightDatasetKind.Sections),
+				facade.addDataset("sections", sections, InsightDatasetKind.Sections),
 				facade.addDataset("one aanb", oneValidSection, InsightDatasetKind.Sections),
 				facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms),
 			];
