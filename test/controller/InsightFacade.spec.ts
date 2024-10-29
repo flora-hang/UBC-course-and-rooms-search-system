@@ -145,7 +145,7 @@ describe("InsightFacade", function () {
 				expect(result.length).to.equal(1);
 				expect(result[0]).to.equal("rooms");
 			} catch (_err) {
-				// console.log(err);
+				console.log(_err);
 				expect.fail("Should not have thrown an error.");
 			}
 		});
@@ -191,6 +191,7 @@ describe("InsightFacade", function () {
 		});
 
 		it("remove a valid rooms dataset", async function () {
+			await facade.removeDataset("validDataset");
 			await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
 			const result = await facade.removeDataset("rooms");
 			const datasets = await facade.listDatasets();
@@ -350,6 +351,7 @@ describe("InsightFacade", function () {
 			const loadDatasetPromises: Promise<string[]>[] = [
 				facade.addDataset("sections", fakeSections, InsightDatasetKind.Sections),
 				facade.addDataset("one aanb", oneValidSection, InsightDatasetKind.Sections),
+				facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms),
 			];
 
 			try {

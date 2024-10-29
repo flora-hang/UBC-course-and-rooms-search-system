@@ -82,7 +82,7 @@ export default class InsightFacade implements IInsightFacade {
 		if (!base64Regex.test(content)) {
 			return Promise.reject(new InsightError("Content not in base64 format"));
 		}
-		console.log("7");
+		// console.log("7");
 		const dataset: RoomsDataset = await extractRoomData(content, id);
 		if (dataset.getTotalRooms() === 0) {
 			throw new InsightError("no valid rooms in dataset");
@@ -129,7 +129,7 @@ export default class InsightFacade implements IInsightFacade {
 
 		// console.log("remove: insights: ", this.insights);
 		if (!this.insights.has(id)) {
-			return Promise.reject(new NotFoundError("Dataset not found"));
+			return Promise.reject(new NotFoundError("Dataset not found: " + id));
 		}
 
 		// removing dataset
