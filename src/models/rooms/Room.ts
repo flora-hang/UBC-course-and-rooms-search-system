@@ -7,9 +7,13 @@ export default class Room extends Item {
     private readonly type: string; // The room type
     private readonly furniture: string; // The room furniture
     private readonly href: string; // The link to the full details online
+	private readonly lat: number; //
+	private readonly lon: number; //
+	private readonly address: string;
 
     constructor(building: string, roomNumber: string, numSeats: number,
-        roomType: string, roomFurniture: string, link: string) {
+        roomType: string, roomFurniture: string, link: string, lat: number,
+		lon: number, address: string) {
 		super();
         this.number = roomNumber;
         this.name = building + "_" + roomNumber;
@@ -17,6 +21,9 @@ export default class Room extends Item {
         this.type = roomType;
         this.furniture = roomFurniture;
         this.href = link;
+		this.lat = lat;
+		this.lon = lon;
+		this.address = address;
     }
 
     public getField(comparisonField: string): any {
@@ -33,6 +40,12 @@ export default class Room extends Item {
                 return this.getFurniture();
             case "href":
                 return this.getHref();
+			case "lat":
+				return this.getLat();
+			case "lon":
+				return this.getLon();
+			case "address":
+				return this.getAddress();
             default:
                 throw new Error("Error: Called getField() with an invalid comparisonField arg.");
         }
@@ -65,4 +78,16 @@ export default class Room extends Item {
     public getHref(): string {
         return this.href;
     }
+
+	public getLat(): number {
+		return this.lat;
+	}
+
+	public getLon(): number {
+		return this.lon;
+	}
+
+	public getAddress(): string {
+		return this.address;
+	}
 }

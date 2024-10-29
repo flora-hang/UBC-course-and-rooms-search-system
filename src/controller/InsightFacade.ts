@@ -23,6 +23,7 @@ import Query from "../models/query/Query";
 import { Dataset } from "../models/Dataset";
 import RoomsDataset from "../models/rooms/RoomsDataset";
 import { Direction } from "../models/query/Sort";
+import ApplyRule from "../models/query/ApplyRule";
 
 // import { json } from "stream/consumers";
 
@@ -320,17 +321,18 @@ export default class InsightFacade implements IInsightFacade {
 		} else if (dataset instanceof RoomsDataset) {
 			items = dataset.getRooms();
 		}
-
+		console.log("!!! START OF FILTER ITEMS FUNC");
 		const filteredItems = filterItems(validQuery.WHERE.filter, items, id) as Item[];
 
+		console.log("!!! START OF OIPTIONS BLOCK PARSE");
 		// Parse OPTIONS block: Extract columns and order field
 		const columns = validQuery.OPTIONS.columns;
-		const orderField = validQuery.OPTIONS.sort?.anyKey ?
-			validQuery.OPTIONS.sort?.anyKey
-			: (validQuery.OPTIONS.sort?.dir && validQuery.OPTIONS.sort?.keys) ?
-				{ "dir": validQuery.OPTIONS.sort?.dir, "keys": validQuery.OPTIONS.sort?.keys }
+		const orderField = validQuery.OPTIONS.sort?.anyKey
+			? validQuery.OPTIONS.sort?.anyKey
+			: (validQuery.OPTIONS.sort?.dir && validQuery.OPTIONS.sort?.keys)
+				? { "dir": validQuery.OPTIONS.sort?.dir, "keys": validQuery.OPTIONS.sort?.keys }
 				: null;
-
+		console.log("!!! END OF OPTIONS BLOCK PARSE");
 		if (!validQuery.OPTIONS.sort?.anyKey && (!!validQuery.OPTIONS.sort?.dir !== !!validQuery.OPTIONS.sort?.keys)) {
 			throw new InsightError("Order is incorrect");
 		}
@@ -338,6 +340,16 @@ export default class InsightFacade implements IInsightFacade {
 		// Parse TRANSFORMATIONS block: Extract group and apply field
 		const groups = validQuery.TRANSFORMATIONS?.group;
 		const apply = validQuery.TRANSFORMATIONS?.apply;
+
+		const seen = new Set<ApplyRule>(); // seen apply keys
+		apply?.forEach(applyRule => {
+			console.log(seen);
+			console.log("b", applyRule);
+			if (seen.has(applyRule)) {
+				throw new InsightError("APPLY contains duplicate key");
+			}
+			seen.add(applyRule);
+		});
 
 		// group the items together
 		if (validQuery.TRANSFORMATIONS && !groups) {
