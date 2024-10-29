@@ -12,7 +12,6 @@ export default class Where {
 	}
 
 	public static buildQuery(object: any): Where {
-		// console.log("> Where.buildQuery():", object);
 		let filter: IFilter;
 
 		if (Object.keys(object).length > 1) {
@@ -29,10 +28,4 @@ export default class Where {
 			return new Where(filter);
 		}
 	}
-
-	// public checkId(id: string): void {
-	//     if (this.filter) {
-	//         this.filter.checkId(id);
-	//     }
-	// }
 }

@@ -7,6 +7,15 @@ export enum SField {
 	instructor = "instructor",
 	title = "title",
 	uuid = "uuid",
+	// new fields for rooms
+	fullname = "fullname",
+	shortname = "shortname",
+	number = "number",
+	name = "name",
+	address = "address",
+	type = "type",
+	furniture = "furniture",
+	href = "href"
 }
 
 export default class SComparison implements IFilter {
@@ -18,18 +27,11 @@ export default class SComparison implements IFilter {
 		this.inputString = inputString;
 	}
 
-	// public checkId(id: string): void {
-	//     if (this.skey.split('_')[0] !== id) {
-	//         throw new InsightError('Cannot query from multiple datasets');
-	//     }
-	// }
-
 	public buildQuery(object: any): IFilter {
 		throw new Error("buildQuery not implemented.", object);
 	}
 
 	public static buildQuery(object: any): IFilter {
-		// console.log("> SComparison.buildQuery()");
 		const key = Object.keys(object)[0]; // returns 'IS'
 		if (key !== "IS") {
 			throw new Error("Invalid logic comparison");

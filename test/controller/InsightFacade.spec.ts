@@ -27,7 +27,7 @@ describe("InsightFacade", function () {
 
 	// Declare datasets used in tests. You should add more datasets like this!
 	let sections: string;
-	let fakeSections: string;
+	// let fakeSections: string;
 	let validDataset: string;
 	let invalidDataset: string;
 	let nonJSONCourseDataset: string;
@@ -35,11 +35,12 @@ describe("InsightFacade", function () {
 	let badCoursesFolderDataset: string;
 	let invalidSectionDataset: string;
 	let oneValidSection: string;
-
+	let rooms: string;
 	before(async function () {
 		// This block runs once and loads the datasets.
+		rooms = await getContentFromArchives("campus.zip");
 		sections = await getContentFromArchives("pair.zip");
-		fakeSections = await getContentFromArchives("fakepair.zip"); // has two extra sections w/ avg === 65
+		// fakeSections = await getContentFromArchives("fakepair.zip"); // has two extra sections w/ avg === 65
 		validDataset = await getContentFromArchives("validDataset.zip");
 		invalidDataset = await getContentFromArchives("invalidDataset.zip");
 		nonJSONCourseDataset = await getContentFromArchives("nonJSONCourseDataset.zip");
@@ -128,12 +129,6 @@ describe("InsightFacade", function () {
 			return expect(result).to.eventually.be.rejectedWith(InsightError);
 		});
 
-		// !!! will need to delete later in c2 and afterward
-		it('reject kind parameter if is "rooms"', function () {
-			const result = facade.addDataset("validDataset", validDataset, InsightDatasetKind.Rooms);
-			return expect(result).to.eventually.be.rejectedWith(InsightError, "Invalid kind");
-		});
-
 		it("should fulfill with large valid dataset (pair.zip)", async function () {
 			try {
 				const result = await facade.addDataset("sections", sections, InsightDatasetKind.Sections);
@@ -141,6 +136,16 @@ describe("InsightFacade", function () {
 				expect(result[0]).to.equal("sections");
 			} catch (_err) {
 				// console.log(err);
+				expect.fail("Should not have thrown an error.");
+			}
+		});
+		it("should add roomsDataset (campus.zip)", async function () {
+			try {
+				const result = await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
+				expect(result.length).to.equal(1);
+				expect(result[0]).to.equal("rooms");
+			} catch (_err) {
+				// console.log(_err);
 				expect.fail("Should not have thrown an error.");
 			}
 		});
@@ -184,6 +189,17 @@ describe("InsightFacade", function () {
 			const result = facade.removeDataset("sections");
 			return expect(result).to.eventually.be.rejectedWith(NotFoundError);
 		});
+
+		it("remove a valid rooms dataset", async function () {
+			await facade.removeDataset("validDataset");
+			await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
+			const result = await facade.removeDataset("rooms");
+			const datasets = await facade.listDatasets();
+			if (datasets.length !== 0) {
+				expect.fail("Dataset should be empty");
+			}
+			return expect(result).to.deep.equal("rooms");
+		});
 	});
 
 	describe("ListDataset", function () {
@@ -212,13 +228,26 @@ describe("InsightFacade", function () {
 			expect(result[0].kind).to.equal(expected[0].kind);
 			return expect(result).to.deep.equal(expected);
 		});
+		it("list all roomdatasets", async function () {
+			await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
+
+			const result = await facade.listDatasets();
+			const validDataset1: InsightDataset = {
+				id: "rooms",
+				kind: InsightDatasetKind.Rooms,
+				numRows: 364,
+			};
+			const expected: InsightDataset[] = [];
+			expected.push(validDataset1);
+
+			expect(result[0].id).to.equal(expected[0].id);
+			expect(result[0].numRows).to.equal(expected[0].numRows);
+			expect(result[0].kind).to.equal(expected[0].kind);
+			return expect(result).to.deep.equal(expected);
+		});
 	});
 
 	describe("cachingProgress", function () {
-		beforeEach(function () {
-			// facade = new InsightFacade();
-		});
-
 		afterEach(async function () {
 			await clearDisk();
 		});
@@ -277,6 +306,19 @@ describe("InsightFacade", function () {
 				expect.fail("Should not have thrown an error.");
 			}
 		});
+
+		it("fulfill: facade2 should be able to access rooms dataset already added by facade1", async function () {
+			try {
+				const facade1 = new InsightFacade();
+				await facade1.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
+				const expected = await facade1.listDatasets();
+				const facade2 = new InsightFacade();
+				expect(await facade2.listDatasets()).to.deep.equal(expected);
+			} catch (_err) {
+				// console.log(_err);
+				expect.fail("Should not have thrown an error.");
+			}
+		});
 	});
 
 	describe("PerformQuery", function () {
@@ -324,8 +366,9 @@ describe("InsightFacade", function () {
 			// Add the datasets to InsightFacade once.
 			// Will *fail* if there is a problem reading ANY dataset.
 			const loadDatasetPromises: Promise<string[]>[] = [
-				facade.addDataset("sections", fakeSections, InsightDatasetKind.Sections),
+				facade.addDataset("sections", sections, InsightDatasetKind.Sections),
 				facade.addDataset("one aanb", oneValidSection, InsightDatasetKind.Sections),
+				facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms),
 			];
 
 			try {
@@ -341,7 +384,7 @@ describe("InsightFacade", function () {
 
 		// Examples demonstrating how to test performQuery using the JSON Test Queries.
 		// The relative path to the query file must be given in square brackets.
-		it("[valid/simple.json] SELECT dept, avg WHERE avg > 97", checkQuery); // given case
+		it("[valid/simple.json] SELECT dept, avg WHERE avg > 97", checkQuery);
 		it("[valid/complex.json] complex query", checkQuery);
 		it("[valid/moreComplex.json] more complex query", checkQuery);
 		it("[valid/validWildcard.json] *InputString*", checkQuery);
@@ -413,5 +456,21 @@ describe("InsightFacade", function () {
 		it("[valid/noResults.json] valid query that has zero results", checkQuery);
 		it("[valid/negativeNumberFilter.json] negative number in WHERE under LT", checkQuery);
 		it("[valid/zeroCharacterFilter.json] zero character in string under IS filter", checkQuery);
+
+		describe("C2: tests for new query functionality", function () {
+			it("[valid/simpleQueryTransformations.json] simple query transformations", checkQuery);
+			it("[valid/roomsQueryExample.json] rooms query example from spec", checkQuery);
+			it("[invalid/invalidKeyTypeInApply.json] invalid key type in APPLY", checkQuery);
+			it("[valid/nonNumericKeyForCount.json] non-numeric key for COUNT", checkQuery);
+			it("[invalid/duplicateApplyKey.json] duplicate APPLY key", checkQuery);
+			it("[valid/validCount.json] valid query using COUNT", checkQuery);
+			it("[invalid/columnKeyNotInGroup.json] column key not in GROUP", checkQuery);
+			it("[invalid/columnKeyNotInApply.json] column key not in APPLY", checkQuery);
+			it("[invalid/sortKeyNotInColumns.json] sort key not in COLUMNS", checkQuery);
+			it("[valid/useLatLonSumQuery.json] valid query that uses lat, lon, and SUM", checkQuery);
+			it("[invalid/sectionsUsingRoomsKey.json] sections query using rooms key", checkQuery);
+			it("[invalid/roomsUsingSectionsKey.json] rooms query using sections key", checkQuery);
+			it("[invalid/diffDatasetIdInApply.json] different dataset id in APPLY", checkQuery);
+		});
 	});
 });

@@ -1,7 +1,8 @@
-import Dataset from "../models/Dataset";
-import Section from "../models/Section";
-import Course from "../models/Course";
-import SectionData from "../models/SectionData";
+import SectionsDataset from "../models/sections/SectionsDataset";
+import Section from "../models/sections/Section";
+import Course from "../models/sections/Course";
+import SectionData from "../models/sections/SectionData";
+
 import {
 	IInsightFacade,
 	InsightDataset,
@@ -12,10 +13,13 @@ import {
 	ResultTooLargeError,
 } from "./IInsightFacade";
 import { filterSections, sortResults, selectColumns, checkIds } from "./PerformQueryHelpers";
+import { extractRoomData } from "./addDatasetHelper";
 import * as fsPromises from "fs/promises";
 import fs from "fs-extra";
 import JSZip from "jszip";
 import Query from "../models/query/Query";
+import { Dataset } from "../models/Dataset";
+import RoomsDataset from "../models/rooms/RoomsDataset";
 
 // import { json } from "stream/consumers";
 
@@ -24,17 +28,13 @@ import Query from "../models/query/Query";
  * Method documentation is in IInsightFacade
  *
  */
+
 export default class InsightFacade implements IInsightFacade {
-	// private loadedData: boolean = false;
 	private dataDir = "./data/datasets";
 	private insightFile = "./data/insights.json";
 	private insights: Map<string, InsightDataset> = new Map<string, InsightDataset>();
+	// private datas: Map<string, SectionsDataset> = new Map<string, SectionsDataset>();
 	private datas: Map<string, Dataset> = new Map<string, Dataset>();
-	// private datasets: Map<string, [Dataset, InsightDataset]> = new Map<string, [Dataset, InsightDataset]>();
-
-	constructor() {
-		// empty constructor
-	}
 
 	// load insights from disk (only load id and InsightDataset, set Dataset to null)
 	private async loadInsights(): Promise<void> {
@@ -44,7 +44,6 @@ export default class InsightFacade implements IInsightFacade {
 		} catch (_err) {
 			this.insights = new Map<string, InsightDataset>();
 		}
-		// this.loadedData = true;
 	}
 
 	private async saveInsights(): Promise<void> {
@@ -54,35 +53,40 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async addDataset(id: string, content: string, kind: InsightDatasetKind): Promise<string[]> {
-		// if (!this.loadedData) {
-		// 	await this.loadInsights();
-		// }
 		await this.loadInsights();
 
 		// id validation: (reject with InsightError if invalid)
 		// - one of more of any character, except underscore
 		// - id with only whitespace is invalid
 		// - same id as an already added dataset is invalid
-		// console.log("addDatasets > insights: ", this.insights); //
 		if (id.trim().length === 0 || id.includes("_") || this.insights.has(id)) {
 			return Promise.reject(new InsightError("Invalid id"));
 		}
 
 		// kind validation:
-		// - only valid kind is sections for c1
-		if (kind !== InsightDatasetKind.Sections) {
+		// - Sections or Rooms
+		if (kind === InsightDatasetKind.Sections) {
+			return this.addSectionsDataset(id, content);
+		} else if (kind === InsightDatasetKind.Rooms) {
+			return this.addRoomsDataset(id, content);
+		} else {
 			return Promise.reject(new InsightError("Invalid kind"));
 		}
+	}
 
-		// parse & validate content (async)
+	private async addRoomsDataset(id: string, content: string): Promise<string[]> {
+		// TODO: Implement this method
 		const base64Regex = /^[A-Za-z0-9+/]+={0,2}$/;
 
 		// Test against the regex
 		if (!base64Regex.test(content)) {
 			return Promise.reject(new InsightError("Content not in base64 format"));
 		}
-
-		const dataset: Dataset = await this.processZip(id, content);
+		// console.log("7");
+		const dataset: RoomsDataset = await extractRoomData(content, id);
+		if (dataset.getTotalRooms() === 0) {
+			throw new InsightError("no valid rooms in dataset");
+		}
 		this.datas.set(id, dataset);
 		const insight = dataset.getInsight();
 		this.insights.set(id, insight);
@@ -91,15 +95,31 @@ export default class InsightFacade implements IInsightFacade {
 		await this.saveInsights();
 
 		// return a string array containing the ids of all currently added datasets upon a successful add
-		const fileNames = await fs.readdir(this.dataDir);
-		const ids = fileNames.map((addedId) => addedId.replace(".json", ""));
-		return ids;
+		return Array.from(this.insights.keys());
+	}
+
+	private async addSectionsDataset(id: string, content: string): Promise<string[]> {
+		// parse & validate content (async)
+		const base64Regex = /^[A-Za-z0-9+/]+={0,2}$/;
+
+		// Test against the regex
+		if (!base64Regex.test(content)) {
+			return Promise.reject(new InsightError("Content not in base64 format"));
+		}
+
+		const dataset: SectionsDataset = await this.processZip(id, content);
+		this.datas.set(id, dataset);
+		const insight = dataset.getInsight();
+		this.insights.set(id, insight);
+
+		await this.saveDatasetToDisk(id);
+		await this.saveInsights();
+
+		// return a string array containing the ids of all currently added datasets upon a successful add
+		return Array.from(this.insights.keys());
 	}
 
 	public async removeDataset(id: string): Promise<string> {
-		// if (!this.loadedData) {
-		// 	await this.loadInsights();
-		// }
 		await this.loadInsights();
 
 		// id checking
@@ -109,7 +129,7 @@ export default class InsightFacade implements IInsightFacade {
 
 		// console.log("remove: insights: ", this.insights);
 		if (!this.insights.has(id)) {
-			return Promise.reject(new NotFoundError("Dataset not found"));
+			return Promise.reject(new NotFoundError("Dataset not found: " + id));
 		}
 
 		// removing dataset
@@ -128,41 +148,8 @@ export default class InsightFacade implements IInsightFacade {
 	}
 
 	public async listDatasets(): Promise<InsightDataset[]> {
-		// if (!this.loadedData) {
-		// 	await this.loadInsights();
-		// }
 		await this.loadInsights();
-
 		return Array.from(this.insights.values());
-
-		// const cachedDatasets = await fs.readdir(this.dataDir);
-		// const datasetsIdArray: string[] = Array.from(this.datasets.values()).map((tuple) => tuple[1].id);
-
-		// // get all of the datasets from the disk in Dataset form/type
-		// const loadedDatasets: Dataset[] = await Promise.all(
-		// 	cachedDatasets.map(async (dataset) => await this.loadDatasetFromDisk(dataset.replace(".json", "")))
-		// );
-
-		// let count = 0; // used for indexing in the loadedDatasets array
-
-		// // looping through all datasets stored on disk to store missing datasets in map
-		// for (const dataset of cachedDatasets) {
-		// 	const datasetId: string = dataset.replace(".json", "");
-
-		// 	// if the current this.datasets doesn't include a dataset found within the disk, add to this.datasets
-		// 	if (!datasetsIdArray.includes(datasetId)) {
-		// 		// creating a InsightDataset object to later add to map
-		// 		const loadedInsightDataset: InsightDataset = {
-		// 			id: datasetId,
-		// 			kind: InsightDatasetKind.Sections,
-		// 			numRows: loadedDatasets[count].getTotalSections(),
-		// 		};
-		// 		this.datasets.set(datasetId, [loadedDatasets[count], loadedInsightDataset]); // adding tuple of Dataset and InsightDataset to this.datasets map
-		// 	}
-		// 	count++;
-		// }
-
-		// return Array.from(this.datasets.values()).map((tuple) => tuple[1]); // returning list of InsightDataset
 	}
 
 	// saves newly added dataset to disk
@@ -170,15 +157,15 @@ export default class InsightFacade implements IInsightFacade {
 	private async saveDatasetToDisk(id: string): Promise<void> {
 		const newDataset = this.datas.get(id);
 		const file = this.dataDir + "/" + id + ".json";
-		await fs.ensureDir(this.dataDir); // could throw error
-		await fs.writeJSON(file, newDataset); // could throw error (catch in addDataset?)
+		await fs.ensureDir(this.dataDir);
+		await fs.writeJSON(file, newDataset);
 	}
 
 	// loads dataset from disk
 	// assumes that id is valid and corresponds to an existing dataset
 	private async loadDatasetFromDisk(id: string): Promise<Dataset> {
 		const file = this.dataDir + "/" + id + ".json";
-		const dataset: Dataset = await fs.readJSON(file); // could throw error
+		const dataset: Dataset = await fs.readJSON(file);
 		return dataset;
 	}
 
@@ -216,16 +203,14 @@ export default class InsightFacade implements IInsightFacade {
 				// Create the section object if validation passes
 				const section = new Section(uuid, id, title, instructor, dept, year, avg, pass, fail, audit);
 				course.addSection(section);
-
-				// console.log("section added: ", id);
 			}
 		});
 		return course;
 	}
 
 	// Function to process the zip file using Promises
-	private async processZip(id: string, content: string): Promise<Dataset> {
-		const dataset = new Dataset(id);
+	private async processZip(id: string, content: string): Promise<SectionsDataset> {
+		const dataset = new SectionsDataset(id);
 
 		try {
 			const zip = await JSZip.loadAsync(content, { base64: true }); // Load zip asynchronously
@@ -254,7 +239,7 @@ export default class InsightFacade implements IInsightFacade {
 				handle.push(this.handleSections(course, jsonData));
 			});
 			const courseArray: Course[] = await Promise.all(handle);
-			dataset.addCourse(courseArray);
+			dataset.addCourses(courseArray);
 		} catch (err) {
 			throw new InsightError(`Error processing zip file: ${(err as Error).message}`);
 		}
@@ -275,7 +260,6 @@ export default class InsightFacade implements IInsightFacade {
 				coursesFiltered.push(file);
 			}
 		}
-		// console.log("courses filtered: ", coursesFiltered);
 		return coursesFiltered;
 	}
 
@@ -294,13 +278,13 @@ export default class InsightFacade implements IInsightFacade {
 
 		// Build query object
 		const validQuery = Query.buildQuery(query);
-		// console.log("> built query");
+		// not neccessarily valid
+		// e.g. using a sections key in a rooms dataset
 
 		const id = checkIds(validQuery);
 		if (!this.insights.has(id)) {
 			throw new InsightError("Querying section that has not been added");
 		}
-		// console.log("> checked ids");
 		let dataset: Dataset;
 
 		// if dataset is not in memory, load it from disk
@@ -315,32 +299,41 @@ export default class InsightFacade implements IInsightFacade {
 			dataset = data;
 		}
 
-		// const dataset = data[0];
-		// console.log("num sections: %d\n", dataset.getTotalSections());
+		// do dataset.getKind() and then check that all the keys in query are valid for that kind?
 
-		// console.log("num sections: %d\n", dataset.getSections().length);
-		// - filter sections (WHERE block)
+		if (dataset.getKind() === InsightDatasetKind.Sections) {
+			return await this.querySectionsDataset(validQuery, dataset as SectionsDataset);
+		} else {
+			// query RoomsDataset
+			return await this.querySectionsDataset(validQuery, dataset as SectionsDataset); ///!!!
+		}
+	}
+
+	// private async queryRoomsDataset(validQuery: Query, dataset: RoomsDataset): Promise<InsightResult[]> {
+	// 	if (validQuery)
+	// 	return Promise.reject(new InsightError("Not yet implemented"));
+	// 	// TODO: Implement this method
+	// }
+
+	private async querySectionsDataset(validQuery: Query, dataset: SectionsDataset): Promise<InsightResult[]> {
+		const id = dataset.getId();
 		const filteredSections = filterSections(validQuery.WHERE.filter, dataset.getSections(), id);
-		// console.log("num sections: %d\n", filteredSections.length);
 
 		const maxSections = 5000;
 		// - check if filtered sections exceed 5000 sections limit
 		if (filteredSections.length > maxSections) {
 			throw new ResultTooLargeError("sections[] exceed size of 5000");
 		}
-		// - make required columns (OPTIONS: COLUMNS)
-		// - order results (OPTIONS: ORDER)
 
 		// // Parse OPTIONS block: Extract columns and order field
 		const columns = validQuery.OPTIONS.columns;
-		const orderField = validQuery.OPTIONS.order;
+		const orderField = validQuery.OPTIONS.sort?.anyKey;
 
 		// Sort the filtered results if ORDER is specified, otherwise leave as is
 		const sortedSections = orderField ? sortResults(filteredSections, orderField, columns) : filteredSections;
 
 		// // Select the required columns
 		const finalResults: InsightResult[] = selectColumns(sortedSections, columns);
-		// console.log(finalResults);
 		return finalResults;
 	}
 }
