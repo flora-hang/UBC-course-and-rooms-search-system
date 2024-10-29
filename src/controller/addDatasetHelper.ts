@@ -78,37 +78,47 @@ function parseBuildingTableRows(
 		// const titleCell = findElementWithClass(columns, "views-field-title");
 		const addressCell = findElementWithClass(columns, "views-field-field-building-address");
 		const link = findLinkElement(findElementWithClass(columns, "views-field-title"));
+		individualRows(codeCell, addressCell, link, zip, LatList, LonList, buildings, parseThis);
+	}
+}
+function individualRows(
+	codeCell: any,
+	addressCell: any,
+	link: any,
+	zip: JSZip,
+	LatList: any,
+	LonList: any,
+	buildings: any,
+	parseThis: any
+): void {
+	if (link) {
+		// const shortname = getTextContent(codeCell);
+		// const fullname = getTextContent(link);
+		// const address = getTextContent(addressCell);
+		// console.log("", shortname, " | ", fullname, " | ", address);
+		const building = new Building(getTextContent(link), getTextContent(codeCell), getTextContent(addressCell));
 
-		if (link) {
-			// const shortname = getTextContent(codeCell);
-			// const fullname = getTextContent(link);
-			// const address = getTextContent(addressCell);
-			// console.log("", shortname, " | ", fullname, " | ", address);
-			const building = new Building(getTextContent(link), getTextContent(codeCell), getTextContent(addressCell));
+		let href;
+		for (const attr of link.attrs) {
+			if (attr.name === "href") {
+				href = attr.value;
+			}
+		}
+		const two = 2;
+		const path = href.substring(two);
+		const buildingFile = zip.file(path);
+		if (!buildingFile) {
+			throw new InsightError("Could not find building file in zip file: " + path);
+		}
 
-			let href;
-			for (const attr of link.attrs) {
-				if (attr.name === "href") {
-					href = attr.value;
-				}
-			}
-			const two = 2;
-			const path = href.substring(two);
-			const buildingFile = zip.file(path);
-			if (!buildingFile) {
-				throw new InsightError("Could not find building file in zip file: " + path);
-			}
-
-			if (buildingFile) {
-				LatList.push(building.getLat());
-				LonList.push(building.getLon());
-				parseThis.push(buildingFile.async("text"));
-				buildings.push(building);
-			}
+		if (buildingFile) {
+			LatList.push(building.getLat());
+			LonList.push(building.getLon());
+			parseThis.push(buildingFile.async("text"));
+			buildings.push(building);
 		}
 	}
 }
-
 // Helper function to parse the room table for a given building.
 function parseRoomTable(building: Building, document: any): void {
 	const roomTable = findAllElements(document, "tbody");
