@@ -384,7 +384,7 @@ describe("InsightFacade", function () {
 
 		// Examples demonstrating how to test performQuery using the JSON Test Queries.
 		// The relative path to the query file must be given in square brackets.
-		it("[valid/simple.json] SELECT dept, avg WHERE avg > 97", checkQuery); // given case, will fail because of ordering
+		it("[valid/simple.json] SELECT dept, avg WHERE avg > 97", checkQuery); 
 		it("[valid/complex.json] complex query", checkQuery);
 		it("[valid/moreComplex.json] more complex query", checkQuery);
 		it("[valid/validWildcard.json] *InputString*", checkQuery);
@@ -394,7 +394,7 @@ describe("InsightFacade", function () {
 		it("[valid/validNot.json] valid NOT", checkQuery);
 		it("[valid/validIs.json] valid IS", checkQuery);
 		// it("[valid/validWithOrder.json] valid with ORDER", checkQuery);
-		it("[valid/everythingMadness.json] use everything", checkQuery); // will fail because of ordering
+		it("[valid/everythingMadness.json] use everything", checkQuery); 
 
 		it("[invalid/missingQuery.json] Query missing", checkQuery);
 		it("[invalid/stringQuery.json] Query is String", checkQuery);
