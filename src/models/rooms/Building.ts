@@ -11,7 +11,7 @@ export default class Building {
     private readonly fullname: string; // Full building name
     private readonly shortname: string; // Short building name
     private readonly address: string; // The building address
-    private lat?: number; // The latitude of the building
+    public lat?: number; // The latitude of the building
     private lon?: number; // The longitude of the building
     private rooms: Room[];
 

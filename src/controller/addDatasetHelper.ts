@@ -36,7 +36,8 @@ export async function extractRoomData(zipContent: string, datasetId: string): Pr
 async function parseBuildingTable(document: any, zip: JSZip): Promise<Building[]> {
 	const buildings: Building[] = [];
 	const parseThis: any = [];
-
+	const latList: any = [];
+	const lonList: any = [];
 	const buildingTable = findAllElements(document, "table");
 	if (!buildingTable) {
 		throw new InsightError("Error: Could not find building table in index.htm.");
@@ -45,9 +46,12 @@ async function parseBuildingTable(document: any, zip: JSZip): Promise<Building[]
 
 	// Traverse rows in the building table
 	const rows = findAllElements(buildingTableBody[0], "tr");
-	parseBuildingTableRows(rows, zip, parseThis, buildings);
+	parseBuildingTableRows(rows, zip, parseThis, buildings, latList, lonList);
 
 	const array = await Promise.all(parseThis);
+	await Promise.all(latList);
+	await Promise.all(lonList);
+	
 	let i = 0;
 	for (const buildingContent of array) {
 		parseRoomTable(buildings[i], parse5.parse(buildingContent));
@@ -56,7 +60,14 @@ async function parseBuildingTable(document: any, zip: JSZip): Promise<Building[]
 	return buildings;
 }
 
-function parseBuildingTableRows(rows: any[], zip: JSZip, parseThis: any, buildings: Building[]): void {
+function parseBuildingTableRows(
+	rows: any[],
+	zip: JSZip,
+	parseThis: any,
+	buildings: Building[],
+	LatList: any,
+	LonList: any
+): void {
 	for (const row of rows) {
 		const columns = findAllElements(row, "td");
 		if (!columns || columns.length === 0) {
@@ -74,7 +85,10 @@ function parseBuildingTableRows(rows: any[], zip: JSZip, parseThis: any, buildin
 			const address = getTextContent(addressCell);
 			// console.log("", shortname, " | ", fullname, " | ", address);
 			const building = new Building(fullname, shortname, address);
-
+			// building.getLat();
+			// building.getLon();
+			// console.log("Lat: %d", building.getLat());
+			// console.log("Lon: %d", building.getLon());
 			let href;
 			for (const attr of link.attrs) {
 				if (attr.name === "href") {
@@ -89,6 +103,8 @@ function parseBuildingTableRows(rows: any[], zip: JSZip, parseThis: any, buildin
 			}
 
 			if (buildingFile) {
+				LatList.push(building.getLat());
+				LonList.push(building.getLon());
 				parseThis.push(buildingFile.async("text"));
 				buildings.push(building);
 			}

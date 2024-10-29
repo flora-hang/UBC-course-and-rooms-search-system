@@ -228,6 +228,23 @@ describe("InsightFacade", function () {
 			expect(result[0].kind).to.equal(expected[0].kind);
 			return expect(result).to.deep.equal(expected);
 		});
+		it("list all roomdatasets", async function () {
+			await facade.addDataset("rooms", rooms, InsightDatasetKind.Rooms);
+
+			const result = await facade.listDatasets();
+			const validDataset1: InsightDataset = {
+				id: "rooms",
+				kind: InsightDatasetKind.Rooms,
+				numRows: 364,
+			};
+			const expected: InsightDataset[] = [];
+			expected.push(validDataset1);
+
+			expect(result[0].id).to.equal(expected[0].id);
+			expect(result[0].numRows).to.equal(expected[0].numRows);
+			expect(result[0].kind).to.equal(expected[0].kind);
+			return expect(result).to.deep.equal(expected);
+		});
 	});
 
 	describe("cachingProgress", function () {
