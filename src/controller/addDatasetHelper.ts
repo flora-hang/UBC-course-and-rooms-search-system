@@ -1,131 +1,195 @@
-import { InsightError, InsightResult } from "./IInsightFacade";
+import { InsightError } from "./IInsightFacade";
 import Room from "../models/rooms/Room";
 import RoomsDataset from "../models/rooms/RoomsDataset";
 import JSZip from "jszip";
-import parse5 from "parse5";
+import * as parse5 from "parse5";
 import Building from "../models/rooms/Building";
 // Decode the base64 zip file and parse HTML for buildings and rooms
-	/**
-	 * Parses and extracts room data from campus.zip and populates the RoomsDataset.
-	 * @param zipContent - Base64 encoded zip file content.
-	 * @param datasetId - The ID for the RoomsDataset.
-	 * @returns A RoomsDataset populated with Building and Room data.
-	 */
-	export async function extractRoomData(zipContent: string, datasetId: string): Promise<RoomsDataset> {
-		const zip = await JSZip.loadAsync(Buffer.from(zipContent, "base64"));
-		const dataset = new RoomsDataset(datasetId);
+/**
+ * Parses and extracts room data from campus.zip and populates the RoomsDataset.
+ * @param zipContent - Base64 encoded zip file content.
+ * @param datasetId - The ID for the RoomsDataset.
+ * @returns A RoomsDataset populated with Building and Room data.
+ */
+export async function extractRoomData(zipContent: string, datasetId: string): Promise<RoomsDataset> {
+	const Zip = new JSZip();
+	const zip = await Zip.loadAsync(zipContent, { base64: true });
+	const dataset = new RoomsDataset(datasetId);
 
-		// Step 1: Parse the index.htm file for building information
-		const indexFile = zip.file("index.htm");
-		if (!indexFile) {
-			throw new Error("Error: index.htm not found in zip file.");
-		}
-
-		const indexContent = await indexFile.async("text");
-		const document = parse5.parse(indexContent);
-
-		// Step 2: Find the building table in index.htm
-		const buildings = await parseBuildingTable(document, zip);
-		dataset.addBuildings(buildings);
-
-		return dataset;
+	// Step 1: Parse the index.htm file for building information
+	const indexFile = zip.file("index.htm");
+	if (!indexFile) {
+		throw new InsightError("index.htm not found in zip file.");
 	}
 
-	// Helper function to find the building table and extract building information.
-    async function parseBuildingTable(document: any, zip: JSZip): Promise<Building[]> {
-		const buildings: Building[] = [];
-		const buildingTable = findTableWithClass(document, "views-field-title");
+	const indexContent = await indexFile.async("text");
+	const document = parse5.parse(indexContent);
 
-		if (!buildingTable) {
-			throw new InsightError("Error: Could not find building table in index.htm.");
+	// Step 2: Find the building table in index.htm
+	const buildings = await parseBuildingTable(document, zip);
+	dataset.addBuildings(buildings);
+
+	return dataset;
+}
+
+// Helper function to find the building table and extract building information.
+async function parseBuildingTable(document: any, zip: JSZip): Promise<Building[]> {
+	const buildings: Building[] = [];
+	const parseThis: any = [];
+	const latList: any = [];
+	const lonList: any = [];
+	const buildingTable = findAllElements(document, "table");
+	if (!buildingTable) {
+		throw new InsightError("Error: Could not find building table in index.htm.");
+	}
+	const buildingTableBody = findAllElements(buildingTable[0], "tbody");
+
+	// Traverse rows in the building table
+	const rows = findAllElements(buildingTableBody[0], "tr");
+	parseBuildingTableRows(rows, zip, parseThis, buildings, latList, lonList);
+
+	const array = await Promise.all(parseThis);
+	await Promise.all(latList);
+	await Promise.all(lonList);
+
+	let i = 0;
+	for (const buildingContent of array) {
+		parseRoomTable(buildings[i], parse5.parse(buildingContent));
+		i++;
+	}
+	return buildings;
+}
+
+function parseBuildingTableRows(
+	rows: any[],
+	zip: JSZip,
+	parseThis: any,
+	buildings: Building[],
+	LatList: any,
+	LonList: any
+): void {
+	for (const row of rows) {
+		const columns = findAllElements(row, "td");
+		if (!columns || columns.length === 0) {
+			continue;
 		}
 
-		// Traverse rows in the building table
-		for (const row of findAllElements(buildingTable, "tr")) {
-			const titleCell = findElementWithClass(row, "views-field-title");
-			const addressCell = findElementWithClass(row, "views-field-field-building-address");
-			const link = findLinkElement(titleCell);
+		const codeCell = findElementWithClass(columns, "views-field-field-building-code");
+		// const titleCell = findElementWithClass(columns, "views-field-title");
+		const addressCell = findElementWithClass(columns, "views-field-field-building-address");
+		const link = findLinkElement(findElementWithClass(columns, "views-field-title"));
+		individualRows(codeCell, addressCell, link, zip, LatList, LonList, buildings, parseThis);
+	}
+}
+function individualRows(
+	codeCell: any,
+	addressCell: any,
+	link: any,
+	zip: JSZip,
+	LatList: any,
+	LonList: any,
+	buildings: any,
+	parseThis: any
+): void {
+	if (link) {
+		// const shortname = getTextContent(codeCell);
+		// const fullname = getTextContent(link);
+		// const address = getTextContent(addressCell);
+		// console.log("", shortname, " | ", fullname, " | ", address);
+		const building = new Building(getTextContent(link), getTextContent(codeCell), getTextContent(addressCell));
 
-			if (link) {
-				const shortname = getTextContent(titleCell);
-				const fullname = getTextContent(link);
-				const address = getTextContent(addressCell);
-				const building = new Building(fullname, shortname, address);
-
-				const buildingFile = zip.file(link.attrs.href);
-				if (buildingFile) {
-					const buildingContent = await buildingFile.async("text");
-					parseRoomTable(building, parse5.parse(buildingContent));
-				}
-
-				if (building.hasValidRoom()) {
-					buildings.push(building);
-				}
+		let href;
+		for (const attr of link.attrs) {
+			if (attr.name === "href") {
+				href = attr.value;
 			}
 		}
-
-		return buildings;
-	}
-
-	// Helper function to parse the room table for a given building.
-	function parseRoomTable(building: Building, document: any): void {
-		const roomTable = findTableWithClass(document, "views-field-room-number");
-		if (!roomTable) {
-			return;
+		const two = 2;
+		const path = href.substring(two);
+		const buildingFile = zip.file(path);
+		if (!buildingFile) {
+			throw new InsightError("Could not find building file in zip file: " + path);
 		}
 
-		for (const row of findAllElements(roomTable, "tr")) {
-			const roomNumber = getTextContent(findElementWithClass(row, "views-field-room-number"));
-			const seatsText = getTextContent(findElementWithClass(row, "views-field-room-capacity"));
-			const seats = parseInt(seatsText, 10) || 0;
-			const type = getTextContent(findElementWithClass(row, "views-field-room-type"));
-			const furniture = getTextContent(findElementWithClass(row, "views-field-room-furniture"));
-			const link = findLinkElement(row)?.attrs.href || "";
+		if (buildingFile) {
+			LatList.push(building.getLat());
+			LonList.push(building.getLon());
+			parseThis.push(buildingFile.async("text"));
+			buildings.push(building);
+		}
+	}
+}
+// Helper function to parse the room table for a given building.
+function parseRoomTable(building: Building, document: any): void {
+	const roomTable = findAllElements(document, "tbody");
+	// console.log(" > ", building.getShortname(), ": ", roomTable.length);
+	if (!roomTable || roomTable.length === 0) {
+		return;
+	}
+	// console.log(" --- ", roomTable.length);
 
-			if (roomNumber) {
-				const room = new Room(building.getShortname(), roomNumber, seats, type, furniture, link);
-				building.addRoom(room);
+	const rows = findAllElements(roomTable[0], "tr");
+	// console.log(" ---------------------- ");
+	for (const row of rows) {
+		const columns = findAllElements(row, "td");
+		if (!columns || columns.length === 0) {
+			continue;
+		}
+		// const roomNumber = getTextContent(findElementWithClass(columns, "views-field-field-room-number"));
+		const roomNumber = getTextContent(findLinkElement(findElementWithClass(columns, "views-field-field-room-number")));
+		const seatsText = getTextContent(findElementWithClass(columns, "views-field-field-room-capacity"));
+		const seats = parseInt(seatsText, 10) || 0;
+		const type = getTextContent(findElementWithClass(columns, "views-field-field-room-type"));
+		const furniture = getTextContent(findElementWithClass(columns, "views-field-field-room-furniture"));
+		const linkElement = findLinkElement(findElementWithClass(columns, "views-field-nothing"));
+		const link = linkElement?.attrs.find((attr: any) => attr.name === "href")?.value;
+		// console.log(" > ", roomNumber, " | ", seats, " | ", type, " | ", furniture, " | ", link);
+
+		if (roomNumber) {
+			const room = new Room(building.getShortname(), roomNumber, seats, type, furniture, link);
+			building.addRoom(room);
+		}
+	}
+}
+
+// Utility to get the text content of an HTML element
+function getTextContent(element: any): string {
+	return element?.childNodes?.[0]?.value?.trim() || "";
+}
+
+// Helper to find a specific element with a class name.
+function findElementWithClass(columns: any, className: string): any {
+	// return findAllElements(root, "td").find((td) =>
+	// 	td.attrs?.some((attr: any) => attr.name === "class" && attr.value.includes(className))
+	// );
+	if (!columns || columns.length === 0) {
+		return;
+	}
+	for (const column of columns) {
+		const attrs = column.attrs;
+		for (const attr of attrs) {
+			if (attr.name === "class" && attr.value.includes(className)) {
+				return column;
 			}
 		}
 	}
+}
 
-	// Utility function to find a table by looking for a specific class on any <td> element within the table.
-	function findTableWithClass(root: any, className: string): any {
-		for (const table of findAllElements(root, "table")) {
-			if (findElementWithClass(table, className)) {
-				return table;
-			}
+// Helper to find all elements of a certain tag
+function findAllElements(root: any, tagName: string): any[] {
+	const elements: any[] = [];
+	const stack = [root];
+	while (stack.length) {
+		const node = stack.pop();
+		if (node.tagName === tagName) {
+			elements.push(node);
 		}
-		return null;
+		stack.push(...(node.childNodes || []));
 	}
+	return elements;
+}
 
-	// Utility to get the text content of an HTML element
-	function getTextContent(element: any): string {
-		return element?.childNodes?.[0]?.value?.trim() || "";
-	}
-
-	// Helper to find a specific element with a class name.
-	function findElementWithClass(root: any, className: string): any {
-		return findAllElements(root, "td").find((td) =>
-			td.attrs?.some((attr: any) => attr.name === "class" && attr.value.includes(className))
-		);
-	}
-
-	// Helper to find all elements of a certain tag
-	function findAllElements(root: any, tagName: string): any[] {
-		const elements: any[] = [];
-		const stack = [root];
-		while (stack.length) {
-			const node = stack.pop();
-			if (node.tagName === tagName) {
-				elements.push(node);
-			}
-			stack.push(...(node.childNodes || []));
-		}
-		return elements;
-	}
-
-	// Helper to find a link element within a cell
-	function findLinkElement(cell: any): any {
-		return cell && findAllElements(cell, "a").find((a) => a.attrs.some((attr: any) => attr.name === "href"));
-	}
+// Helper to find a link element within a cell
+function findLinkElement(cell: any): any {
+	return cell && findAllElements(cell, "a").find((a) => a.attrs.some((attr: any) => attr.name === "href"));
+}

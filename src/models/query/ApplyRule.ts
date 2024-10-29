@@ -21,6 +21,7 @@ export default class ApplyRule {
         this.applyToken = applyToken;
         this.key = key;
     }
+<<<<<<< HEAD
 }
 
 export function useApply(resultItem: any, applyKey: string, applyToken: ApplyToken, values: any[]): void {
@@ -53,3 +54,15 @@ export function useApply(resultItem: any, applyKey: string, applyToken: ApplyTok
 			throw new InsightError(`Unsupported applyToken: ${applyToken}`);
 	}
 }
+=======
+
+    public static buildQuery(object: any): ApplyRule {
+        const applyKey = Object.keys(object)[0];
+        const nestedObject = object[applyKey];
+        const applyToken = Object.keys(nestedObject)[0] as ApplyToken;
+        const key = nestedObject[applyToken];
+
+        return new ApplyRule(applyKey, applyToken, key);
+    }
+}
+>>>>>>> origin/main
