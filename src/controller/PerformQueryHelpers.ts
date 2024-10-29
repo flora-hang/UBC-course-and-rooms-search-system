@@ -242,7 +242,6 @@ export function sortResults(items: Item[], order: String, columns: String[]): It
 		throw new InsightError("ORDER key must be in COLUMNS");
 	}
 
-<<<<<<< HEAD
 	if (typeof order === "string") { // if order is just something like: 'ORDER: ' ANYKEY
 		const field: string = order.split("_")[1];
 		if (mkeyFlag(field)) {
@@ -252,14 +251,6 @@ export function sortResults(items: Item[], order: String, columns: String[]): It
 		}
 	} else { // if order is something like: 'ORDER: { dir:'  DIRECTION ', keys: [ ' ANYKEY_LIST '] }'
 		const { dir, keys } = order as any;
-=======
-	const field: string = order.split("_")[1];
-	if (mkeyFlag(field)) {
-		sections.sort((a, b) => a.getField(field) - b.getField(field));
-	} else {
-		sections.sort((a, b) => a.getField(field).localeCompare(b.getField(field)));
-	}
->>>>>>> origin/main
 
 		if (!Array.isArray(keys)) {
 			throw new InsightError("ORDER keys must be an array");

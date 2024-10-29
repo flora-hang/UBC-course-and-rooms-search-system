@@ -266,6 +266,48 @@ export default class InsightFacade implements IInsightFacade {
 		return coursesFiltered;
 	}
 
+	public async performQuery(query: unknown): Promise<InsightResult[]> {
+		await this.loadInsights();
+
+		// Check if query is an object
+		if (typeof query !== "object" || query === null) {
+			return Promise.reject(new InsightError("Query must be an object"));
+		}
+
+		// Check if query is empty
+		if (Object.keys(query).length === 0) {
+			return Promise.reject(new InsightError("Query is empty"));
+		}
+
+		// Build query object
+		const validQuery = Query.buildQuery(query);
+
+		const id = checkIds(validQuery);
+		if (!this.insights.has(id)) {
+			throw new InsightError("Querying section that has not been added");
+		}
+		let dataset: Dataset;
+
+		// if dataset is not in memory, load it from disk
+		if (!this.datas.has(id)) {
+			dataset = await this.loadDatasetFromDisk(id);
+			this.datas.set(id, dataset);
+		} else {
+			const data = this.datas.get(id);
+			if (!data) {
+				throw new InsightError("Dataset not found");
+			}
+			dataset = data;
+		}
+
+		// if (dataset.getKind() === InsightDatasetKind.Sections) {
+		return await this.queryItemsDataset(validQuery, dataset as SectionsDataset | RoomsDataset);
+		// } else {
+		// query RoomsDataset
+		// return await this.queryRoomsDataset(validQuery, dataset as RoomsDataset);
+		// }
+	}
+
 	private async queryItemsDataset(
 		validQuery: Query,
 		dataset: SectionsDataset | RoomsDataset
@@ -281,18 +323,12 @@ export default class InsightFacade implements IInsightFacade {
 
 		const filteredItems = filterItems(validQuery.WHERE.filter, items, id) as Item[];
 
-		const maxSections = 5000;
-		// - check if filtered sections exceed 5000 sections limit
-		if (filteredItems.length > maxSections) {
-			throw new ResultTooLargeError("sections[] exceed size of 5000");
-		}
-
 		// Parse OPTIONS block: Extract columns and order field
 		const columns = validQuery.OPTIONS.columns;
 		const orderField = validQuery.OPTIONS.sort?.anyKey ?
 			validQuery.OPTIONS.sort?.anyKey
 			: (validQuery.OPTIONS.sort?.dir && validQuery.OPTIONS.sort?.keys) ?
-				{"dir": validQuery.OPTIONS.sort?.dir, "keys": validQuery.OPTIONS.sort?.keys }
+				{ "dir": validQuery.OPTIONS.sort?.dir, "keys": validQuery.OPTIONS.sort?.keys }
 				: null;
 
 		if (!validQuery.OPTIONS.sort?.anyKey && (!!validQuery.OPTIONS.sort?.dir !== !!validQuery.OPTIONS.sort?.keys)) {
@@ -327,6 +363,13 @@ export default class InsightFacade implements IInsightFacade {
 
 		// // Select the required columns
 		const finalResults: InsightResult[] = selectColumns(sortedItems, columns);
+
+		const maxSections = 5000;
+		// - check if filtered sections exceed 5000 sections limit
+		if (finalResults.length > maxSections) {
+			throw new ResultTooLargeError("results exceed size of 5000");
+		}
+
 		return finalResults;
 	}
 }
