@@ -7,6 +7,15 @@ export enum SField {
 	instructor = "instructor",
 	title = "title",
 	uuid = "uuid",
+	// new fields for rooms
+	fullname = "fullname",
+	shortname = "shortname",
+	number = "number",
+	name = "name",
+	address = "address",
+	type = "type",
+	furniture = "furniture",
+	href = "href"
 }
 
 export default class SComparison implements IFilter {

@@ -91,7 +91,8 @@ export default class InsightFacade implements IInsightFacade {
 		if (!base64Regex.test(content)) {
 			return Promise.reject(new InsightError("Content not in base64 format"));
 		}
-		const dataset: RoomsDataset = await extractRoomData(id, content);
+		// console.log("7");
+		const dataset: RoomsDataset = await extractRoomData(content, id);
 		if (dataset.getTotalRooms() === 0) {
 			throw new InsightError("no valid rooms in dataset");
 		}
@@ -137,7 +138,7 @@ export default class InsightFacade implements IInsightFacade {
 
 		// console.log("remove: insights: ", this.insights);
 		if (!this.insights.has(id)) {
-			return Promise.reject(new NotFoundError("Dataset not found"));
+			return Promise.reject(new NotFoundError("Dataset not found: " + id));
 		}
 
 		// removing dataset
@@ -269,48 +270,6 @@ export default class InsightFacade implements IInsightFacade {
 			}
 		}
 		return coursesFiltered;
-	}
-
-	public async performQuery(query: unknown): Promise<InsightResult[]> {
-		await this.loadInsights();
-
-		// Check if query is an object
-		if (typeof query !== "object" || query === null) {
-			return Promise.reject(new InsightError("Query must be an object"));
-		}
-
-		// Check if query is empty
-		if (Object.keys(query).length === 0) {
-			return Promise.reject(new InsightError("Query is empty"));
-		}
-
-		// Build query object
-		const validQuery = Query.buildQuery(query);
-
-		const id = checkIds(validQuery);
-		if (!this.insights.has(id)) {
-			throw new InsightError("Querying section that has not been added");
-		}
-		let dataset: Dataset;
-
-		// if dataset is not in memory, load it from disk
-		if (!this.datas.has(id)) {
-			dataset = await this.loadDatasetFromDisk(id);
-			this.datas.set(id, dataset);
-		} else {
-			const data = this.datas.get(id);
-			if (!data) {
-				throw new InsightError("Dataset not found");
-			}
-			dataset = data;
-		}
-
-		// if (dataset.getKind() === InsightDatasetKind.Sections) {
-		return await this.queryItemsDataset(validQuery, dataset as SectionsDataset | RoomsDataset);
-		// } else {
-		// query RoomsDataset
-		// return await this.queryRoomsDataset(validQuery, dataset as RoomsDataset);
-		// }
 	}
 
 	private async queryItemsDataset(

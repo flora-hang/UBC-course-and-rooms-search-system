@@ -21,7 +21,10 @@ export default class Transformations {
         if (!Array.isArray(group) || group.length === 0) {
             throw new Error("GROUP must be a non-empty array");
         }
-        const apply: ApplyRule[] = object.APPLY;
+        const apply: ApplyRule[] = [];
+        for (const applyRule of object.APPLY) {
+            apply.push(ApplyRule.buildQuery(applyRule));
+        }
         return new Transformations(group, apply);
     }
 }

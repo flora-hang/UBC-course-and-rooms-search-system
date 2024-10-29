@@ -32,26 +32,23 @@ export function filterItems(where: any, items: Item[], id: string): Item[] {
 		// console.log("num sections (NOT): %d\n", sections.length);
 		return handleNOT(where, items, id);
 	}
-	// console.log("been outside of EQ");
-	// Process comparison operators (EQ, GT, LT, IS)
+
 	if (where.mComparator === "EQ") {
 		// console.log("been in EQ");
 		// console.log("num sections (EQ): %d\n", sections.length);
 		return handleEQ(where, items, id);
 	}
-	// console.log("been outside of GT");
+
 	if (where.mComparator === "GT") {
 		// console.log("been in GT");
 		return handleGT(where, items, id);
 	}
-	// console.log("been outside of LT");
+
 	if (where.mComparator === "LT") {
 		// console.log("been in LT");
 		return handleLT(where, items, id);
 	}
 
-	// console.log(" %s\n", where.filter);
-	// console.log("been outside of IS");
 	if ("skey" in where) {
 		// console.log("been in IS");
 		return handleIS(where, items, id);
@@ -88,7 +85,6 @@ function handleOR(conditions: any[], items: Item[], id: string): Item[] {
 			return true; // Keep the unique section
 		}
 	});
-	// console.log("newitems 2: %d\n", ret.length);
 	return ret;
 }
 
@@ -110,9 +106,9 @@ function handleEQ(condition: any, items: Item[], id: string): any {
 
 function handleGT(condition: any, items: Item[], id: string): any {
 	const field: string = condition.mkey.split("_")[1]; // e.g. "avg"
-	// console.log("%s\n", field);
+
 	const ID: string = condition.mkey.split("_")[0];
-	// console.log("%s\n", ID);
+
 	if (ID !== id) {
 		throw new InsightError("id does not match");
 	}
@@ -238,8 +234,8 @@ export function sortResults(items: Item[], order: String, columns: String[]): It
 		throw new InsightError("ORDER key must be in COLUMNS");
 	}
 
-	if (typeof order === "string") {
-		// if order is just something like: 'ORDER: ' ANYKEY
+<<<<<<< HEAD
+	if (typeof order === "string") { // if order is just something like: 'ORDER: ' ANYKEY
 		const field: string = order.split("_")[1];
 		if (mkeyFlag(field)) {
 			items.sort((a, b) => a.getField(field) - b.getField(field));
@@ -249,6 +245,14 @@ export function sortResults(items: Item[], order: String, columns: String[]): It
 	} else {
 		// if order is something like: 'ORDER: { dir:'  DIRECTION ', keys: [ ' ANYKEY_LIST '] }'
 		const { dir, keys } = order as any;
+=======
+	const field: string = order.split("_")[1];
+	if (mkeyFlag(field)) {
+		sections.sort((a, b) => a.getField(field) - b.getField(field));
+	} else {
+		sections.sort((a, b) => a.getField(field).localeCompare(b.getField(field)));
+	}
+>>>>>>> origin/main
 
 		if (!Array.isArray(keys)) {
 			throw new InsightError("ORDER keys must be an array");
@@ -293,7 +297,8 @@ export function selectColumns(items: Item[], columns: string[]): InsightResult[]
 
 // traverse query to check that the same valid id is used throughout
 export function checkIds(query: Query): string {
-	const idStrings = query.OPTIONS.columns.map((column: string) => column.split("_")[0]);
+	const columnsWithUnderscore = query.OPTIONS.columns.filter((column: string) => column.includes("_"));
+	const idStrings = columnsWithUnderscore.map((column: string) => column.split("_")[0]);
 	// check if all idStrings are the same
 	const uniqueIds = new Set(idStrings);
 	if (uniqueIds.size > 1) {
@@ -302,5 +307,5 @@ export function checkIds(query: Query): string {
 	const datasetId = idStrings[0];
 
 	// order key in columns checked in sortResults
-	return datasetId;
+	return datasetId; //!!! check that this still works
 }

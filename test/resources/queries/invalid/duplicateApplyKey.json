@@ -1,0 +1,52 @@
+{
+	"title": "duplicateApplyKey",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"IS": {
+						"rooms_furniture": "*Tables*"
+					}
+				},
+				{
+					"GT": {
+						"rooms_lat": 0
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_fullname",
+				"rooms_seats",
+				"count"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"count"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_fullname",
+				"rooms_seats"
+			],
+			"APPLY": [
+				{
+					"count": {
+						"COUNT": "rooms_address"
+					}
+				},
+				{
+					"count": {
+						"COUNT": "rooms_address"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

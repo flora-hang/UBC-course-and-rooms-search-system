@@ -1,0 +1,26 @@
+{
+	"title": "roomsUsingSectionsKey",
+	"input": {
+		"WHERE": {},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_href",
+				"overallAvg"
+			]
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_href"
+			],
+			"APPLY": [
+				{
+					"overallAvg": {
+						"AVG": "rooms_avg"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": true,
+	"expected": "InsightError"
+}

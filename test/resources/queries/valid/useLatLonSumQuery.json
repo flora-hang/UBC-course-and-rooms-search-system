@@ -1,0 +1,243 @@
+{
+	"title": "useLatLonSumQuery",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"IS": {
+						"rooms_furniture": "*Tables*"
+					}
+				},
+				{
+					"GT": {
+						"rooms_lat": 30
+					}
+				},
+				{
+					"LT": {
+						"rooms_lon": 100
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_shortname",
+				"rooms_address",
+				"sumSeats"
+			],
+			"ORDER": {
+				"dir": "UP",
+				"keys": [
+					"sumSeats"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_shortname",
+				"rooms_address"
+			],
+			"APPLY": [
+				{
+					"sumSeats": {
+						"SUM": "rooms_seats"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_shortname": "FNH",
+			"rooms_address": "2205 East Mall",
+			"sumSeats": 28
+		},
+		{
+			"rooms_shortname": "AUDX",
+			"rooms_address": "1924 West Mall",
+			"sumSeats": 41
+		},
+		{
+			"rooms_shortname": "SOWK",
+			"rooms_address": "2080 West Mall",
+			"sumSeats": 44
+		},
+		{
+			"rooms_shortname": "EOSM",
+			"rooms_address": "6339 Stores Road",
+			"sumSeats": 50
+		},
+		{
+			"rooms_shortname": "ESB",
+			"rooms_address": "2207 Main Mall",
+			"sumSeats": 80
+		},
+		{
+			"rooms_shortname": "BRKX",
+			"rooms_address": "1874 East Mall",
+			"sumSeats": 94
+		},
+		{
+			"rooms_shortname": "ANSO",
+			"rooms_address": "6303 North West Marine Drive",
+			"sumSeats": 96
+		},
+		{
+			"rooms_shortname": "HENN",
+			"rooms_address": "6224 Agricultural Road",
+			"sumSeats": 96
+		},
+		{
+			"rooms_shortname": "BIOL",
+			"rooms_address": "6270 University Boulevard",
+			"sumSeats": 108
+		},
+		{
+			"rooms_shortname": "LASR",
+			"rooms_address": "6333 Memorial Road",
+			"sumSeats": 120
+		},
+		{
+			"rooms_shortname": "UCLL",
+			"rooms_address": "6331 Crescent Road V6T 1Z1",
+			"sumSeats": 133
+		},
+		{
+			"rooms_shortname": "FORW",
+			"rooms_address": "6350 Stores Road",
+			"sumSeats": 142
+		},
+		{
+			"rooms_shortname": "IONA",
+			"rooms_address": "6000 Iona Drive",
+			"sumSeats": 150
+		},
+		{
+			"rooms_shortname": "MATH",
+			"rooms_address": "1984 Mathematics Road",
+			"sumSeats": 156
+		},
+		{
+			"rooms_shortname": "FRDM",
+			"rooms_address": "2177 Wesbrook Mall V6T 1Z3",
+			"sumSeats": 160
+		},
+		{
+			"rooms_shortname": "SPPH",
+			"rooms_address": "2206 East Mall",
+			"sumSeats": 166
+		},
+		{
+			"rooms_shortname": "PCOH",
+			"rooms_address": "6445 University Boulevard",
+			"sumSeats": 216
+		},
+		{
+			"rooms_shortname": "ALRD",
+			"rooms_address": "1822 East Mall",
+			"sumSeats": 228
+		},
+		{
+			"rooms_shortname": "ORCH",
+			"rooms_address": "6363 Agronomy Road",
+			"sumSeats": 263
+		},
+		{
+			"rooms_shortname": "FSC",
+			"rooms_address": "2424 Main Mall",
+			"sumSeats": 272
+		},
+		{
+			"rooms_shortname": "CEME",
+			"rooms_address": "6250 Applied Science Lane",
+			"sumSeats": 289
+		},
+		{
+			"rooms_shortname": "MCML",
+			"rooms_address": "2357 Main Mall",
+			"sumSeats": 299
+		},
+		{
+			"rooms_shortname": "CHBE",
+			"rooms_address": "2360 East Mall V6T 1Z3",
+			"sumSeats": 354
+		},
+		{
+			"rooms_shortname": "GEOG",
+			"rooms_address": "1984 West Mall",
+			"sumSeats": 394
+		},
+		{
+			"rooms_shortname": "DMP",
+			"rooms_address": "6245 Agronomy Road V6T 1Z4",
+			"sumSeats": 440
+		},
+		{
+			"rooms_shortname": "OSBO",
+			"rooms_address": "6108 Thunderbird Boulevard",
+			"sumSeats": 482
+		},
+		{
+			"rooms_shortname": "MCLD",
+			"rooms_address": "2356 Main Mall",
+			"sumSeats": 503
+		},
+		{
+			"rooms_shortname": "LSK",
+			"rooms_address": "6356 Agricultural Road",
+			"sumSeats": 505
+		},
+		{
+			"rooms_shortname": "HEBB",
+			"rooms_address": "2045 East Mall",
+			"sumSeats": 537
+		},
+		{
+			"rooms_shortname": "IBLC",
+			"rooms_address": "1961 East Mall V6T 1Z1",
+			"sumSeats": 538
+		},
+		{
+			"rooms_shortname": "PHRM",
+			"rooms_address": "2405 Wesbrook Mall",
+			"sumSeats": 538
+		},
+		{
+			"rooms_shortname": "WOOD",
+			"rooms_address": "2194 Health Sciences Mall",
+			"sumSeats": 592
+		},
+		{
+			"rooms_shortname": "SCRF",
+			"rooms_address": "2125 Main Mall",
+			"sumSeats": 724
+		},
+		{
+			"rooms_shortname": "LSC",
+			"rooms_address": "2350 Health Sciences Mall",
+			"sumSeats": 825
+		},
+		{
+			"rooms_shortname": "SRC",
+			"rooms_address": "6000 Student Union Blvd",
+			"sumSeats": 897
+		},
+		{
+			"rooms_shortname": "SWNG",
+			"rooms_address": "2175 West Mall V6T 1Z4",
+			"sumSeats": 1421
+		},
+		{
+			"rooms_shortname": "BUCH",
+			"rooms_address": "1866 Main Mall",
+			"sumSeats": 1473
+		},
+		{
+			"rooms_shortname": "ANGU",
+			"rooms_address": "2053 Main Mall",
+			"sumSeats": 1546
+		}
+	]
+}
