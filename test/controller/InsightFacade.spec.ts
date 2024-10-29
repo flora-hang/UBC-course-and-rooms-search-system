@@ -145,7 +145,7 @@ describe("InsightFacade", function () {
 				expect(result.length).to.equal(1);
 				expect(result[0]).to.equal("rooms");
 			} catch (_err) {
-				console.log(_err);
+				// console.log(_err);
 				expect.fail("Should not have thrown an error.");
 			}
 		});
