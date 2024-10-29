@@ -3,7 +3,7 @@ import Section from "../models/sections/Section";
 import Item from "../models/query/Item";
 import Course from "../models/sections/Course";
 import SectionData from "../models/sections/SectionData";
-
+import Building from "../models/rooms/Building";
 import Room from "../models/rooms/Room";
 import {
 	IInsightFacade,
@@ -14,14 +14,7 @@ import {
 	NotFoundError,
 	ResultTooLargeError,
 } from "./IInsightFacade";
-import {
-	filterItems,
-	sortResults,
-	selectColumns,
-	checkIds,
-	groupItems,
-	applyFunctionItems,
-} from "./PerformQueryHelpers";
+import { filterItems, sortResults, selectColumns, checkIds, groupItems, applyFunctionItems } from "./PerformQueryHelpers";
 import { extractRoomData } from "./addDatasetHelper";
 import * as fsPromises from "fs/promises";
 import fs from "fs-extra";
@@ -29,6 +22,7 @@ import JSZip from "jszip";
 import Query from "../models/query/Query";
 import { Dataset } from "../models/Dataset";
 import RoomsDataset from "../models/rooms/RoomsDataset";
+import { Direction } from "../models/query/Sort";
 
 // import { json } from "stream/consumers";
 
@@ -331,13 +325,13 @@ export default class InsightFacade implements IInsightFacade {
 
 		// Parse OPTIONS block: Extract columns and order field
 		const columns = validQuery.OPTIONS.columns;
-		const orderField = validQuery.OPTIONS.sort?.anyKey
-			? validQuery.OPTIONS.sort?.anyKey
-			: validQuery.OPTIONS.sort?.dir && validQuery.OPTIONS.sort?.keys
-			? { "dir": validQuery.OPTIONS.sort?.dir, "keys": validQuery.OPTIONS.sort?.keys }
-			: null;
+		const orderField = validQuery.OPTIONS.sort?.anyKey ?
+			validQuery.OPTIONS.sort?.anyKey
+			: (validQuery.OPTIONS.sort?.dir && validQuery.OPTIONS.sort?.keys) ?
+				{ "dir": validQuery.OPTIONS.sort?.dir, "keys": validQuery.OPTIONS.sort?.keys }
+				: null;
 
-		if (!validQuery.OPTIONS.sort?.anyKey && !!validQuery.OPTIONS.sort?.dir !== !!validQuery.OPTIONS.sort?.keys) {
+		if (!validQuery.OPTIONS.sort?.anyKey && (!!validQuery.OPTIONS.sort?.dir !== !!validQuery.OPTIONS.sort?.keys)) {
 			throw new InsightError("Order is incorrect");
 		}
 
@@ -361,9 +355,9 @@ export default class InsightFacade implements IInsightFacade {
 		// IF TRANSFORMATION block and SORT given: sort the group items
 		// ELSE IF only SORT given and TRANSFORMATION block not given: sort the filtered items
 		// ELSE: return filtered items
-		const sortedItems = orderField
-			? groups && apply
-				? sortResults(applyItems as Item[], orderField as any, columns)
+		const sortedItems = orderField ?
+			(groups && apply) ?
+				sortResults(applyItems as Item[], orderField as any, columns)
 				: sortResults(filteredItems, orderField as any, columns)
 			: filteredItems;
 
