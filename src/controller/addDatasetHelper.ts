@@ -51,7 +51,7 @@ async function parseBuildingTable(document: any, zip: JSZip): Promise<Building[]
 	const array = await Promise.all(parseThis);
 	await Promise.all(latList);
 	await Promise.all(lonList);
-	
+
 	let i = 0;
 	for (const buildingContent of array) {
 		parseRoomTable(buildings[i], parse5.parse(buildingContent));
