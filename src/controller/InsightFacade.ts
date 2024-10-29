@@ -3,7 +3,8 @@ import Section from "../models/sections/Section";
 import Item from "../models/query/Item";
 import Course from "../models/sections/Course";
 import SectionData from "../models/sections/SectionData";
-
+import Building from "../models/rooms/Building";
+import Room from "../models/rooms/Room";
 import {
 	IInsightFacade,
 	InsightDataset,
@@ -99,7 +100,6 @@ export default class InsightFacade implements IInsightFacade {
 		// return a string array containing the ids of all currently added datasets upon a successful add
 		return Array.from(this.insights.keys());
 	}
-
 
 	private async addSectionsDataset(id: string, content: string): Promise<string[]> {
 		// parse & validate content (async)
@@ -266,58 +266,10 @@ export default class InsightFacade implements IInsightFacade {
 		return coursesFiltered;
 	}
 
-	public async performQuery(query: unknown): Promise<InsightResult[]> {
-		await this.loadInsights();
-
-		// Check if query is an object
-		if (typeof query !== "object" || query === null) {
-			return Promise.reject(new InsightError("Query must be an object"));
-		}
-
-		// Check if query is empty
-		if (Object.keys(query).length === 0) {
-			return Promise.reject(new InsightError("Query is empty"));
-		}
-
-		// Build query object
-		const validQuery = Query.buildQuery(query);
-		// not neccessarily valid
-		// e.g. using a sections key in a rooms dataset
-
-		const id = checkIds(validQuery);
-		if (!this.insights.has(id)) {
-			throw new InsightError("Querying section that has not been added");
-		}
-		let dataset: Dataset;
-
-		// if dataset is not in memory, load it from disk
-		if (!this.datas.has(id)) {
-			dataset = await this.loadDatasetFromDisk(id);
-			this.datas.set(id, dataset);
-		} else {
-			const data = this.datas.get(id);
-			if (!data) {
-				throw new InsightError("Dataset not found");
-			}
-			dataset = data;
-		}
-
-		// do dataset.getKind() and then check that all the keys in query are valid for that kind?
-
-		// if (dataset.getKind() === InsightDatasetKind.Sections) {
-			return await this.queryItemsDataset(validQuery, dataset as SectionsDataset | RoomsDataset);
-		// } else {
-			// query RoomsDataset
-			return await this.queryRoomsDataset(validQuery, dataset as RoomsDataset);
-		}
-	}
-
-	private async queryRoomsDataset(validQuery: Query, dataset: RoomsDataset): Promise<InsightResult[]> {
-		return Promise.reject(new InsightError("Not yet implemented"));
-		// TODO: Implement this method
-	}
-
-	private async querySectionsDataset(validQuery: Query, dataset: SectionsDataset): Promise<InsightResult[]> {
+	private async queryItemsDataset(
+		validQuery: Query,
+		dataset: SectionsDataset | RoomsDataset
+	): Promise<InsightResult[]> {
 		const id = dataset.getId();
 
 		let items: Item[] = null as unknown as Item[];

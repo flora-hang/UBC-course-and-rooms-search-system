@@ -21,7 +21,6 @@ export function filterItems(where: any, items: Item[], id: string): Item[] {
 	}
 	// console.log("been outside of OR");
 	if (where.logic === "OR") {
-<<<<<<< HEAD
 		// console.log("num sections (OR): %d\n", sections.length);
 		// console.log("%s\n", where.filter.filters);
 		// console.log("been in OR");
@@ -33,57 +32,33 @@ export function filterItems(where: any, items: Item[], id: string): Item[] {
 		// console.log("been in NOT");
 		// console.log("num sections (NOT): %d\n", sections.length);
 		return handleNOT(where, items, id);
-=======
-		return handleOR(where.filters, sections, id);
-	}
-	// console.log("been outside of NOT");
-	if (where instanceof Negation) {
-		return handleNOT(where, sections, id);
->>>>>>> origin/main
 	}
 
 	if (where.mComparator === "EQ") {
-<<<<<<< HEAD
 		// console.log("been in EQ");
 		// console.log("num sections (EQ): %d\n", sections.length);
 		return handleEQ(where, items, id);
-=======
-		return handleEQ(where, sections, id);
->>>>>>> origin/main
 	}
 
 	if (where.mComparator === "GT") {
-<<<<<<< HEAD
 		// console.log("been in GT");
 		return handleGT(where, items, id);
-=======
-		return handleGT(where, sections, id);
->>>>>>> origin/main
 	}
 
 	if (where.mComparator === "LT") {
-<<<<<<< HEAD
 		// console.log("been in LT");
 		return handleLT(where, items, id);
-=======
-		return handleLT(where, sections, id);
->>>>>>> origin/main
 	}
 
 	if ("skey" in where) {
-<<<<<<< HEAD
 		// console.log("been in IS");
 		return handleIS(where, items, id);
-=======
-		return handleIS(where, sections, id);
->>>>>>> origin/main
 	}
 
 	// If no valid operator is found, return all sections (shouldn't happen)
 	return items;
 }
 
-<<<<<<< HEAD
 function handleAND(conditions: any[], items: Item[], id: string): Item[] {
 	// console.log("handleAND");
 	let results = items;
@@ -91,29 +66,15 @@ function handleAND(conditions: any[], items: Item[], id: string): Item[] {
 	for (const condition of conditions) {
 		results = filterItems(condition, results, id) as Item[];
 		// console.log("handleAnd: %d\n", results.length);
-=======
-function handleAND(conditions: any[], sections: Section[], id: string): Section[] {
-	let results: Section[] = sections;
-
-	for (const condition of conditions) {
-		results = filterSections(condition, results, id);
->>>>>>> origin/main
 	}
 	// Merge all results (union)
 	return results;
 }
-<<<<<<< HEAD
 function handleOR(conditions: any[], items: Item[], id: string): Item[] {
 	// console.log("handleOR");
 	const results = conditions.map((condition) => filterItems(condition, items, id));
 	const newItems = results.flat();
 	// console.log("newSections: %d\n", newSections.length);
-=======
-function handleOR(conditions: any[], sections: Section[], id: string): Section[] {
-	const results = conditions.map((condition) => filterSections(condition, sections, id));
-	const newSections = results.flat();
-
->>>>>>> origin/main
 	const seen = new Set<any>(); // Set to store unique field values
 
 	const ret = newItems.filter((item) => {
@@ -125,25 +86,13 @@ function handleOR(conditions: any[], sections: Section[], id: string): Section[]
 			return true; // Keep the unique section
 		}
 	});
-<<<<<<< HEAD
-	// console.log("newitems 2: %d\n", ret.length);
-=======
-
->>>>>>> origin/main
 	return ret;
 
 }
 
-<<<<<<< HEAD
 function handleNOT(condition: any, items: Item[], id: string): Item[] {
 	const filteredItems = filterItems(condition.filter, items, id);
 	return items.filter((item) => !filteredItems.includes(item));
-=======
-function handleNOT(condition: any, sections: Section[], id: string): Section[] {
-	const filteredSections = filterSections(condition.filter, sections, id);
-	// Return sections that are NOT in the filtered set
-	return sections.filter((section) => !filteredSections.includes(section));
->>>>>>> origin/main
 }
 
 function handleEQ(condition: any, items: Item[], id: string): any {
@@ -165,17 +114,10 @@ function handleGT(condition: any, items: Item[], id: string): any {
 	if (ID !== id) {
 		throw new InsightError("id does not match");
 	}
-<<<<<<< HEAD
 	// console.log("%d\n", condition.value);
 	const ret = items.filter((item) => item.getField(field) > condition.value);
 	// console.log("%d\n", ret.length);
 	return ret as any;
-=======
-
-	const ret = sections.filter((section) => section.getField(field) > condition.value);
-
-	return ret;
->>>>>>> origin/main
 }
 
 function handleLT(condition: any, items: Item[], id: string): any {
@@ -184,15 +126,9 @@ function handleLT(condition: any, items: Item[], id: string): any {
 	if (ID !== id) {
 		throw new InsightError("id does not match");
 	}
-<<<<<<< HEAD
 	const ret = items.filter((item) => item.getField(field) < condition.value);
 	// console.log("handleLT: %d\n", ret.length);
 	return ret as any;
-=======
-	const ret = sections.filter((section) => section.getField(field) < condition.value);
-
-	return ret;
->>>>>>> origin/main
 }
 
 function handleIS(condition: any, items: Item[], id: string): any {
@@ -226,15 +162,9 @@ function handleIS(condition: any, items: Item[], id: string): any {
 		}
 	}
 
-<<<<<<< HEAD
 	ret = items.filter((item) => item.getField(field) === condition.inputString);
 	// console.log("handleIS: %d\n", ret.length);
 	return ret as any;
-=======
-	ret = sections.filter((section) => section.getField(field) === condition.inputString);
-
-	return ret;
->>>>>>> origin/main
 }
 
 function checkWildcardAgain(str: string): void {
