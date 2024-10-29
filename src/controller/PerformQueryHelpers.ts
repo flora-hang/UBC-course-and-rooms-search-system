@@ -234,7 +234,8 @@ export function sortResults(items: Item[], order: String, columns: String[]): It
 		throw new InsightError("ORDER key must be in COLUMNS");
 	}
 
-	if (typeof order === "string") { // if order is just something like: 'ORDER: ' ANYKEY
+	if (typeof order === "string") {
+		// if order is just something like: 'ORDER: ' ANYKEY
 		const field: string = order.split("_")[1];
 		if (mkeyFlag(field)) {
 			items.sort((a, b) => a.getField(field) - b.getField(field));
