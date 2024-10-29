@@ -1,4 +1,6 @@
-export default class Room {
+import Item from "../query/Item";
+
+export default class Room extends Item {
     private readonly number: string; // The room number, not always a number so represented as a string
     private readonly name: string; // The room id, should be rooms_shortname + "_" + rooms_number
     private readonly seats: number; // The number of seats in the room
@@ -8,6 +10,7 @@ export default class Room {
 
     constructor(building: string, roomNumber: string, numSeats: number,
         roomType: string, roomFurniture: string, link: string) {
+		super();
         this.number = roomNumber;
         this.name = building + "_" + roomNumber;
         this.seats = numSeats;

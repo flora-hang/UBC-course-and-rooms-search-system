@@ -1,4 +1,6 @@
-export default class Section {
+import Item from "../query/Item";
+
+export default class Section extends Item {
 	private readonly uuid: string; // "id" A identifier for the section
 	private readonly id: string; // "Course" The course identifier
 	private readonly title: string; // "Title" The name of the course
@@ -22,6 +24,7 @@ export default class Section {
 		fail: number,
 		audit: number
 	) {
+		super();
 		this.uuid = uuid;
 		this.id = id;
 		this.title = title;

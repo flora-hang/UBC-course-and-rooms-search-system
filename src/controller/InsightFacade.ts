@@ -1,5 +1,6 @@
 import SectionsDataset from "../models/sections/SectionsDataset";
 import Section from "../models/sections/Section";
+import Item from "../models/query/Item";
 import Course from "../models/sections/Course";
 import SectionData from "../models/sections/SectionData";
 import Building from "../models/rooms/Building";
@@ -306,17 +307,20 @@ export default class InsightFacade implements IInsightFacade {
 		// }
 	}
 
-	private async queryItemsDataset(validQuery: Query, dataset: SectionsDataset | RoomsDataset): Promise<InsightResult[]> {
+	private async queryItemsDataset(
+		validQuery: Query,
+		dataset: SectionsDataset | RoomsDataset
+	): Promise<InsightResult[]> {
 		const id = dataset.getId();
 
-		let items: Section[] | Room[] = null as unknown as Section[] | Room[];
+		let items: Item[] = null as unknown as Item[];
 		if (dataset instanceof SectionsDataset) {
 			items = dataset.getSections();
 		} else if (dataset instanceof RoomsDataset) {
 			items = dataset.getRooms();
 		}
 
-		const filteredItems = filterItems(validQuery.WHERE.filter, items, id) as Section[] | Room[];
+		const filteredItems = filterItems(validQuery.WHERE.filter, items, id) as Item[];
 
 		const maxSections = 5000;
 		// - check if filtered sections exceed 5000 sections limit
@@ -326,11 +330,13 @@ export default class InsightFacade implements IInsightFacade {
 
 		// Parse OPTIONS block: Extract columns and order field
 		const columns = validQuery.OPTIONS.columns;
-		const orderField = !validQuery.OPTIONS.sort?.anyKey ?
+		const orderField = validQuery.OPTIONS.sort?.anyKey ?
+			validQuery.OPTIONS.sort?.anyKey
+			: (validQuery.OPTIONS.sort?.dir && validQuery.OPTIONS.sort?.keys) ?
 				{"dir": validQuery.OPTIONS.sort?.dir, "keys": validQuery.OPTIONS.sort?.keys }
-				:validQuery.OPTIONS.sort?.anyKey;
+				: null;
 
-		if (!validQuery.OPTIONS.sort?.dir || !validQuery.OPTIONS.sort?.keys) {
+		if (!validQuery.OPTIONS.sort?.anyKey && (!!validQuery.OPTIONS.sort?.dir !== !!validQuery.OPTIONS.sort?.keys)) {
 			throw new InsightError("Order is incorrect");
 		}
 
@@ -356,7 +362,7 @@ export default class InsightFacade implements IInsightFacade {
 		// ELSE: return filtered items
 		const sortedItems = orderField ?
 			(groups && apply) ?
-				sortResults(applyItems as Section[] | Room[], orderField as any, columns)
+				sortResults(applyItems as Item[], orderField as any, columns)
 				: sortResults(filteredItems, orderField as any, columns)
 			: filteredItems;
 

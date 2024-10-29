@@ -2,10 +2,12 @@ import Negation from "../models/query/Negation";
 import Query from "../models/query/Query";
 import Section from "../models/sections/Section";
 import Room from "../models/rooms/Room";
+import Item from "../models/query/Item";
 import { InsightError, InsightResult } from "./IInsightFacade";
 import ApplyRule, { useApply } from "../models/query/ApplyRule";
+import Sort from "../models/query/Sort";
 
-export function filterItems(where: any, items: Section[] | Room[], id: string): (Section | Room)[] {
+export function filterItems(where: any, items: Item[], id: string): Item[] {
 	// If WHERE block is empty, return all items (no filtering)
 	// !!! get all items in the dataset
 	// console.log("been in filteredItems");
@@ -60,18 +62,18 @@ export function filterItems(where: any, items: Section[] | Room[], id: string): 
 	return items;
 }
 
-function handleAND(conditions: any[], items: Section[] | Room[], id: string): (Section | Room)[] {
+function handleAND(conditions: any[], items: Item[], id: string): Item[] {
 	// console.log("handleAND");
 	let results = items;
 
 	for (const condition of conditions) {
-		results = filterItems(condition, results, id) as Section[] | Room[];
+		results = filterItems(condition, results, id) as Item[];
 		// console.log("handleAnd: %d\n", results.length);
 	}
 	// Merge all results (union)
 	return results;
 }
-function handleOR(conditions: any[], items: Section[] | Room[], id: string): (Section | Room)[] {
+function handleOR(conditions: any[], items: Item[], id: string): Item[] {
 	// console.log("handleOR");
 	const results = conditions.map((condition) => filterItems(condition, items, id));
 	const newItems = results.flat();
@@ -92,14 +94,12 @@ function handleOR(conditions: any[], items: Section[] | Room[], id: string): (Se
 
 }
 
-function handleNOT(condition: any, items: Section[] | Room[], id: string): (Section | Room)[] {
-	// console.log("handleNOT: %s\n", condition);
+function handleNOT(condition: any, items: Item[], id: string): Item[] {
 	const filteredItems = filterItems(condition.filter, items, id);
-	// Return sections that are NOT in the filtered set
-	return items.filter((item) => !filteredItems.includes(item as Section & Room));
+	return items.filter((item) => !filteredItems.includes(item));
 }
 
-function handleEQ(condition: any, items: Section[] | Room[], id: string): (Section | Room)[] {
+function handleEQ(condition: any, items: Item[], id: string): any {
 	// console.log("handleEQ");
 	const field: string = condition.mkey.split("_")[1]; // e.g. "avg"
 	const ID: string = condition.mkey.split("_")[0];
@@ -107,10 +107,10 @@ function handleEQ(condition: any, items: Section[] | Room[], id: string): (Secti
 		throw new InsightError("id does not match");
 	}
 	const ret = items.filter((item) => item.getField(field) === condition.value);
-	return ret;
+	return ret as any;
 }
 
-function handleGT(condition: any, items: Section[] | Room[], id: string): (Section | Room)[] {
+function handleGT(condition: any, items: Item[], id: string): any {
 	const field: string = condition.mkey.split("_")[1]; // e.g. "avg"
 	// console.log("%s\n", field);
 	const ID: string = condition.mkey.split("_")[0];
@@ -121,10 +121,10 @@ function handleGT(condition: any, items: Section[] | Room[], id: string): (Secti
 	// console.log("%d\n", condition.value);
 	const ret = items.filter((item) => item.getField(field) > condition.value);
 	// console.log("%d\n", ret.length);
-	return ret;
+	return ret as any;
 }
 
-function handleLT(condition: any, items: Section[] | Room[], id: string): (Section | Room)[] {
+function handleLT(condition: any, items: Item[], id: string): any {
 	const field: string = condition.mkey.split("_")[1]; // e.g. "avg"
 	const ID: string = condition.mkey.split("_")[0];
 	if (ID !== id) {
@@ -132,10 +132,10 @@ function handleLT(condition: any, items: Section[] | Room[], id: string): (Secti
 	}
 	const ret = items.filter((item) => item.getField(field) < condition.value);
 	// console.log("handleLT: %d\n", ret.length);
-	return ret;
+	return ret as any;
 }
 
-function handleIS(condition: any, items: Section[] | Room[], id: string): (Section | Room)[] {
+function handleIS(condition: any, items: Item[], id: string): any {
 	const field: string = condition.skey.split("_")[1]; // e.g. "avg"
 
 	const ID: string = condition.skey.split("_")[0];
@@ -150,17 +150,17 @@ function handleIS(condition: any, items: Section[] | Room[], id: string): (Secti
 			const str = condition.inputString.substring(1, condition.inputString.length - 1);
 			checkWildcardAgain(str);
 			ret = items.filter((item) => item.getField(field).includes(str));
-			return ret;
+			return ret as any;
 		} else if (condition.inputString.startsWith("*")) {
 			const str = condition.inputString.substring(1, condition.inputString.length);
 			checkWildcardAgain(str);
 			ret = items.filter((item) => item.getField(field).endsWith(str));
-			return ret;
+			return ret as any;
 		} else if (condition.inputString.endsWith("*")) {
 			const str = condition.inputString.substring(0, condition.inputString.length - 1);
 			checkWildcardAgain(str);
 			ret = items.filter((item) => item.getField(field).startsWith(str));
-			return ret;
+			return ret as any;
 		} else {
 			throw new InsightError("invalid use of wildcard");
 		}
@@ -168,7 +168,7 @@ function handleIS(condition: any, items: Section[] | Room[], id: string): (Secti
 
 	ret = items.filter((item) => item.getField(field) === condition.inputString);
 	// console.log("handleIS: %d\n", ret.length);
-	return ret;
+	return ret as any;
 }
 
 function checkWildcardAgain(str: string): void {
@@ -195,8 +195,8 @@ function mkeyFlag(field: string): boolean {
 }
 
 // TODO: this function might cause errors tbh
-export function groupItems(items: Section[] | Room[], groups: String[]): (Section | Room)[][] {
-	const groupedItemsMap: Record<string, (Section | Room)[]> = {};
+export function groupItems(items: Item[], groups: String[]): any {
+	const groupedItemsMap: Record<string, Item[]> = {};
 	items.forEach((item) => {
 		const key = groups.map(group => (
 			(item as any)[group.split("_")[1]])
@@ -216,37 +216,37 @@ export function applyFunctionItems(
 	groupedItems: (Section | Room)[][],
 	applyRules: ApplyRule[]
 ): (Section | Room)[] {
-    if (!groupItems) {
+	if (!groupItems) {
 		throw new InsightError("group key error");
 	}
 
 	const results: any[] = []; // To store the results of the calculations
 
-    for (const group of groupedItems) {
+	for (const group of groupedItems) {
 		const resultItem: any = {}; // To hold the result for the current group
 
-        applyRules.forEach((rule) => {
-            const { applyKey, applyToken, key } = rule;
+		applyRules.forEach((rule) => {
+			const { applyKey, applyToken, key } = rule;
 
-            // Extract values from the group based on the key
-            const values = group.map(item => (item as any)[key]);
+			// Extract values from the group based on the key
+			const values = group.map(item => (item as any)[key]);
 
-            useApply(resultItem, applyKey, applyToken, values)
-        });
+			useApply(resultItem, applyKey, applyToken, values)
+		});
 
-        results.push(resultItem); // Add the result item to results array
+		results.push(resultItem); // Add the result item to results array
 	}
 
-    return results;
+	return results;
 }
 
-export function sortResults(items: Section[] | Room[], order: String, columns: String[]): Section[] | Room[] {
+export function sortResults(items: Item[], order: String, columns: String[]): Item[] {
 	// check if order is in columns, if not throw error
 	if (!columns.includes(order)) {
 		throw new InsightError("ORDER key must be in COLUMNS");
 	}
 
-	if (order instanceof String) { // if order is just something like: 'ORDER: ' ANYKEY
+	if (typeof order === "string") { // if order is just something like: 'ORDER: ' ANYKEY
 		const field: string = order.split("_")[1];
 		if (mkeyFlag(field)) {
 			items.sort((a, b) => a.getField(field) - b.getField(field));
@@ -254,37 +254,37 @@ export function sortResults(items: Section[] | Room[], order: String, columns: S
 			items.sort((a, b) => a.getField(field).localeCompare(b.getField(field)));
 		}
 	} else { // if order is something like: 'ORDER: { dir:'  DIRECTION ', keys: [ ' ANYKEY_LIST '] }'
-		const {dir, keys} = order;
+		const { dir, keys } = order as any;
 
 		if (!Array.isArray(keys)) {
-            throw new InsightError("ORDER keys must be an array");
-        }
+			throw new InsightError("ORDER keys must be an array");
+		}
 		if (dir !== "DOWN" && dir !== "UP") {
 			throw new InsightError("DIR key must be \"UP\" or \"DOWN\"");
 		}
 
 		items.sort((a, b) => {
-            for (const key of keys as string[]) {
-                const {aValue, bValue} = {aValue: a.getField(key), bValue: b.getField(key)};
+			for (const key of keys as string[]) {
+				const { aValue, bValue } = { aValue: a.getField(key), bValue: b.getField(key) };
 
-                let comparison = 0;
+				let comparison = 0;
 
-                if (mkeyFlag(key)) {
-                    comparison = aValue - bValue; // Numeric comparison
-                } else {
-                    comparison = aValue.localeCompare(bValue); // String comparison
-                }
+				if (mkeyFlag(key)) {
+					comparison = aValue - bValue; // Numeric comparison
+				} else {
+					comparison = aValue.localeCompare(bValue); // String comparison
+				}
 
-                // If comparison is not equal, return based on direction
+				// If comparison is not equal, return based on direction
 				return (comparison !== 0) ? (dir === "UP" ? comparison : -comparison) : 0;
-            }
-            return 0; // If all keys are equal
-        });
+			}
+			return 0; // If all keys are equal
+		});
 	}
 	return items;
 }
 
-export function selectColumns(items: Section[] | Room[], columns: string[]): InsightResult[] {
+export function selectColumns(items: Item[], columns: string[]): InsightResult[] {
 	return items.map((item) => {
 		const selected: any = {};
 		columns.forEach((column) => {
