@@ -1,4 +1,5 @@
 import Room from "./Room";
+import { get } from "http";
 
 interface GeoResponse {
     lat?: number;
@@ -56,18 +57,48 @@ export default class Building {
     private async getLatLon(): Promise<number[]> {
         const addressURL = encodeURIComponent(this.address);
         const url = "http://cs310.students.cs.ubc.ca:11316/api/v1/project_team142/" + addressURL;
-        const response = await fetch(url);
-        if (!response.ok) {
-            return Promise.reject("Error: No response when fetch geolocation for building " + this.shortname);
-        }
-        const responseJson: GeoResponse = await response.json();
-        if (responseJson.lat && responseJson.lon) {
-            this.lat = responseJson.lat;
-            this.lon = responseJson.lon;
-            return Promise.resolve([responseJson.lat, responseJson.lon]);
-        } else {
-            return Promise.reject("Error: Could not get latitude and longitude for building " + responseJson.error);
-        }
+        return new Promise((resolve, reject) => {
+            get(url, (response) => {
+                let data = '';
+
+                // A chunk of data has been received.
+                response.on('data', (chunk) => {
+                    data += chunk;
+                });
+
+                // The whole response has been received. Parse the result.
+                response.on('end', () => {
+                    try {
+                        const geoResponse: GeoResponse = JSON.parse(data);
+                        if (geoResponse.error) {
+                            reject(new Error(geoResponse.error));
+                        } else if (geoResponse.lat !== undefined && geoResponse.lon !== undefined) {
+                            resolve([geoResponse.lat, geoResponse.lon]);
+                        } else {
+                            reject(new Error("Invalid response format"));
+                        }
+                    } catch (error) {
+                        reject(error);
+                    }
+                });
+
+            }).on("error", (err) => {
+                reject(err);
+            });
+        });
+
+        // const response = await fetch(url);
+        // if (!response.ok) {
+        //     return Promise.reject("Error: No response when fetch geolocation for building " + this.shortname);
+        // }
+        // const responseJson: GeoResponse = await response.json();
+        // if (responseJson.lat && responseJson.lon) {
+        //     this.lat = responseJson.lat;
+        //     this.lon = responseJson.lon;
+        //     return Promise.resolve([responseJson.lat, responseJson.lon]);
+        // } else {
+            // return Promise.reject("Error: Could not get latitude and longitude for building " );
+        // }
     }
 
     public getFullname(): string {
