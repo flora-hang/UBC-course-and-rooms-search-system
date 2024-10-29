@@ -17,7 +17,7 @@ export async function extractRoomData(zipContent: string, datasetId: string): Pr
 	const dataset = new RoomsDataset(datasetId);
 
 	// Step 1: Parse the index.htm file for building information
-	const indexFile = zip.file("campus/index.htm");
+	const indexFile = zip.file("index.htm");
 	if (!indexFile) {
 		throw new InsightError("index.htm not found in zip file.");
 	}
@@ -82,10 +82,10 @@ function parseBuildingTableRows(rows: any[], zip: JSZip, parseThis: any, buildin
 				}
 			}
 			const two = 2;
-			const path = "campus/" + href.substring(two);
+			const path = href.substring(two);
 			const buildingFile = zip.file(path);
 			if (!buildingFile) {
-				throw new InsightError("Could not find building file in zip file.");
+				throw new InsightError("Could not find building file in zip file: " + path);
 			}
 
 			if (buildingFile) {
