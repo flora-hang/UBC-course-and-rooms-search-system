@@ -480,7 +480,7 @@ describe("InsightFacade", function () {
 			it("[valid/orderUpResolveTies.json] ORDER up resolves ties", checkQuery);
 			it("[valid/groupWithOrderApplykey.json] GROUP with ORDER using APPLY key", checkQuery);
 			it("[valid/groupWithOrderGroup.json] GROUP with ORDER using GROUP key", checkQuery);
-			it.only("[valid/moreGroupAndApply.json] 2 GROUP and 2 APPLY keys", checkQuery);
+			it("[valid/moreGroupAndApply.json] 2 GROUP and 2 APPLY keys", checkQuery);
 		});
 	});
 });

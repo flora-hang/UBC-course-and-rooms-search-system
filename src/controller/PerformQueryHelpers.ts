@@ -284,7 +284,9 @@ export function applyFunctionItems(
 			// Extract values from the group based on the key
 			try {
 				//!!! just try-catch or check if key is valid?
+				// console.log("group: %o", group);
 				const values = group.map((item) => (item as any)[keyOnly]);
+				// console.log("> values: %o", values);
 				useApply(resultItem, applyKey, applyToken, values);
 			} catch (error) {
 				throw new InsightError("Invalid apply key in APPLY");
@@ -294,7 +296,7 @@ export function applyFunctionItems(
 		results.push(resultItem); // Add the result item to results array
 	}
 	console.log("---------------------------------");
-
+	// console.log("> results: %o", results);
 	return results;
 }
 
