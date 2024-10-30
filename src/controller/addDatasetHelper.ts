@@ -127,8 +127,9 @@ async function parseRoomTable(building: Building, document: any): Promise<void> 
 	}
 	// console.log(" --- ", roomTable.length);
 
+	
+
 	const rows = findAllElements(roomTable[0], "tr");
-	const promises = [];
 	for (const row of rows) {
 		const columns = findAllElements(row, "td");
 		if (!columns || columns.length === 0) {
@@ -153,14 +154,13 @@ async function parseRoomTable(building: Building, document: any): Promise<void> 
 				type,
 				furniture,
 				link,
-				promises.push(building.lon),
-				promises.push(building.lat),
+				building.lat,
+				building.lon,
 				building.getAddress()
 			);
 			building.addRoom(room);
 		}
 	}
-	await Promise.all(promises);
 }
 
 // Utility to get the text content of an HTML element

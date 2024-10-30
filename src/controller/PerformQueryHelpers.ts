@@ -11,7 +11,7 @@ import Sort from "../models/query/Sort";
 export function filterItems(where: any, items: Item[], id: string): Item[] {
 	// If WHERE block is empty, return all items (no filtering)
 	// !!! get all items in the dataset
-	// console.log("been in filteredItems");
+	console.log("!!! in filterItems");
 
 	if (where === undefined) {
 		return items;
@@ -56,12 +56,13 @@ export function filterItems(where: any, items: Item[], id: string): Item[] {
 		return handleIS(where, items, id);
 	}
 
+	console.log("---------------------------------");
 	// If no valid operator is found, return all sections (shouldn't happen)
 	return items;
 }
 
 function handleAND(conditions: any[], items: Item[], id: string): Item[] {
-	// console.log("handleAND");
+	console.log("--- handleAND ---");
 	let results = items;
 
 	for (const condition of conditions) {
@@ -69,6 +70,7 @@ function handleAND(conditions: any[], items: Item[], id: string): Item[] {
 		// console.log("handleAnd: %d\n", results.length);
 	}
 	// Merge all results (union)
+	console.log("handleAND: %d\n", results.length);
 	return results;
 }
 function handleOR(conditions: any[], items: Item[], id: string): Item[] {
@@ -107,6 +109,7 @@ function handleEQ(condition: any, items: Item[], id: string): any {
 }
 
 function handleGT(condition: any, items: Item[], id: string): any {
+	console.log("--- handleGT ---");
 	const field: string = condition.mkey.split("_")[1]; // e.g. "avg"
 
 	const ID: string = condition.mkey.split("_")[0];
@@ -115,9 +118,9 @@ function handleGT(condition: any, items: Item[], id: string): any {
 		throw new InsightError("id does not match");
 	}
 	// console.log("%d\n", condition.value);
-	console.log(field);
+	// console.log(field);
 	const ret = items.filter((item) => item.getField(field) > condition.value);
-	// console.log("%d\n", ret.length);
+	console.log("handleGT: %d\n", ret.length);
 	return ret as any;
 }
 
@@ -133,6 +136,7 @@ function handleLT(condition: any, items: Item[], id: string): any {
 }
 
 function handleIS(condition: any, items: Item[], id: string): any {
+	console.log("--- handleIS ---");
 	const field: string = condition.skey.split("_")[1]; // e.g. "avg"
 
 	const ID: string = condition.skey.split("_")[0];
@@ -142,7 +146,9 @@ function handleIS(condition: any, items: Item[], id: string): any {
 	}
 
 	let ret;
-	if (condition.inputString.includes("*")) {
+	if (condition.inputString === "*") {
+		return items;
+	} else if (condition.inputString.includes("*")) {
 		if (condition.inputString.startsWith("*") && condition.inputString.endsWith("*")) {
 			const str = condition.inputString.substring(1, condition.inputString.length - 1);
 			checkWildcardAgain(str);
@@ -167,13 +173,17 @@ function handleIS(condition: any, items: Item[], id: string): any {
 	}
 
 	ret = items.filter((item) => item.getField(field) === condition.inputString);
-	// console.log("handleIS: %d\n", ret.length);
+	console.log("handleIS: %d\n", ret.length);
 	return ret as any;
 }
 
 function checkWildcardAgain(str: string): void {
-	if (str.includes("*")) {
-		throw new InsightError("* in the middle");
+	// if (str.includes("*")) {
+	// 	throw new InsightError("* in the middle");
+	// }
+	const two = 2;
+	if (str.length > two && str.slice(1, -1).includes("*")) {
+		throw new InsightError("invalid inputString with * in the middle");
 	}
 }
 
@@ -204,6 +214,7 @@ function mkeyFlag(field: string): boolean {
 export function groupItems(items: Item[], groups: String[], id: string): any {
 	console.log("!!! in groupItems"); // items = filteredItems
 	// console.log("> groups: %o", groups);
+	// console.log("> items: %o", items);
 	const groupedItemsMap: Record<string, Item[]> = {}; // Item[] = groupedItems
 
 	items.forEach((item) => {
@@ -274,7 +285,9 @@ export function applyFunctionItems(
 			// Extract values from the group based on the key
 			try {
 				//!!! just try-catch or check if key is valid?
+				// console.log("group: %o", group);
 				const values = group.map((item) => (item as any)[keyOnly]);
+				// console.log("> values: %o", values);
 				useApply(resultItem, applyKey, applyToken, values);
 			} catch (error) {
 				throw new InsightError("Invalid apply key in APPLY");
@@ -284,7 +297,7 @@ export function applyFunctionItems(
 		results.push(resultItem); // Add the result item to results array
 	}
 	console.log("---------------------------------");
-
+	// console.log("> results: %o", results);
 	return results;
 }
 
@@ -337,8 +350,9 @@ export function columnsIncludesAllKeys(columns: String[], keys: String[]): boole
 
 export function sortResults(items: Item[], sort: Sort, columns: String[]): Item[] {
 	// check if order is in columns, if not throw error
-	console.log("!!! order: %o", sort);
-	console.log("!!! columns: %o", columns);
+	console.log("!!! in sortResults");
+	// console.log("!!! order: %o", sort);
+	// console.log("!!! columns: %o", columns);
 	// if ((sort.anyKey && !columns.includes(sort.anyKey))) {
 	// 	throw new InsightError("ORDER key must be in COLUMNS");
 	// } else if (!columnsIncludesAllKeys(columns, sort.keys as string[])){
@@ -348,7 +362,7 @@ export function sortResults(items: Item[], sort: Sort, columns: String[]): Item[
 	if (sort.anyKey) {
 		order = sort.anyKey;
 	} else {
-		order = { dir: sort?.dir, keys: sort?.keys };
+		order = { dir: sort?.dir ?? "UP", keys: sort?.keys ?? [] };
 	}
 	if (typeof order === "string") {
 		if (!columns.includes(order)) {
@@ -378,19 +392,25 @@ export function sortResults(items: Item[], sort: Sort, columns: String[]): Item[
 		}
 
 		items.sort((a, b) => {
+			// console.log("!!! a: %o, b: %o", a, b);
 			for (const key of keys as string[]) {
-				const { aValue, bValue } = { aValue: a.getField(key), bValue: b.getField(key) };
-
+				const keyOnly = key.split("_")[1];
+				// console.log("!!! key: %o", keyOnly);
+				const { aValue, bValue } = { aValue: a.getField(keyOnly), bValue: b.getField(keyOnly) };
+				// console.log("!!! aValue: %o, bValue: %o", aValue, bValue);
 				let comparison = 0;
 
-				if (mkeyFlag(key)) {
+				if (mkeyFlag(keyOnly)) {
 					comparison = aValue - bValue; // Numeric comparison
 				} else {
 					comparison = aValue.localeCompare(bValue); // String comparison
 				}
 
 				// If comparison is not equal, return based on direction
-				return comparison !== 0 ? (dir === "UP" ? comparison : -comparison) : 0;
+				if (comparison !== 0) {
+					return dir === "UP" ? comparison : -comparison;
+				}
+				// return comparison !== 0 ? (dir === "UP" ? comparison : -comparison) : 0;
 			}
 			return 0; // If all keys are equal
 		});
@@ -404,31 +424,52 @@ export function sortResultsGroup(
 	columns: String[]
 ): Record<string, any>[][] {
 	// check if order is in columns, if not throw error
-	console.log("!!! in sortResults");
-	// console.log("!!! order: %o", sort);
+	console.log("!!! in sortResultsGroup");
+	console.log("> sort: %o", sort);
 	// console.log("!!! columns: %o", columns);
-	if ((sort.anyKey && !columns.includes(sort.anyKey)) || !columnsIncludesAllKeys(columns, sort.keys as string[])) {
-		throw new InsightError("ORDER key must be in COLUMNS");
-	}
-	let order;
+	// if ((sort.anyKey && !columns.includes(sort.anyKey)) || !columnsIncludesAllKeys(columns, sort.keys as string[])) {
+	// 	throw new InsightError("ORDER key must be in COLUMNS");
+	// }
+	let order: string | { dir: string; keys: string[] };
 	if (sort.anyKey) {
 		order = sort.anyKey;
 	} else {
-		order = { dir: sort?.dir, keys: sort?.keys };
+		order = { dir: sort?.dir ?? "UP", keys: sort?.keys ?? [] };
 	}
 	if (typeof order === "string") {
-		if (Array.isArray(groupAndApply) && groupAndApply.every((item) => item instanceof Item)) {
-			// if order is just something like: 'ORDER: ' ANYKEY
+		// couud be "abc_avg" or "maxSeats"
+		if (!columns.includes(order)) {
+			throw new InsightError("ORDER key must be in COLUMNS");
+		}
+		// if order is just something like: 'ORDER: ' ANYKEY
+		if (order.includes("_")) {
 			const field: string = order.split("_")[1];
+			// console.log("!!! field: %o", field);
 			if (mkeyFlag(field)) {
 				groupAndApply.sort((a: any, b: any) => a.getField(field) - b.getField(field));
 			} else {
-				groupAndApply.sort((a: any, b: any) => a.getField(field).localeCompare(b.getField(field)));
+				groupAndApply.sort((a: any, b: any) => {
+					// console.log("Comparing:", a, b);
+					const aValue = a.find((obj: any) => obj.hasOwnProperty("rooms_shortname")).rooms_shortname;
+					const bValue = b.find((obj: any) => obj.hasOwnProperty("rooms_shortname")).rooms_shortname;
+					// console.log("aValue:", aValue);
+					// console.log("bValue:", bValue);
+					return aValue.localeCompare(bValue);
+				});
 			}
 		} else {
-			//!!! for transformations
+			const key: string = order;
+			groupAndApply.sort((a: any, b: any) => {
+				// console.log("Comparing:", a, b);
+				// console.log("Order key:", order);
+				return a[a.length - 1][key] - b[b.length - 1][key];
+			});
 		}
 	} else {
+		order as { dir: string; keys: string[] };
+		if (!columnsIncludesAllKeys(columns, sort.keys as string[])) {
+			throw new InsightError("ORDER keys must be in COLUMNS");
+		}
 		// if order is something like: 'ORDER: { dir:'  DIRECTION ', keys: [ ' ANYKEY_LIST '] }'
 		const { dir, keys } = order as any;
 

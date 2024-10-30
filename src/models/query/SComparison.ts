@@ -59,9 +59,11 @@ export default class SComparison implements IFilter {
 			throw new InsightError("inputString must be a string");
 		}
 
-		if (inputString.slice(1, -1).includes("*")) {
+		const two = 2;
+		if (inputString.length > two && inputString.slice(1, -1).includes("*")) {
 			throw new InsightError("invalid inputString with * in the middle");
 		}
+		
 
 		return new SComparison(skey, inputString);
 	}

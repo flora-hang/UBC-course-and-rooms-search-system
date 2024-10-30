@@ -472,6 +472,15 @@ describe("InsightFacade", function () {
 			//!!! check that each item.getField() throws InsightError?
 			it("[invalid/roomsUsingSectionsKey.json] rooms query using sections key", checkQuery);
 			it("[invalid/diffDatasetIdInApply.json] different dataset id in APPLY", checkQuery);
+			it("[valid/applyNotInColumns.json] APPLY key not in COLUMNS", checkQuery);
+			it("[valid/twoApply.json] two APPLY keys", checkQuery);
+			it("[valid/twoOrderKeys.json] two ORDER keys", checkQuery); //shouldnt fail because of unique order
+			it("[valid/twoOrderResolveTies.json] two ORDER keys that resolve ties", checkQuery);
+			it("[valid/orderDownResolveTies.json] ORDER down resolves ties", checkQuery);
+			it("[valid/orderUpResolveTies.json] ORDER up resolves ties", checkQuery);
+			it("[valid/groupWithOrderApplykey.json] GROUP with ORDER using APPLY key", checkQuery);
+			it("[valid/groupWithOrderGroup.json] GROUP with ORDER using GROUP key", checkQuery);
+			it("[valid/moreGroupAndApply.json] 2 GROUP and 2 APPLY keys", checkQuery);
 		});
 	});
 });
