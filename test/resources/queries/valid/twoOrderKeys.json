@@ -1,0 +1,68 @@
+{
+	"title": "twoOrderKeys",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"IS": {
+						"rooms_furniture": "*Tables*"
+					}
+				},
+				{
+					"GT": {
+						"rooms_seats": 300
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_shortname",
+				"maxSeats",
+				"count"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"count",
+					"maxSeats"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_shortname"
+			],
+			"APPLY": [
+				{
+					"maxSeats": {
+						"MAX": "rooms_seats"
+					}
+				},
+				{
+					"count": {
+						"COUNT": "rooms_name"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_shortname": "LSC",
+			"maxSeats": 350,
+			"count": 2
+		},
+		{
+			"rooms_shortname": "OSBO",
+			"maxSeats": 442,
+			"count": 1
+		},
+		{
+			"rooms_shortname": "HEBB",
+			"maxSeats": 375,
+			"count": 1
+		}
+	]
+}

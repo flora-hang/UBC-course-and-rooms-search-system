@@ -321,7 +321,7 @@ describe("InsightFacade", function () {
 		});
 	});
 
-	describe("PerformQuery", function () {
+	describe.only("PerformQuery", function () {
 		/**
 		 * Loads the TestQuery specified in the test name and asserts the behaviour of performQuery.
 		 *
@@ -462,15 +462,25 @@ describe("InsightFacade", function () {
 			it("[valid/roomsQueryExample.json] rooms query example from spec", checkQuery);
 			it("[invalid/invalidKeyTypeInApply.json] invalid key type in APPLY", checkQuery);
 			it("[valid/nonNumericKeyForCount.json] non-numeric key for COUNT", checkQuery);
-			it("[invalid/duplicateApplyKey.json] duplicate APPLY key", checkQuery);
+			it("[invalid/duplicateApplyKey.json] duplicate APPLY key", checkQuery); //
 			it("[valid/validCount.json] valid query using COUNT", checkQuery);
 			it("[invalid/columnKeyNotInGroup.json] column key not in GROUP", checkQuery);
 			it("[invalid/columnKeyNotInApply.json] column key not in APPLY", checkQuery);
 			it("[invalid/sortKeyNotInColumns.json] sort key not in COLUMNS", checkQuery);
 			it("[valid/useLatLonSumQuery.json] valid query that uses lat, lon, and SUM", checkQuery);
 			it("[invalid/sectionsUsingRoomsKey.json] sections query using rooms key", checkQuery);
+			//!!! check that each item.getField() throws InsightError?
 			it("[invalid/roomsUsingSectionsKey.json] rooms query using sections key", checkQuery);
 			it("[invalid/diffDatasetIdInApply.json] different dataset id in APPLY", checkQuery);
+			it("[valid/applyNotInColumns.json] APPLY key not in COLUMNS", checkQuery);
+			it("[valid/twoApply.json] two APPLY keys", checkQuery);
+			it("[valid/twoOrderKeys.json] two ORDER keys", checkQuery); //shouldnt fail because of unique order
+			it("[valid/twoOrderResolveTies.json] two ORDER keys that resolve ties", checkQuery);
+			it("[valid/orderDownResolveTies.json] ORDER down resolves ties", checkQuery);
+			it("[valid/orderUpResolveTies.json] ORDER up resolves ties", checkQuery);
+			it("[valid/groupWithOrderApplykey.json] GROUP with ORDER using APPLY key", checkQuery);
+			it("[valid/groupWithOrderGroup.json] GROUP with ORDER using GROUP key", checkQuery);
+			it("[valid/moreGroupAndApply.json] 2 GROUP and 2 APPLY keys", checkQuery);
 		});
 	});
 });

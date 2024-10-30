@@ -37,7 +37,7 @@ async function parseBuildingTable(document: any, zip: JSZip): Promise<Building[]
 	const buildings: Building[] = [];
 	const parseThis: any = [];
 	const latList: any = [];
-	const lonList: any = [];
+
 	const buildingTable = findAllElements(document, "table");
 	if (!buildingTable) {
 		throw new InsightError("Error: Could not find building table in index.htm.");
@@ -46,28 +46,22 @@ async function parseBuildingTable(document: any, zip: JSZip): Promise<Building[]
 
 	// Traverse rows in the building table
 	const rows = findAllElements(buildingTableBody[0], "tr");
-	parseBuildingTableRows(rows, zip, parseThis, buildings, latList, lonList);
+	parseBuildingTableRows(rows, zip, parseThis, buildings, latList);
 
 	const array = await Promise.all(parseThis);
-	await Promise.all(latList);
-	await Promise.all(lonList);
-
+	await Promise.allSettled(latList);
+	buildings.filter((building) => building.lat !== -1 && building.lon !== -1);
 	let i = 0;
+	const promises = [];
 	for (const buildingContent of array) {
-		parseRoomTable(buildings[i], parse5.parse(buildingContent));
+		promises.push(parseRoomTable(buildings[i], parse5.parse(buildingContent)));
 		i++;
 	}
+	await Promise.all(promises);
 	return buildings;
 }
 
-function parseBuildingTableRows(
-	rows: any[],
-	zip: JSZip,
-	parseThis: any,
-	buildings: Building[],
-	LatList: any,
-	LonList: any
-): void {
+function parseBuildingTableRows(rows: any[], zip: JSZip, parseThis: any, buildings: Building[], LatList: any): void {
 	for (const row of rows) {
 		const columns = findAllElements(row, "td");
 		if (!columns || columns.length === 0) {
@@ -78,7 +72,7 @@ function parseBuildingTableRows(
 		// const titleCell = findElementWithClass(columns, "views-field-title");
 		const addressCell = findElementWithClass(columns, "views-field-field-building-address");
 		const link = findLinkElement(findElementWithClass(columns, "views-field-title"));
-		individualRows(codeCell, addressCell, link, zip, LatList, LonList, buildings, parseThis);
+		individualRows(codeCell, addressCell, link, zip, LatList, buildings, parseThis);
 	}
 }
 function individualRows(
@@ -87,7 +81,6 @@ function individualRows(
 	link: any,
 	zip: JSZip,
 	LatList: any,
-	LonList: any,
 	buildings: any,
 	parseThis: any
 ): void {
@@ -112,15 +105,15 @@ function individualRows(
 		}
 
 		if (buildingFile) {
-			LatList.push(building.getLat());
-			LonList.push(building.getLon());
+			LatList.push(building.getLatLon());
+
 			parseThis.push(buildingFile.async("text"));
 			buildings.push(building);
 		}
 	}
 }
 // Helper function to parse the room table for a given building.
-function parseRoomTable(building: Building, document: any): void {
+async function parseRoomTable(building: Building, document: any): Promise<void> {
 	const roomTable = findAllElements(document, "tbody");
 	// console.log(" > ", building.getShortname(), ": ", roomTable.length);
 	if (!roomTable || roomTable.length === 0) {
@@ -129,7 +122,6 @@ function parseRoomTable(building: Building, document: any): void {
 	// console.log(" --- ", roomTable.length);
 
 	const rows = findAllElements(roomTable[0], "tr");
-	// console.log(" ---------------------- ");
 	for (const row of rows) {
 		const columns = findAllElements(row, "td");
 		if (!columns || columns.length === 0) {
@@ -146,7 +138,18 @@ function parseRoomTable(building: Building, document: any): void {
 		// console.log(" > ", roomNumber, " | ", seats, " | ", type, " | ", furniture, " | ", link);
 
 		if (roomNumber) {
-			const room = new Room(building.getShortname(), roomNumber, seats, type, furniture, link);
+			const room = new Room(
+				building.getFullname(),
+				building.getShortname(),
+				roomNumber,
+				seats,
+				type,
+				furniture,
+				link,
+				building.lat,
+				building.lon,
+				building.getAddress()
+			);
 			building.addRoom(room);
 		}
 	}
