@@ -321,7 +321,7 @@ describe("InsightFacade", function () {
 		});
 	});
 
-	describe("PerformQuery", function () {
+	describe.only("PerformQuery", function () {
 		/**
 		 * Loads the TestQuery specified in the test name and asserts the behaviour of performQuery.
 		 *
@@ -457,9 +457,9 @@ describe("InsightFacade", function () {
 		it("[valid/negativeNumberFilter.json] negative number in WHERE under LT", checkQuery);
 		it("[valid/zeroCharacterFilter.json] zero character in string under IS filter", checkQuery);
 
-		describe.only("C2: tests for new query functionality", function () {
+		describe("C2: tests for new query functionality", function () {
 			it("[valid/simpleQueryTransformations.json] simple query transformations", checkQuery);
-			it.only("[valid/roomsQueryExample.json] rooms query example from spec", checkQuery);
+			it("[valid/roomsQueryExample.json] rooms query example from spec", checkQuery);
 			it("[invalid/invalidKeyTypeInApply.json] invalid key type in APPLY", checkQuery);
 			it("[valid/nonNumericKeyForCount.json] non-numeric key for COUNT", checkQuery);
 			it("[invalid/duplicateApplyKey.json] duplicate APPLY key", checkQuery); //
@@ -469,6 +469,7 @@ describe("InsightFacade", function () {
 			it("[invalid/sortKeyNotInColumns.json] sort key not in COLUMNS", checkQuery);
 			it("[valid/useLatLonSumQuery.json] valid query that uses lat, lon, and SUM", checkQuery);
 			it("[invalid/sectionsUsingRoomsKey.json] sections query using rooms key", checkQuery);
+			//!!! check that each item.getField() throws InsightError?
 			it("[invalid/roomsUsingSectionsKey.json] rooms query using sections key", checkQuery);
 			it("[invalid/diffDatasetIdInApply.json] different dataset id in APPLY", checkQuery);
 		});
