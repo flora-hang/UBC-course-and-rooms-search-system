@@ -24,6 +24,7 @@ module.exports = {
 				"descriptive/max-lines-per-function": "off",
 				// describe/it have 3 additional callbacks (if they want to have two nested describes)
 				"descriptive/max-nested-callbacks": ["error", 3 + 2],
+				"descriptive/dot-notation": 0,
 			},
 		},
 	],

@@ -3,7 +3,7 @@ import Section from "../models/sections/Section";
 import Item from "../models/query/Item";
 import Course from "../models/sections/Course";
 import SectionData from "../models/sections/SectionData";
-import Building from "../models/rooms/Building";
+
 import Room from "../models/rooms/Room";
 import {
 	IInsightFacade,
@@ -14,7 +14,14 @@ import {
 	NotFoundError,
 	ResultTooLargeError,
 } from "./IInsightFacade";
-import { filterItems, sortResults, selectColumns, checkIds, groupItems, applyFunctionItems } from "./PerformQueryHelpers";
+import {
+	filterItems,
+	sortResults,
+	selectColumns,
+	checkIds,
+	groupItems,
+	applyFunctionItems,
+} from "./PerformQueryHelpers";
 import { extractRoomData } from "./addDatasetHelper";
 import * as fsPromises from "fs/promises";
 import fs from "fs-extra";
@@ -367,9 +374,9 @@ export default class InsightFacade implements IInsightFacade {
 		// IF TRANSFORMATION block and SORT given: sort the group items
 		// ELSE IF only SORT given and TRANSFORMATION block not given: sort the filtered items
 		// ELSE: return filtered items
-		const sortedItems = orderField ?
-			(groups && apply) ?
-				sortResults(applyItems as Item[], orderField as any, columns)
+		const sortedItems = orderField
+			? groups && apply
+				? sortResults(applyItems as Item[], orderField as any, columns)
 				: sortResults(filteredItems, orderField as any, columns)
 			: filteredItems;
 
