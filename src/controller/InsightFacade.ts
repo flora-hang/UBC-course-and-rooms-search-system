@@ -398,9 +398,9 @@ export default class InsightFacade implements IInsightFacade {
 			if (orderField) {
 				const sortedItems = sortResultsGroup(groupAndApply, orderField, columns);
 				console.log("> sorted items:", sortedItems?.length);
-				finalResults = returnResults(sortedItems);
+				finalResults = returnResults(sortedItems, columns);
 			} else {
-				finalResults = returnResults(groupAndApply);
+				finalResults = returnResults(groupAndApply, columns);
 			}
 		} else {
 			// sort without group and apply
@@ -434,11 +434,11 @@ export default class InsightFacade implements IInsightFacade {
 		if (finalResults.length > maxSections) {
 			throw new ResultTooLargeError("results exceed size of 5000, size is: " + finalResults.length);
 		}
-		console.log("> final results[0]:", finalResults);
-		// console.log("> final results[1]:", finalResults[1]);
-		// console.log("> final results[2]:", finalResults[2]);
-		// console.log("> final results[3]:", finalResults[3]);
-		// console.log("> final results[4]:", finalResults[4]);
+		console.log("> final results[0]:", finalResults[0]);
+		console.log("> final results[1]:", finalResults[1]);
+		console.log("> final results[2]:", finalResults[2]);
+		console.log("> final results[3]:", finalResults[3]);
+		console.log("> final results[4]:", finalResults[4]);
 		return finalResults;
 	}
 }

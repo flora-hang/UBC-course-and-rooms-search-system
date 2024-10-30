@@ -467,7 +467,7 @@ describe("InsightFacade", function () {
 			it("[invalid/columnKeyNotInGroup.json] column key not in GROUP", checkQuery);
 			it("[invalid/columnKeyNotInApply.json] column key not in APPLY", checkQuery);
 			it("[invalid/sortKeyNotInColumns.json] sort key not in COLUMNS", checkQuery);
-			it.only("[valid/useLatLonSumQuery.json] valid query that uses lat, lon, and SUM", checkQuery);
+			it("[valid/useLatLonSumQuery.json] valid query that uses lat, lon, and SUM", checkQuery);
 			it("[invalid/sectionsUsingRoomsKey.json] sections query using rooms key", checkQuery);
 			//!!! check that each item.getField() throws InsightError?
 			it("[invalid/roomsUsingSectionsKey.json] rooms query using sections key", checkQuery);

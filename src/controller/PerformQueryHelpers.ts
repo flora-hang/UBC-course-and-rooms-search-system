@@ -508,13 +508,20 @@ export function sortResultsGroup(
 	return groupAndApply;
 }
 
-export function returnResults(sortedItems: Record<string, any>[][]): InsightResult[] {
+export function returnResults(sortedItems: Record<string, any>[][], columns: string[]): InsightResult[] {
 	console.log("!!! in returnResults");
 	return sortedItems.map((item) => {
 		const result: any = {};
+		// item.forEach((field) => {
+		// 	Object.assign(result, field);
+		// });
 		item.forEach((field) => {
-			Object.assign(result, field);
-		});
+            Object.keys(field).forEach((key) => {
+                if (columns.includes(key)) {
+                    result[key] = field[key];
+                }
+            });
+        });
 		return result;
 	});
 }
