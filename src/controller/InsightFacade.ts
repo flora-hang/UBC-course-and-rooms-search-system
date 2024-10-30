@@ -306,13 +306,8 @@ export default class InsightFacade implements IInsightFacade {
 			}
 			dataset = data;
 		}
-
-		// if (dataset.getKind() === InsightDatasetKind.Sections) {
+		console.log("> before calling this.queryItemsDataset");
 		return await this.queryItemsDataset(validQuery, dataset as SectionsDataset | RoomsDataset);
-		// } else {
-		// query RoomsDataset
-		// return await this.queryRoomsDataset(validQuery, dataset as RoomsDataset);
-		// }
 	}
 
 	private async queryItemsDataset(
@@ -329,15 +324,16 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		console.log("!!! START OF FILTER ITEMS FUNC");
 		const filteredItems = filterItems(validQuery.WHERE.filter, items, id) as Item[];
-
+		console.log("> filtered items", filteredItems);
 		console.log("!!! START OF OIPTIONS BLOCK PARSE");
 		// Parse OPTIONS block: Extract columns and order field
 		const columns = validQuery.OPTIONS.columns;
-		const orderField = validQuery.OPTIONS.sort?.anyKey
-			? validQuery.OPTIONS.sort?.anyKey
-			: validQuery.OPTIONS.sort?.dir && validQuery.OPTIONS.sort?.keys
-			? { dir: validQuery.OPTIONS.sort?.dir, keys: validQuery.OPTIONS.sort?.keys }
-			: null;
+		// const orderField = validQuery.OPTIONS.sort?.anyKey
+		// 	? validQuery.OPTIONS.sort?.anyKey
+		// 	: validQuery.OPTIONS.sort?.dir && validQuery.OPTIONS.sort?.keys
+		// 	? { dir: validQuery.OPTIONS.sort?.dir, keys: validQuery.OPTIONS.sort?.keys }
+		// 	: null;
+		const orderField = validQuery.OPTIONS.sort;
 		console.log("!!! END OF OPTIONS BLOCK PARSE");
 		if (!validQuery.OPTIONS.sort?.anyKey && !!validQuery.OPTIONS.sort?.dir !== !!validQuery.OPTIONS.sort?.keys) {
 			throw new InsightError("Order is incorrect");
@@ -347,15 +343,16 @@ export default class InsightFacade implements IInsightFacade {
 		const groups = validQuery.TRANSFORMATIONS?.group;
 		const apply = validQuery.TRANSFORMATIONS?.apply;
 
-		const seen = new Set<ApplyRule>(); // seen apply keys
+		const seen = new Set<string>(); // seen apply keys
 		apply?.forEach((applyRule) => {
-			console.log(seen);
-			console.log("b", applyRule);
-			if (seen.has(applyRule)) {
+			// console.log(seen);
+			// console.log("b", applyRule.applyKey);
+			if (seen.has(applyRule.applyKey)) {
 				throw new InsightError("APPLY contains duplicate key");
 			}
-			seen.add(applyRule);
+			seen.add(applyRule.applyKey);
 		});
+		console.log("> checked for unique apply keys");
 
 		// group the items together
 		if (validQuery.TRANSFORMATIONS && !groups) {
@@ -363,29 +360,35 @@ export default class InsightFacade implements IInsightFacade {
 		} else if (validQuery.TRANSFORMATIONS && !apply) {
 			throw new InsightError("Transformations must have an APPLY block");
 		}
+		console.log("> checked for group and apply blocks");
 
 		// group the filtered results into specific groups
 		const groupedItems = groups ? groupItems(filteredItems, groups) : null;
+		console.log("> grouped items, size: ", groupedItems?.length);
 		// apply specified APPLYTOKENs if given
 		const applyItems = apply ? applyFunctionItems(groupedItems as (Section | Room)[][], apply) : null;
+		console.log("> grouped and applied items, size: ", applyItems?.length);
 
 		// TODO: add new sort functionality
 		// IF TRANSFORMATION block and SORT given: sort the group items
 		// ELSE IF only SORT given and TRANSFORMATION block not given: sort the filtered items
 		// ELSE: return filtered items
-		const sortedItems = orderField
-			? groups && apply
-				? sortResults(applyItems as Item[], orderField as any, columns)
-				: sortResults(filteredItems, orderField as any, columns)
-			: filteredItems;
+		let finalResults: InsightResult[] = [];
+		if (applyItems) {
+			const sortedItems = orderField
+				? groups && apply
+					? sortResults(applyItems as Item[], orderField as any, columns)
+					: sortResults(applyItems, orderField as any, columns)
+				: applyItems;
 
-		// // Select the required columns
-		const finalResults: InsightResult[] = selectColumns(sortedItems, columns);
-
+			console.log("> sorted items, size: ", sortedItems?.length);
+			// // Select the required columns
+			finalResults = selectColumns(sortedItems, columns);
+		}
 		const maxSections = 5000;
 		// - check if filtered sections exceed 5000 sections limit
 		if (finalResults.length > maxSections) {
-			throw new ResultTooLargeError("results exceed size of 5000");
+			throw new ResultTooLargeError("results exceed size of 5000, size is: " + finalResults.length);
 		}
 
 		return finalResults;

@@ -5,6 +5,7 @@ import Room from "../models/rooms/Room";
 import Item from "../models/query/Item";
 import { InsightError, InsightResult } from "./IInsightFacade";
 import ApplyRule, { useApply } from "../models/query/ApplyRule";
+import Sort from "../models/query/Sort";
 
 export function filterItems(where: any, items: Item[], id: string): Item[] {
 	// If WHERE block is empty, return all items (no filtering)
@@ -194,50 +195,76 @@ function mkeyFlag(field: string): boolean {
 
 // TODO: this function might cause errors tbh
 export function groupItems(items: Item[], groups: String[]): any {
-	const groupedItemsMap: Record<string, Item[]> = {};
+	console.log("!!! in groupItems"); // items = filteredItems
+	console.log("> groups: %o", groups);
+	const groupedItemsMap: Record<string, Item[]> = {}; // Item[] = groupedItems
 	items.forEach((item) => {
 		const key = groups.map((group) => (item as any)[group.split("_")[1]]).join("_");
+		console.log("!!! key: %o", key);
 		if (!groupedItemsMap[key]) {
 			groupedItemsMap[key] = [item];
 		} else {
 			groupedItemsMap[key].push(item);
 		}
 	});
-
+	console.log("---------------------------------");
 	return Object.values(groupedItemsMap);
 }
 
 export function applyFunctionItems(groupedItems: (Section | Room)[][], applyRules: ApplyRule[]): (Section | Room)[] {
+	console.log("!!! in applyFunctionItems");
 	if (!groupItems) {
 		throw new InsightError("group key error");
 	}
 
 	const results: any[] = []; // To store the results of the calculations
 
+	console.log("> before for loop, groupedItems: %o", groupedItems.length);
+	console.log("> applyRules: %o", applyRules);
 	for (const group of groupedItems) {
+		// console.log("!!! group: %o", group);
 		const resultItem: any = {}; // To hold the result for the current group
 
 		applyRules.forEach((rule) => {
 			const { applyKey, applyToken, key } = rule;
-
+			const keyOnly = key.split("_")[1];
+			// console.log("!!! key: %o", keyOnly);
 			// Extract values from the group based on the key
-			const values = group.map((item) => (item as any)[key]);
+			const values = group.map((item) => (item as any)[keyOnly]);
+			// console.log("!!! values: %o", values);
 
 			useApply(resultItem, applyKey, applyToken, values);
 		});
-
+		// console.log("!!! resultItem: %o", resultItem);
 		results.push(resultItem); // Add the result item to results array
 	}
+	console.log("> after for loop");
 
 	return results;
 }
 
-export function sortResults(items: Item[], order: String, columns: String[]): Item[] {
+export function columnsIncludesAllKeys(columns: String[], keys: String[]): boolean {
+	for (const key of keys) {
+		if (!columns.includes(key)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+export function sortResults(items: Item[], sort: Sort, columns: String[]): Item[] {
 	// check if order is in columns, if not throw error
-	if (!columns.includes(order)) {
+	console.log("!!! order: %o", sort);
+	console.log("!!! columns: %o", columns);
+	if ((sort.anyKey && !columns.includes(sort.anyKey)) || !columnsIncludesAllKeys(columns, sort.keys as string[])) {
 		throw new InsightError("ORDER key must be in COLUMNS");
 	}
-
+	let order;
+	if (sort.anyKey) {
+		order = sort.anyKey;
+	} else {
+		order = { dir: sort?.dir, keys: sort?.keys };
+	}
 	if (typeof order === "string") {
 		// if order is just something like: 'ORDER: ' ANYKEY
 		const field: string = order.split("_")[1];
