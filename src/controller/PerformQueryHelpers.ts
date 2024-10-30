@@ -231,7 +231,7 @@ export function groupItems(items: Item[], groups: String[], id: string): any {
 				try {
 					const value = item.getField(property);
 					return value;
-				} catch (error) {
+				} catch (_error) {
 					throw new InsightError("Invalid key in GROUP");
 				}
 			})
@@ -288,7 +288,7 @@ export function applyFunctionItems(
 				const values = grp.map((item) => (item as any)[keyOnly]);
 				// console.log("> values: %o", values);
 				useApply(resultItem, applyKey, applyToken, values);
-			} catch (error) {
+			} catch (_error) {
 				throw new InsightError("Invalid apply key in APPLY");
 			}
 		});
@@ -314,7 +314,7 @@ export function combine2(
 	// [ [{"rooms_shortname": "abc"}, {"maxSeats": 442}],
 	//   [{"rooms_shortname": "sdf"}, {"maxSeats": 350}] ]
 	let i = 0;
-	for (const item of groupedItems) {
+	for (const {} of groupedItems) {
 		// each row
 		const combined = [];
 		for (const group of groups) {
@@ -516,12 +516,12 @@ export function returnResults(sortedItems: Record<string, any>[][], columns: str
 		// 	Object.assign(result, field);
 		// });
 		item.forEach((field) => {
-            Object.keys(field).forEach((key) => {
-                if (columns.includes(key)) {
-                    result[key] = field[key];
-                }
-            });
-        });
+			Object.keys(field).forEach((key) => {
+				if (columns.includes(key)) {
+					result[key] = field[key];
+				}
+			});
+		});
 		return result;
 	});
 }
