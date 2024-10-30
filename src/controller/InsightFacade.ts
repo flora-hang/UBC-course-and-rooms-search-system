@@ -330,7 +330,7 @@ export default class InsightFacade implements IInsightFacade {
 		}
 		// console.log("!!! START OF FILTER ITEMS FUNC");
 		const filteredItems = filterItems(validQuery.WHERE.filter, items, id) as Item[];
-		// console.log("> filtered items", filteredItems);
+		console.log("> filtered items", filteredItems, filteredItems.length);
 		// console.log("!!! START OF OIPTIONS BLOCK PARSE");
 		// Parse OPTIONS block: Extract columns and order field
 		const columns = validQuery.OPTIONS.columns;

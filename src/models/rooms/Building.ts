@@ -12,7 +12,7 @@ export default class Building {
     private readonly shortname: string; // Short building name
     private readonly address: string; // The building address
     public lat?: number; // The latitude of the building
-    private lon?: number; // The longitude of the building
+    public lon?: number; // The longitude of the building
     private rooms: Room[];
 
     constructor(fullname: string, shortname: string, address: string) {
@@ -30,31 +30,10 @@ export default class Building {
         return this.rooms.length > 0;
     }
 
-    public async getLat(): Promise<number> {
-        if (!this.lat) {
-            const latLon = await this.getLatLon();
-            this.lat = latLon[0];
-        }
-        if (!this.lat) {
-            return Promise.reject("Error: Could not get latitude for building " + this.shortname);
-        } else {
-            return Promise.resolve(this.lat);   
-            }
-        }
     
-    public async getLon(): Promise<number> {
-        if (!this.lon) {
-            const latLon = await this.getLatLon();
-            this.lon = latLon[1];
-        }
-        if (!this.lon) {
-            return Promise.reject("Error: Could not get longitude for building " + this.shortname);
-        } else {
-            return Promise.resolve(this.lon);
-    }
-}
 
-    private async getLatLon(): Promise<number[]> {
+
+    public async getLatLon(): Promise<number[]> {
         const addressURL = encodeURIComponent(this.address);
         const url = "http://cs310.students.cs.ubc.ca:11316/api/v1/project_team142/" + addressURL;
         return new Promise((resolve, reject) => {
@@ -71,11 +50,13 @@ export default class Building {
                     try {
                         const geoResponse: GeoResponse = JSON.parse(data);
                         if (geoResponse.error) {
-                            reject(new Error(geoResponse.error));
+                            this.lon = -1;
+                            this.lat = -1;
+                            reject();
                         } else if (geoResponse.lat !== undefined && geoResponse.lon !== undefined) {
+                            this.lon = geoResponse.lon;
+                            this.lat = geoResponse.lat;
                             resolve([geoResponse.lat, geoResponse.lon]);
-                        } else {
-                            reject(new Error("Invalid response format"));
                         }
                     } catch (error) {
                         reject(error);

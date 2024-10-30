@@ -6,7 +6,7 @@ import Item from "../models/query/Item";
 import { InsightError, InsightResult } from "./IInsightFacade";
 import ApplyRule, { useApply } from "../models/query/ApplyRule";
 import Sort from "../models/query/Sort";
-import { group } from "console";
+
 
 export function filterItems(where: any, items: Item[], id: string): Item[] {
 	// If WHERE block is empty, return all items (no filtering)
@@ -235,6 +235,7 @@ export function groupItems(items: Item[], groups: String[], id: string): any {
 		}
 	});
 	console.log("---------------------------------");
+	console.log("in helper:", groupedItemsMap.length);
 	return Object.values(groupedItemsMap);
 }
 

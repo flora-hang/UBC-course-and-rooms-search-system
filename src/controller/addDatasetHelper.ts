@@ -46,11 +46,10 @@ async function parseBuildingTable(document: any, zip: JSZip): Promise<Building[]
 
 	// Traverse rows in the building table
 	const rows = findAllElements(buildingTableBody[0], "tr");
-	parseBuildingTableRows(rows, zip, parseThis, buildings, latList, lonList);
+	parseBuildingTableRows(rows, zip, parseThis, buildings, latList);
 
 	const array = await Promise.all(parseThis);
-	await Promise.all(latList);
-	await Promise.all(lonList);
+	await Promise.allSettled(latList);
 
 	let i = 0;
 	const promises = [];
@@ -67,8 +66,7 @@ function parseBuildingTableRows(
 	zip: JSZip,
 	parseThis: any,
 	buildings: Building[],
-	LatList: any,
-	LonList: any
+	LatList: any
 ): void {
 	for (const row of rows) {
 		const columns = findAllElements(row, "td");
@@ -80,7 +78,7 @@ function parseBuildingTableRows(
 		// const titleCell = findElementWithClass(columns, "views-field-title");
 		const addressCell = findElementWithClass(columns, "views-field-field-building-address");
 		const link = findLinkElement(findElementWithClass(columns, "views-field-title"));
-		individualRows(codeCell, addressCell, link, zip, LatList, LonList, buildings, parseThis);
+		individualRows(codeCell, addressCell, link, zip, LatList, buildings, parseThis);
 	}
 }
 function individualRows(
@@ -89,7 +87,6 @@ function individualRows(
 	link: any,
 	zip: JSZip,
 	LatList: any,
-	LonList: any,
 	buildings: any,
 	parseThis: any
 ): void {
@@ -114,8 +111,8 @@ function individualRows(
 		}
 
 		if (buildingFile) {
-			LatList.push(building.getLat());
-			LonList.push(building.getLon());
+			LatList.push(building.getLatLon());
+			
 			parseThis.push(buildingFile.async("text"));
 			buildings.push(building);
 		}
@@ -156,8 +153,8 @@ async function parseRoomTable(building: Building, document: any): Promise<void> 
 				type,
 				furniture,
 				link,
-				promises.push(building.getLat()),
-				promises.push(building.getLon()),
+				promises.push(building.lon),
+				promises.push(building.lat),
 				building.getAddress()
 			);
 			building.addRoom(room);
