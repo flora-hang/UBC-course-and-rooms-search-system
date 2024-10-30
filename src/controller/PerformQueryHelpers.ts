@@ -7,7 +7,6 @@ import { InsightError, InsightResult } from "./IInsightFacade";
 import ApplyRule, { useApply } from "../models/query/ApplyRule";
 import Sort from "../models/query/Sort";
 
-
 export function filterItems(where: any, items: Item[], id: string): Item[] {
 	// If WHERE block is empty, return all items (no filtering)
 	// !!! get all items in the dataset
@@ -286,7 +285,7 @@ export function applyFunctionItems(
 			try {
 				//!!! just try-catch or check if key is valid?
 				// console.log("group: %o", group);
-				const values = group.map((item) => (item as any)[keyOnly]);
+				const values = grp.map((item) => (item as any)[keyOnly]);
 				// console.log("> values: %o", values);
 				useApply(resultItem, applyKey, applyToken, values);
 			} catch (error) {
@@ -317,11 +316,11 @@ export function combine2(
 	let i = 0;
 	for (const item of groupedItems) {
 		// each row
-		let combined = [];
-		for (const group in groups) {
-			const key = groups[group].split("_")[1];
+		const combined = [];
+		for (const group of groups) {
+			const key = group.split("_")[1];
 			// console.log("!!! key: %o", key);
-			combined.push({ [groups[group]]: groupedItems[i][0].getField(key) });
+			combined.push({ [group]: groupedItems[i][0].getField(key) });
 		}
 		combined.push(appliedItems[i]);
 		combinedItems[i] = combined;
