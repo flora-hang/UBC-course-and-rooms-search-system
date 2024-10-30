@@ -21,6 +21,7 @@ import {
 	checkIds,
 	groupItems,
 	applyFunctionItems,
+	combine,
 } from "./PerformQueryHelpers";
 import { extractRoomData } from "./addDatasetHelper";
 import * as fsPromises from "fs/promises";
@@ -364,10 +365,12 @@ export default class InsightFacade implements IInsightFacade {
 
 		// group the filtered results into specific groups
 		const groupedItems = groups ? groupItems(filteredItems, groups) : null;
-		console.log("> grouped items, size: ", groupedItems?.length);
+		console.log("> grouped items, size: ", groupedItems);
 		// apply specified APPLYTOKENs if given
 		const applyItems = apply ? applyFunctionItems(groupedItems as (Section | Room)[][], apply) : null;
-		console.log("> grouped and applied items, size: ", applyItems?.length);
+		console.log("> grouped and applied items, size: ", applyItems);
+
+		const groupAndApply = combine(groupedItems, applyItems);
 
 		// TODO: add new sort functionality
 		// IF TRANSFORMATION block and SORT given: sort the group items
@@ -377,11 +380,11 @@ export default class InsightFacade implements IInsightFacade {
 		if (applyItems) {
 			const sortedItems = orderField
 				? groups && apply
-					? sortResults(applyItems as Item[], orderField as any, columns)
-					: sortResults(applyItems, orderField as any, columns)
+					? sortResults(groupAndApply, orderField as any, columns)
+					: sortResults(groupAndApply, orderField as any, columns)
 				: applyItems;
 
-			console.log("> sorted items, size: ", sortedItems?.length);
+			console.log("> sorted items, size: ", sortedItems);
 			// // Select the required columns
 			finalResults = selectColumns(sortedItems, columns);
 		}

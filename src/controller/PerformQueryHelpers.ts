@@ -202,14 +202,16 @@ export function groupItems(items: Item[], groups: String[]): any {
 
 	items.forEach((item) => {
 		// const key = groups.map((group) => (item as any)[group.split("_")[1]]).join("_");
-		
+
 		// Generate the key by accessing the properties specified in the groups array
-        const key = groups.map((group) => {
-            const property = group.split("_")[1];
-            const value = item.getField(property);
-            console.log("> group: %o, property: %o, value: %o", group, property, value);
-            return value;
-        }).join("_");
+		const key = groups
+			.map((group) => {
+				const property = group.split("_")[1];
+				const value = item.getField(property);
+				console.log("> group: %o, property: %o, value: %o", group, property, value);
+				return value;
+			})
+			.join("_");
 		console.log("!!! key: %o", key);
 
 		if (!groupedItemsMap[key]) {
@@ -222,7 +224,10 @@ export function groupItems(items: Item[], groups: String[]): any {
 	return Object.values(groupedItemsMap);
 }
 
-export function applyFunctionItems(groupedItems: (Section | Room)[][], applyRules: ApplyRule[]): (Section | Room)[] {
+export function applyFunctionItems(
+	groupedItems: (Section | Room)[][],
+	applyRules: ApplyRule[]
+): Record<string, number>[] {
 	console.log("!!! in applyFunctionItems");
 	if (!groupItems) {
 		throw new InsightError("group key error");
@@ -254,6 +259,13 @@ export function applyFunctionItems(groupedItems: (Section | Room)[][], applyRule
 	return results;
 }
 
+export function combine(groupedItems: any, applyItems: any): any {
+	for (const [i, applyItem] of applyItems.entries()) {
+		groupedItems[i].push(applyItem);
+	}
+	return groupedItems;
+}
+
 export function columnsIncludesAllKeys(columns: String[], keys: String[]): boolean {
 	for (const key of keys) {
 		if (!columns.includes(key)) {
@@ -263,7 +275,7 @@ export function columnsIncludesAllKeys(columns: String[], keys: String[]): boole
 	return true;
 }
 
-export function sortResults(items: Item[], sort: Sort, columns: String[]): Item[] {
+export function sortResults(groupAndApply: any, sort: Sort, columns: String[]): Item[] {
 	// check if order is in columns, if not throw error
 	console.log("!!! order: %o", sort);
 	console.log("!!! columns: %o", columns);
@@ -277,12 +289,16 @@ export function sortResults(items: Item[], sort: Sort, columns: String[]): Item[
 		order = { dir: sort?.dir, keys: sort?.keys };
 	}
 	if (typeof order === "string") {
-		// if order is just something like: 'ORDER: ' ANYKEY
-		const field: string = order.split("_")[1];
-		if (mkeyFlag(field)) {
-			items.sort((a, b) => a.getField(field) - b.getField(field));
+		if (Array.isArray(groupAndApply) && groupAndApply.every((item) => item instanceof Item)) {
+			// if order is just something like: 'ORDER: ' ANYKEY
+			const field: string = order.split("_")[1];
+			if (mkeyFlag(field)) {
+				groupAndApply.sort((a: any, b: any) => a.getField(field) - b.getField(field));
+			} else {
+				groupAndApply.sort((a: any, b: any) => a.getField(field).localeCompare(b.getField(field)));
+			}
 		} else {
-			items.sort((a, b) => a.getField(field).localeCompare(b.getField(field)));
+			//!!! for transformations
 		}
 	} else {
 		// if order is something like: 'ORDER: { dir:'  DIRECTION ', keys: [ ' ANYKEY_LIST '] }'
@@ -294,18 +310,22 @@ export function sortResults(items: Item[], sort: Sort, columns: String[]): Item[
 		if (dir !== "DOWN" && dir !== "UP") {
 			throw new InsightError('DIR key must be "UP" or "DOWN"');
 		}
-
-		items.sort((a, b) => {
+		console.log("!!! gorupa nd apply: %o", groupAndApply);
+		// compare items in appliedItems and then sort both groupedItems and appliedItems
+		groupAndApply.sort((a: any, b: any) => {
 			for (const key of keys as string[]) {
-				const { aValue, bValue } = { aValue: a.getField(key), bValue: b.getField(key) };
-
+				console.log("!!! key: %o", key);
+				console.log("!!! a: %o, b: %o", a, b);
+				const { aValue, bValue } = { aValue: a[a.length - 1][key], bValue: b[b.length - 1][key] };
+				console.log("!!! aValue: %o, bValue: %o", aValue, bValue);
 				let comparison = 0;
 
-				if (mkeyFlag(key)) {
-					comparison = aValue - bValue; // Numeric comparison
-				} else {
-					comparison = aValue.localeCompare(bValue); // String comparison
-				}
+				comparison = aValue - bValue;
+				// if (mkeyFlag(key)) {
+				// 	comparison = aValue - bValue; // Numeric comparison
+				// } else {
+				// 	comparison = aValue.localeCompare(bValue); // String comparison
+				// }
 
 				// If comparison is not equal, return based on direction
 				return comparison !== 0 ? (dir === "UP" ? comparison : -comparison) : 0;
@@ -313,11 +333,12 @@ export function sortResults(items: Item[], sort: Sort, columns: String[]): Item[
 			return 0; // If all keys are equal
 		});
 	}
-	return items;
+	return groupAndApply;
 }
 
-export function selectColumns(items: Item[], columns: string[]): InsightResult[] {
-	return items.map((item) => {
+export function selectColumns(items: any, columns: string[]): InsightResult[] {
+	//!!!
+	return items.map((item: any) => {
 		const selected: any = {};
 		columns.forEach((column) => {
 			const columnNameWithoutDatasetID: string = column.split("_")[1];
