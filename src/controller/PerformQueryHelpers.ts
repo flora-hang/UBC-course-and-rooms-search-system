@@ -7,6 +7,7 @@ import { InsightError, InsightResult } from "./IInsightFacade";
 import ApplyRule, { useApply } from "../models/query/ApplyRule";
 import Sort from "../models/query/Sort";
 
+
 export function filterItems(where: any, items: Item[], id: string): Item[] {
 	// If WHERE block is empty, return all items (no filtering)
 	// !!! get all items in the dataset
@@ -221,16 +222,19 @@ export function groupItems(items: Item[], groups: String[], id: string): any {
 
 		// Generate the key by accessing the properties specified in the groups array
 		const key = groups
-			.map((group) => {
-				const groupId = group.split("_")[0];
+			.map((grpStr) => {
+				const groupId = grpStr.split("_")[0];
 				if (groupId !== id) {
 					throw new InsightError("id does not match in GROUP");
 				}
-				const property = group.split("_")[1];
+				const property = grpStr.split("_")[1];
 				// console.log("!!! property: %o", property);
-
-				const value = item.getField(property);
-				return value;
+				try {
+					const value = item.getField(property);
+					return value;
+				} catch (error) {
+					throw new InsightError("Invalid key in GROUP");
+				}
 			})
 			.join("_");
 		// console.log("!!! key: %o", key);
@@ -260,7 +264,7 @@ export function applyFunctionItems(
 
 	// console.log("> before for loop, groupedItems: %o", groupedItems.length);
 	// console.log("> applyRules: %o", applyRules);
-	for (const group of groupedItems) {
+	for (const grp of groupedItems) {
 		// console.log("!!! group: %o", group);
 		const resultItem: any = {}; // To hold the result for the current group
 
@@ -279,12 +283,15 @@ export function applyFunctionItems(
 			// console.log("!!! key: %o", keyOnly);
 
 			// Extract values from the group based on the key
-
-			//!!! just try-catch or check if key is valid?
-			// console.log("group: %o", group);
-			const values = group.map((item) => (item as any)[keyOnly]);
-			// console.log("> values: %o", values);
-			useApply(resultItem, applyKey, applyToken, values);
+			try {
+				//!!! just try-catch or check if key is valid?
+				// console.log("group: %o", group);
+				const values = group.map((item) => (item as any)[keyOnly]);
+				// console.log("> values: %o", values);
+				useApply(resultItem, applyKey, applyToken, values);
+			} catch (error) {
+				throw new InsightError("Invalid apply key in APPLY");
+			}
 		});
 		// console.log("!!! resultItem: %o", resultItem);
 		results.push(resultItem); // Add the result item to results array
@@ -310,16 +317,17 @@ export function combine2(
 	let i = 0;
 	for (const item of groupedItems) {
 		// each row
-		const combined = [];
-		for (const group of groups) {
-			const key = group.split("_")[1];
+		let combined = [];
+		for (const group in groups) {
+			const key = groups[group].split("_")[1];
 			// console.log("!!! key: %o", key);
-			combined.push({ [group]: groupedItems[i][0].getField(key) });
+			combined.push({ [groups[group]]: groupedItems[i][0].getField(key) });
 		}
 		combined.push(appliedItems[i]);
 		combinedItems[i] = combined;
 		i++;
 	}
+
 	console.log("---------------------------------");
 	// console.log("> combinedItems: %o", combinedItems);
 	return combinedItems;
@@ -443,10 +451,12 @@ export function sortResultsGroup(
 			} else {
 				groupAndApply.sort((a: any, b: any) => {
 					// console.log("Comparing:", a, b);
-					const aValue = a.find((obj: any) => obj.hasOwnProperty("rooms_shortname")).rooms_shortname;
-					const bValue = b.find((obj: any) => obj.hasOwnProperty("rooms_shortname")).rooms_shortname;
-					// console.log("aValue:", aValue);
-					// console.log("bValue:", bValue);
+					const aValue = a.find((obj: any) =>
+						Object.prototype.hasOwnProperty.call(obj, "rooms_shortname")
+					).rooms_shortname;
+					const bValue = b.find((obj: any) =>
+						Object.prototype.hasOwnProperty.call(obj, "rooms_shortname")
+					).rooms_shortname;
 					return aValue.localeCompare(bValue);
 				});
 			}
