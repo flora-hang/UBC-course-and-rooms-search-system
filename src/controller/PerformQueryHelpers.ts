@@ -7,7 +7,6 @@ import { InsightError, InsightResult } from "./IInsightFacade";
 import ApplyRule, { useApply } from "../models/query/ApplyRule";
 import Sort from "../models/query/Sort";
 
-
 export function filterItems(where: any, items: Item[], id: string): Item[] {
 	// If WHERE block is empty, return all items (no filtering)
 	// !!! get all items in the dataset
@@ -222,17 +221,17 @@ export function groupItems(items: Item[], groups: String[], id: string): any {
 
 		// Generate the key by accessing the properties specified in the groups array
 		const key = groups
-			.map((group) => {
-				const groupId = group.split("_")[0];
+			.map((grpStr) => {
+				const groupId = grpStr.split("_")[0];
 				if (groupId !== id) {
 					throw new InsightError("id does not match in GROUP");
 				}
-				const property = group.split("_")[1];
+				const property = grpStr.split("_")[1];
 				// console.log("!!! property: %o", property);
 				try {
 					const value = item.getField(property);
 					return value;
-				} catch (error) {
+				} catch (_error) {
 					throw new InsightError("Invalid key in GROUP");
 				}
 			})
@@ -264,7 +263,7 @@ export function applyFunctionItems(
 
 	// console.log("> before for loop, groupedItems: %o", groupedItems.length);
 	// console.log("> applyRules: %o", applyRules);
-	for (const group of groupedItems) {
+	for (const grp of groupedItems) {
 		// console.log("!!! group: %o", group);
 		const resultItem: any = {}; // To hold the result for the current group
 
@@ -286,10 +285,10 @@ export function applyFunctionItems(
 			try {
 				//!!! just try-catch or check if key is valid?
 				// console.log("group: %o", group);
-				const values = group.map((item) => (item as any)[keyOnly]);
+				const values = grp.map((item) => (item as any)[keyOnly]);
 				// console.log("> values: %o", values);
 				useApply(resultItem, applyKey, applyToken, values);
-			} catch (error) {
+			} catch (_error) {
 				throw new InsightError("Invalid apply key in APPLY");
 			}
 		});
@@ -317,16 +316,17 @@ export function combine2(
 	let i = 0;
 	for (const item in groupedItems) {
 		// each row
-		let combined = [];
-		for (const group in groups) {
-			const key = groups[group].split("_")[1];
+		const combined = [];
+		for (const g in groups) {
+			const key = groups[g].split("_")[1];
 			// console.log("!!! key: %o", key);
-			combined.push({ [groups[group]]: groupedItems[i][0].getField(key) });
+			combined.push({ [groups[g]]: groupedItems[i][0].getField(key) });
 		}
 		combined.push(appliedItems[i]);
 		combinedItems[i] = combined;
 		i++;
 	}
+
 	console.log("---------------------------------");
 	// console.log("> combinedItems: %o", combinedItems);
 	return combinedItems;
@@ -450,10 +450,12 @@ export function sortResultsGroup(
 			} else {
 				groupAndApply.sort((a: any, b: any) => {
 					// console.log("Comparing:", a, b);
-					const aValue = a.find((obj: any) => obj.hasOwnProperty("rooms_shortname")).rooms_shortname;
-					const bValue = b.find((obj: any) => obj.hasOwnProperty("rooms_shortname")).rooms_shortname;
-					// console.log("aValue:", aValue);
-					// console.log("bValue:", bValue);
+					const aValue = a.find((obj: any) =>
+						Object.prototype.hasOwnProperty.call(obj, "rooms_shortname")
+					).rooms_shortname;
+					const bValue = b.find((obj: any) =>
+						Object.prototype.hasOwnProperty.call(obj, "rooms_shortname")
+					).rooms_shortname;
 					return aValue.localeCompare(bValue);
 				});
 			}
@@ -522,12 +524,12 @@ export function selectColumns(items: any, columns: string[]): InsightResult[] {
 	console.log("!!! in selectColumns");
 	// console.log("> columns: %o", columns); // all order keys in columns
 
-	for (const column of columns) {
-		if (column.includes("_")) {
-			const columnName = column.split("_")[1]; // e.g. "shortname"
-			// if (columnName)
-		}
-	}
+	// for (const column of columns) {
+	// 	if (column.includes("_")) {
+	// 		const columnName = column.split("_")[1]; // e.g. "shortname"
+	// 		// if (columnName)
+	// 	}
+	// }
 
 	//!!!
 	return items.map((item: any) => {
