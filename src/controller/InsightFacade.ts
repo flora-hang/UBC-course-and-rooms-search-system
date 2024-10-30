@@ -29,7 +29,6 @@ import JSZip from "jszip";
 import Query from "../models/query/Query";
 import { Dataset } from "../models/Dataset";
 import RoomsDataset from "../models/rooms/RoomsDataset";
-import { Direction } from "../models/query/Sort";
 import ApplyRule from "../models/query/ApplyRule";
 
 // import { json } from "stream/consumers";
@@ -336,11 +335,11 @@ export default class InsightFacade implements IInsightFacade {
 		const columns = validQuery.OPTIONS.columns;
 		const orderField = validQuery.OPTIONS.sort?.anyKey
 			? validQuery.OPTIONS.sort?.anyKey
-			: (validQuery.OPTIONS.sort?.dir && validQuery.OPTIONS.sort?.keys)
-				? { "dir": validQuery.OPTIONS.sort?.dir, "keys": validQuery.OPTIONS.sort?.keys }
-				: null;
+			: validQuery.OPTIONS.sort?.dir && validQuery.OPTIONS.sort?.keys
+			? { dir: validQuery.OPTIONS.sort?.dir, keys: validQuery.OPTIONS.sort?.keys }
+			: null;
 		console.log("!!! END OF OPTIONS BLOCK PARSE");
-		if (!validQuery.OPTIONS.sort?.anyKey && (!!validQuery.OPTIONS.sort?.dir !== !!validQuery.OPTIONS.sort?.keys)) {
+		if (!validQuery.OPTIONS.sort?.anyKey && !!validQuery.OPTIONS.sort?.dir !== !!validQuery.OPTIONS.sort?.keys) {
 			throw new InsightError("Order is incorrect");
 		}
 
@@ -349,7 +348,7 @@ export default class InsightFacade implements IInsightFacade {
 		const apply = validQuery.TRANSFORMATIONS?.apply;
 
 		const seen = new Set<ApplyRule>(); // seen apply keys
-		apply?.forEach(applyRule => {
+		apply?.forEach((applyRule) => {
 			console.log(seen);
 			console.log("b", applyRule);
 			if (seen.has(applyRule)) {

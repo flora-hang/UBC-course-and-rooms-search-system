@@ -144,19 +144,19 @@ function handleIS(condition: any, items: Item[], id: string): any {
 		if (condition.inputString.startsWith("*") && condition.inputString.endsWith("*")) {
 			const str = condition.inputString.substring(1, condition.inputString.length - 1);
 			checkWildcardAgain(str);
-			console.log("!!!!!!!a", field)
+			console.log("!!!!!!!a", field);
 			ret = items.filter((item) => item.getField(field).includes(str));
 			return ret as any;
 		} else if (condition.inputString.startsWith("*")) {
 			const str = condition.inputString.substring(1, condition.inputString.length);
 			checkWildcardAgain(str);
-			console.log("!!!!!!!b", field)
+			console.log("!!!!!!!b", field);
 			ret = items.filter((item) => item.getField(field).endsWith(str));
 			return ret as any;
 		} else if (condition.inputString.endsWith("*")) {
 			const str = condition.inputString.substring(0, condition.inputString.length - 1);
 			checkWildcardAgain(str);
-			console.log("!!!!!!!c", field)
+			console.log("!!!!!!!c", field);
 			ret = items.filter((item) => item.getField(field).startsWith(str));
 			return ret as any;
 		} else {

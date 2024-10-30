@@ -53,10 +53,12 @@ async function parseBuildingTable(document: any, zip: JSZip): Promise<Building[]
 	await Promise.all(lonList);
 
 	let i = 0;
+	const promises = [];
 	for (const buildingContent of array) {
-		parseRoomTable(buildings[i], parse5.parse(buildingContent));
+		promises.push(parseRoomTable(buildings[i], parse5.parse(buildingContent)));
 		i++;
 	}
+	await Promise.all(promises);
 	return buildings;
 }
 
@@ -120,7 +122,7 @@ function individualRows(
 	}
 }
 // Helper function to parse the room table for a given building.
-function parseRoomTable(building: Building, document: any): void {
+async function parseRoomTable(building: Building, document: any): Promise<void> {
 	const roomTable = findAllElements(document, "tbody");
 	// console.log(" > ", building.getShortname(), ": ", roomTable.length);
 	if (!roomTable || roomTable.length === 0) {
@@ -129,7 +131,7 @@ function parseRoomTable(building: Building, document: any): void {
 	// console.log(" --- ", roomTable.length);
 
 	const rows = findAllElements(roomTable[0], "tr");
-	// console.log(" ---------------------- ");
+	const promises = [];
 	for (const row of rows) {
 		const columns = findAllElements(row, "td");
 		if (!columns || columns.length === 0) {
@@ -146,10 +148,21 @@ function parseRoomTable(building: Building, document: any): void {
 		// console.log(" > ", roomNumber, " | ", seats, " | ", type, " | ", furniture, " | ", link);
 
 		if (roomNumber) {
-			const room = new Room(building.getShortname(), roomNumber, seats, type, furniture, link);
+			const room = new Room(
+				building.getShortname(),
+				roomNumber,
+				seats,
+				type,
+				furniture,
+				link,
+				promises.push(building.getLat()),
+				promises.push(building.getLon()),
+				building.getAddress()
+			);
 			building.addRoom(room);
 		}
 	}
+	await Promise.all(promises);
 }
 
 // Utility to get the text content of an HTML element
