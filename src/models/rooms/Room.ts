@@ -1,6 +1,8 @@
 import Item from "../query/Item";
 
 export default class Room extends Item {
+    private readonly fullname: string; // Full building name
+    private readonly shortname: string; // Short building name
     private readonly number: string; // The room number, not always a number so represented as a string
     private readonly name: string; // The room id, should be rooms_shortname + "_" + rooms_number
     private readonly seats: number; // The number of seats in the room
@@ -11,12 +13,14 @@ export default class Room extends Item {
 	private readonly lon: number; //
 	private readonly address: string;
 
-    constructor(building: string, roomNumber: string, numSeats: number,
+    constructor(fullname: string, shortname: string, roomNumber: string, numSeats: number,
         roomType: string, roomFurniture: string, link: string, lat: number,
 		lon: number, address: string) {
 		super();
+        this.fullname = fullname;
+        this.shortname = shortname;
         this.number = roomNumber;
-        this.name = building + "_" + roomNumber;
+        this.name = shortname + "_" + roomNumber;
         this.seats = numSeats;
         this.type = roomType;
         this.furniture = roomFurniture;
@@ -28,6 +32,10 @@ export default class Room extends Item {
 
     public getField(comparisonField: string): any {
         switch (comparisonField) {
+            case "fullname":
+                return this.getFullname();
+            case "shortname":
+                return this.getShortname();
             case "number":
                 return this.getNumber();
             case "name":
@@ -54,6 +62,14 @@ export default class Room extends Item {
 	public getUniqueIdentifier(): string {
 		return this.getName();
 	}
+
+    public getFullname(): string {
+        return this.fullname;
+    }
+
+    public getShortname(): string {
+        return this.shortname;
+    }
 
     public getNumber(): string {
         return this.number;

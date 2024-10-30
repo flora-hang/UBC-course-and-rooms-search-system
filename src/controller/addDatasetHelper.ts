@@ -149,6 +149,7 @@ async function parseRoomTable(building: Building, document: any): Promise<void> 
 
 		if (roomNumber) {
 			const room = new Room(
+				building.getFullname(),
 				building.getShortname(),
 				roomNumber,
 				seats,

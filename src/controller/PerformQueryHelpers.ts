@@ -6,6 +6,7 @@ import Item from "../models/query/Item";
 import { InsightError, InsightResult } from "./IInsightFacade";
 import ApplyRule, { useApply } from "../models/query/ApplyRule";
 import Sort from "../models/query/Sort";
+import { group } from "console";
 
 export function filterItems(where: any, items: Item[], id: string): Item[] {
 	// If WHERE block is empty, return all items (no filtering)
@@ -198,9 +199,19 @@ export function groupItems(items: Item[], groups: String[]): any {
 	console.log("!!! in groupItems"); // items = filteredItems
 	console.log("> groups: %o", groups);
 	const groupedItemsMap: Record<string, Item[]> = {}; // Item[] = groupedItems
+
 	items.forEach((item) => {
-		const key = groups.map((group) => (item as any)[group.split("_")[1]]).join("_");
+		// const key = groups.map((group) => (item as any)[group.split("_")[1]]).join("_");
+		
+		// Generate the key by accessing the properties specified in the groups array
+        const key = groups.map((group) => {
+            const property = group.split("_")[1];
+            const value = item.getField(property);
+            console.log("> group: %o, property: %o, value: %o", group, property, value);
+            return value;
+        }).join("_");
 		console.log("!!! key: %o", key);
+
 		if (!groupedItemsMap[key]) {
 			groupedItemsMap[key] = [item];
 		} else {
