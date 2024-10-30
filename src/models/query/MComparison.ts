@@ -16,7 +16,7 @@ export enum MField {
 	// new fields for rooms
 	lat = "lat",
 	lon = "lon",
-	seats = "seats"
+	seats = "seats",
 }
 
 export default class MComparison implements IFilter {

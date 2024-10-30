@@ -15,7 +15,7 @@ export enum SField {
 	address = "address",
 	type = "type",
 	furniture = "furniture",
-	href = "href"
+	href = "href",
 }
 
 export default class SComparison implements IFilter {
@@ -63,7 +63,6 @@ export default class SComparison implements IFilter {
 		if (inputString.length > two && inputString.slice(1, -1).includes("*")) {
 			throw new InsightError("invalid inputString with * in the middle");
 		}
-		
 
 		return new SComparison(skey, inputString);
 	}

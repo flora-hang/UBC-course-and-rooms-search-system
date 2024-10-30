@@ -313,8 +313,8 @@ export function combine2(
 	const combinedItems: Record<string, any>[][] = [];
 	// [ [{"rooms_shortname": "abc"}, {"maxSeats": 442}],
 	//   [{"rooms_shortname": "sdf"}, {"maxSeats": 350}] ]
-	let i = 0;
-	for (const {} of groupedItems) {
+
+	for (let i = 0; i < groupedItems.length; i++) {
 		// each row
 		const combined = [];
 		for (const group of groups) {
@@ -324,7 +324,6 @@ export function combine2(
 		}
 		combined.push(appliedItems[i]);
 		combinedItems[i] = combined;
-		i++;
 	}
 
 	console.log("---------------------------------");

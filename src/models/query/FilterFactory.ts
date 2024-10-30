@@ -35,7 +35,4 @@ export default class FilterFactory implements IFilter {
 
 		return filter;
 	}
-
-   
-    
 }

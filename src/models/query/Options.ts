@@ -41,17 +41,15 @@ export default class Options {
 				}
 			} else {
 				// check that anykey is valid: is a applykey under APPLY
-				// else throw InsightError: Invalid key <column> in COLUMNS 
+				// else throw InsightError: Invalid key <column> in COLUMNS
 				// !!!
 				// might not check it here
 				// maybe check after sorting?
 			}
-			
-
-			
 		}
 
-		if ("ORDER" in object) { //!!!
+		if ("ORDER" in object) {
+			//!!!
 			// const order = object.ORDER;
 			const sort: Sort = Sort.buildQuery(object.ORDER);
 			return new Options(columns, sort);
