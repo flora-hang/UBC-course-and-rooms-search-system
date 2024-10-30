@@ -37,7 +37,7 @@ async function parseBuildingTable(document: any, zip: JSZip): Promise<Building[]
 	const buildings: Building[] = [];
 	const parseThis: any = [];
 	const latList: any = [];
-	const lonList: any = [];
+
 	const buildingTable = findAllElements(document, "table");
 	if (!buildingTable) {
 		throw new InsightError("Error: Could not find building table in index.htm.");
@@ -50,7 +50,7 @@ async function parseBuildingTable(document: any, zip: JSZip): Promise<Building[]
 
 	const array = await Promise.all(parseThis);
 	await Promise.allSettled(latList);
-    buildings.filter(building => building.lat !== -1 && building.lon !== -1);
+	buildings.filter((building) => building.lat !== -1 && building.lon !== -1);
 	let i = 0;
 	const promises = [];
 	for (const buildingContent of array) {
@@ -61,13 +61,7 @@ async function parseBuildingTable(document: any, zip: JSZip): Promise<Building[]
 	return buildings;
 }
 
-function parseBuildingTableRows(
-	rows: any[],
-	zip: JSZip,
-	parseThis: any,
-	buildings: Building[],
-	LatList: any
-): void {
+function parseBuildingTableRows(rows: any[], zip: JSZip, parseThis: any, buildings: Building[], LatList: any): void {
 	for (const row of rows) {
 		const columns = findAllElements(row, "td");
 		if (!columns || columns.length === 0) {
@@ -112,7 +106,7 @@ function individualRows(
 
 		if (buildingFile) {
 			LatList.push(building.getLatLon());
-			
+
 			parseThis.push(buildingFile.async("text"));
 			buildings.push(building);
 		}
@@ -126,8 +120,6 @@ async function parseRoomTable(building: Building, document: any): Promise<void> 
 		return;
 	}
 	// console.log(" --- ", roomTable.length);
-
-	
 
 	const rows = findAllElements(roomTable[0], "tr");
 	for (const row of rows) {

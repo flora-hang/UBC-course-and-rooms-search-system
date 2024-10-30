@@ -7,7 +7,6 @@ import { InsightError, InsightResult } from "./IInsightFacade";
 import ApplyRule, { useApply } from "../models/query/ApplyRule";
 import Sort from "../models/query/Sort";
 
-
 export function filterItems(where: any, items: Item[], id: string): Item[] {
 	// If WHERE block is empty, return all items (no filtering)
 	// !!! get all items in the dataset
@@ -229,12 +228,9 @@ export function groupItems(items: Item[], groups: String[], id: string): any {
 				}
 				const property = group.split("_")[1];
 				// console.log("!!! property: %o", property);
-				try {
-					const value = item.getField(property);
-					return value;
-				} catch (error) {
-					throw new InsightError("Invalid key in GROUP");
-				}
+
+				const value = item.getField(property);
+				return value;
 			})
 			.join("_");
 		// console.log("!!! key: %o", key);
@@ -283,15 +279,12 @@ export function applyFunctionItems(
 			// console.log("!!! key: %o", keyOnly);
 
 			// Extract values from the group based on the key
-			try {
-				//!!! just try-catch or check if key is valid?
-				// console.log("group: %o", group);
-				const values = group.map((item) => (item as any)[keyOnly]);
-				// console.log("> values: %o", values);
-				useApply(resultItem, applyKey, applyToken, values);
-			} catch (error) {
-				throw new InsightError("Invalid apply key in APPLY");
-			}
+
+			//!!! just try-catch or check if key is valid?
+			// console.log("group: %o", group);
+			const values = group.map((item) => (item as any)[keyOnly]);
+			// console.log("> values: %o", values);
+			useApply(resultItem, applyKey, applyToken, values);
 		});
 		// console.log("!!! resultItem: %o", resultItem);
 		results.push(resultItem); // Add the result item to results array
@@ -315,13 +308,13 @@ export function combine2(
 	// [ [{"rooms_shortname": "abc"}, {"maxSeats": 442}],
 	//   [{"rooms_shortname": "sdf"}, {"maxSeats": 350}] ]
 	let i = 0;
-	for (const item in groupedItems) {
+	for (const item of groupedItems) {
 		// each row
-		let combined = [];
-		for (const group in groups) {
-			const key = groups[group].split("_")[1];
+		const combined = [];
+		for (const group of groups) {
+			const key = group.split("_")[1];
 			// console.log("!!! key: %o", key);
-			combined.push({ [groups[group]]: groupedItems[i][0].getField(key) });
+			combined.push({ [group]: groupedItems[i][0].getField(key) });
 		}
 		combined.push(appliedItems[i]);
 		combinedItems[i] = combined;
@@ -522,12 +515,12 @@ export function selectColumns(items: any, columns: string[]): InsightResult[] {
 	console.log("!!! in selectColumns");
 	// console.log("> columns: %o", columns); // all order keys in columns
 
-	for (const column of columns) {
-		if (column.includes("_")) {
-			const columnName = column.split("_")[1]; // e.g. "shortname"
-			// if (columnName)
-		}
-	}
+	// for (const column of columns) {
+	// 	if (column.includes("_")) {
+	// 		const columnName = column.split("_")[1]; // e.g. "shortname"
+	// 		// if (columnName)
+	// 	}
+	// }
 
 	//!!!
 	return items.map((item: any) => {
