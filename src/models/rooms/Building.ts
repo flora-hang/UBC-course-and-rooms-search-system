@@ -11,8 +11,8 @@ export default class Building {
     private readonly fullname: string; // Full building name
     private readonly shortname: string; // Short building name
     private readonly address: string; // The building address
-    public lat?: number; // The latitude of the building
-    public lon?: number; // The longitude of the building
+    public lat: number; // The latitude of the building
+    public lon: number; // The longitude of the building
     private rooms: Room[];
 
     constructor(fullname: string, shortname: string, address: string) {
@@ -20,6 +20,8 @@ export default class Building {
         this.shortname = shortname;
         this.address = address;
         this.rooms = [];
+        this.lat = -1;
+        this.lon = -1;
     }
 
     public addRoom(room: Room): void {

@@ -50,7 +50,7 @@ async function parseBuildingTable(document: any, zip: JSZip): Promise<Building[]
 
 	const array = await Promise.all(parseThis);
 	await Promise.allSettled(latList);
-
+    buildings.filter(building => building.lat !== -1 && building.lon !== -1);
 	let i = 0;
 	const promises = [];
 	for (const buildingContent of array) {
