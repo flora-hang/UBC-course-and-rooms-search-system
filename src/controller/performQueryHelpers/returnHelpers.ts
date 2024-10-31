@@ -8,14 +8,18 @@ export function returnResults(sortedItems: Record<string, any>[][], columns: str
 		// 	Object.assign(result, field);
 		// });
 		item.forEach((field) => {
-			Object.keys(field).forEach((key) => {
-				if (columns.includes(key)) {
-					result[key] = field[key];
-				}
-			});
+			extractFields(field, columns, result);
 		});
 		return result;
 	});
+}
+
+function extractFields(field: Record<string, any>, columns: string[], result: Record<string, any>): void {
+    Object.keys(field).forEach((key) => {
+        if (columns.includes(key)) {
+            result[key] = field[key];
+        }
+    });
 }
 
 export function selectColumns(items: any, columns: string[]): InsightResult[] {
