@@ -1,0 +1,8579 @@
+{
+	"title": "moreGroup",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"IS": {
+						"sections_title": "*"
+					}
+				},
+				{
+					"GT": {
+						"sections_avg": 90
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_title",
+				"maxAvg",
+				"minPass",
+				"avgFail"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"maxAvg"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"sections_title",
+				"sections_instructor"
+			],
+			"APPLY": [
+				{
+					"maxAvg": {
+						"MAX": "sections_avg"
+					}
+				},
+				{
+					"minPass": {
+						"MIN": "sections_pass"
+					}
+				},
+				{
+					"avgFail": {
+						"AVG": "sections_fail"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_title": "algb topology i",
+			"maxAvg": 99.78,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "algb topology i",
+			"maxAvg": 99.78,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "career planning",
+			"maxAvg": 99.19,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "work int health",
+			"maxAvg": 98.98,
+			"minPass": 82,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "work int health",
+			"maxAvg": 98.98,
+			"minPass": 82,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "educ stds autism",
+			"maxAvg": 98.8,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "educ stds autism",
+			"maxAvg": 98.76,
+			"minPass": 17,
+			"avgFail": 0.22
+		},
+		{
+			"sections_title": "multimedia sys",
+			"maxAvg": 98.75,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "multimedia sys",
+			"maxAvg": 98.75,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cl pro prim care",
+			"maxAvg": 98.71,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cl pro prim care",
+			"maxAvg": 98.71,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "assess lrn diffi",
+			"maxAvg": 98.7,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fam nrs pract",
+			"maxAvg": 98.58,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fam nrs pract",
+			"maxAvg": 98.5,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dev el sk df&hrd",
+			"maxAvg": 98.45,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dev el sk df&hrd",
+			"maxAvg": 98.45,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "assess lrn diffi",
+			"maxAvg": 98.36,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cl pro prim care",
+			"maxAvg": 98.21,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thesis",
+			"maxAvg": 98,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thesis",
+			"maxAvg": 98,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "acad assess schl",
+			"maxAvg": 97.78,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sem in autism",
+			"maxAvg": 97.69,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "coll&uni teachng",
+			"maxAvg": 97.67,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res mthd in educ",
+			"maxAvg": 97.5,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "algb geometry i",
+			"maxAvg": 97.48,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "algb geometry i",
+			"maxAvg": 97.48,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "career planning",
+			"maxAvg": 97.47,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "career planning",
+			"maxAvg": 97.47,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "educ stds autism",
+			"maxAvg": 97.41,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "acad assess schl",
+			"maxAvg": 97.41,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "eth&profl issues",
+			"maxAvg": 97.33,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "eth&profl issues",
+			"maxAvg": 97.33,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "diff geometry i",
+			"maxAvg": 97.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "diff geometry i",
+			"maxAvg": 97.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cor des ed res",
+			"maxAvg": 97.09,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cor des ed res",
+			"maxAvg": 97.09,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "harmonic anal i",
+			"maxAvg": 97.09,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "harmonic anal i",
+			"maxAvg": 97.09,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thesis",
+			"maxAvg": 97,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "masters thesis",
+			"maxAvg": 97,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sociocult determ",
+			"maxAvg": 96.96,
+			"minPass": 56,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "aud&non-txt arch",
+			"maxAvg": 96.94,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "audi prctcm iv",
+			"maxAvg": 96.9,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "audi prctcm iv",
+			"maxAvg": 96.9,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro excp child",
+			"maxAvg": 96.9,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro excp child",
+			"maxAvg": 96.9,
+			"minPass": 29,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "probability ii",
+			"maxAvg": 96.83,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "probability ii",
+			"maxAvg": 96.83,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "survlnc&monitrng",
+			"maxAvg": 96.8,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "survlnc&monitrng",
+			"maxAvg": 96.8,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "eth&profl issues",
+			"maxAvg": 96.73,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fam nrs pract",
+			"maxAvg": 96.64,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "seminar",
+			"maxAvg": 96.59,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cnsl mat cr prov",
+			"maxAvg": 96.5,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cnsl mat cr prov",
+			"maxAvg": 96.5,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ubc chamb string",
+			"maxAvg": 96.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ubc chamb string",
+			"maxAvg": 96.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "indig, tech&ed",
+			"maxAvg": 96.47,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "indig, tech&ed",
+			"maxAvg": 96.47,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "nat resrce mngmt",
+			"maxAvg": 96.47,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "nat resrce mngmt",
+			"maxAvg": 96.47,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adlt edu pract",
+			"maxAvg": 96.46,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adlt edu pract",
+			"maxAvg": 96.46,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "algebra ii",
+			"maxAvg": 96.44,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "algebra ii",
+			"maxAvg": 96.44,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mo pict prod i",
+			"maxAvg": 96.4,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mo pict prod i",
+			"maxAvg": 96.4,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ds intl forstry",
+			"maxAvg": 96.36,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ds intl forstry",
+			"maxAvg": 96.36,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prgm devl cnsl",
+			"maxAvg": 96.33,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "specific lrn dis",
+			"maxAvg": 96.33,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "specific lrn dis",
+			"maxAvg": 96.33,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "msc major essay",
+			"maxAvg": 96.33,
+			"minPass": 2,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dynam struct 2",
+			"maxAvg": 96.27,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dynam struct 2",
+			"maxAvg": 96.27,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prt diff equa i",
+			"maxAvg": 96.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prt diff equa i",
+			"maxAvg": 96.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hydrmtllgcl rctr",
+			"maxAvg": 96.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hydrmtllgcl rctr",
+			"maxAvg": 96.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hn dev: inf-adlt",
+			"maxAvg": 96.23,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "classroom mgmt",
+			"maxAvg": 96.21,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "classroom mgmt",
+			"maxAvg": 96.21,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prgm devl cnsl",
+			"maxAvg": 96.16,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "social analysis",
+			"maxAvg": 96.15,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "social analysis",
+			"maxAvg": 96.15,
+			"minPass": 27,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dev wkshp/sem",
+			"maxAvg": 96.11,
+			"minPass": 26,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "acad libraries",
+			"maxAvg": 96.1,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "acad libraries",
+			"maxAvg": 96.1,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hlth & soc care",
+			"maxAvg": 96.09,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "phyl asp phy act",
+			"maxAvg": 96.06,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro excp child",
+			"maxAvg": 96.03,
+			"minPass": 35,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "eng mtls lab",
+			"maxAvg": 96,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prgm devl cnsl",
+			"maxAvg": 96,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thesis",
+			"maxAvg": 96,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thesis",
+			"maxAvg": 96,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thesis",
+			"maxAvg": 96,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tch'g hghly able",
+			"maxAvg": 96,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tch'g hghly able",
+			"maxAvg": 96,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "basic princ meas",
+			"maxAvg": 96,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "kin project",
+			"maxAvg": 96,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ms thesis",
+			"maxAvg": 96,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "log & crit think",
+			"maxAvg": 96,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "health psych",
+			"maxAvg": 96,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "health psych",
+			"maxAvg": 96,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tech math sci",
+			"maxAvg": 95.96,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tech math sci",
+			"maxAvg": 95.96,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "social analysis",
+			"maxAvg": 95.93,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "exp des anl ed",
+			"maxAvg": 95.9,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "basic princ meas",
+			"maxAvg": 95.86,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "basic princ meas",
+			"maxAvg": 95.86,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cur dev e df&hrd",
+			"maxAvg": 95.83,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "schl counselling",
+			"maxAvg": 95.78,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "schl counselling",
+			"maxAvg": 95.78,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fn & educ change",
+			"maxAvg": 95.78,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fn & educ change",
+			"maxAvg": 95.78,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sociocult determ",
+			"maxAvg": 95.76,
+			"minPass": 92,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "eth & prof clin",
+			"maxAvg": 95.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "eth & prof clin",
+			"maxAvg": 95.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "math mdl com dis",
+			"maxAvg": 95.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "math mdl com dis",
+			"maxAvg": 95.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prep writ career",
+			"maxAvg": 95.7,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prep writ career",
+			"maxAvg": 95.7,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tech for vis imp",
+			"maxAvg": 95.67,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tech for vis imp",
+			"maxAvg": 95.67,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "functional analy",
+			"maxAvg": 95.67,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "functional analy",
+			"maxAvg": 95.67,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "orch repertoire",
+			"maxAvg": 95.67,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "curric issu",
+			"maxAvg": 95.63,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mgmt sc meth",
+			"maxAvg": 95.6,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ds tec ii sc c&p",
+			"maxAvg": 95.58,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ds tec ii sc c&p",
+			"maxAvg": 95.58,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "lie theory i",
+			"maxAvg": 95.56,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "lie theory i",
+			"maxAvg": 95.56,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thermodynamics",
+			"maxAvg": 95.54,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thermodynamics",
+			"maxAvg": 95.54,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "augmt&alt comm",
+			"maxAvg": 95.5,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "augmt&alt comm",
+			"maxAvg": 95.5,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "surv bhvr dis ch",
+			"maxAvg": 95.47,
+			"minPass": 26,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "surv bhvr dis ch",
+			"maxAvg": 95.47,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mgmt sc meth",
+			"maxAvg": 95.43,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "quant fld theory",
+			"maxAvg": 95.43,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "quant fld theory",
+			"maxAvg": 95.43,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "able&creatv lrnr",
+			"maxAvg": 95.41,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "orch repertoire",
+			"maxAvg": 95.38,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "clin make iv",
+			"maxAvg": 95.37,
+			"minPass": 78,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "counsl adolescnt",
+			"maxAvg": 95.36,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "counsl adolescnt",
+			"maxAvg": 95.36,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "",
+			"maxAvg": 95.36,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "curric issu",
+			"maxAvg": 95.33,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "math operations",
+			"maxAvg": 95.31,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "math operations",
+			"maxAvg": 95.31,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thy cognt assess",
+			"maxAvg": 95.31,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thy cognt assess",
+			"maxAvg": 95.31,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "able&creatv lrnr",
+			"maxAvg": 95.3,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "islnd wild mgmt",
+			"maxAvg": 95.29,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cl pro prim care",
+			"maxAvg": 95.29,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tchg st visl imp",
+			"maxAvg": 95.27,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro psychthrpy",
+			"maxAvg": 95.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro psychthrpy",
+			"maxAvg": 95.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ed prg hghly abl",
+			"maxAvg": 95.22,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ed prg hghly abl",
+			"maxAvg": 95.22,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "scenery prod i",
+			"maxAvg": 95.2,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "scenery prod i",
+			"maxAvg": 95.2,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "seminar",
+			"maxAvg": 95.18,
+			"minPass": 1,
+			"avgFail": 0.04
+		},
+		{
+			"sections_title": "dev neuropsych",
+			"maxAvg": 95.17,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dev neuropsych",
+			"maxAvg": 95.17,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res mthd in educ",
+			"maxAvg": 95.16,
+			"minPass": 31,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "exp des anl ed",
+			"maxAvg": 95.16,
+			"minPass": 37,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "med tech project",
+			"maxAvg": 95.15,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "med tech project",
+			"maxAvg": 95.15,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro excp child",
+			"maxAvg": 95.15,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "classroom mgmt",
+			"maxAvg": 95.13,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "exp des anl ed",
+			"maxAvg": 95.13,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cl pro prim care",
+			"maxAvg": 95.13,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intr stat rs edu",
+			"maxAvg": 95.11,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "an meth epid res",
+			"maxAvg": 95.11,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "com hlth prom",
+			"maxAvg": 95.09,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "com hlth prom",
+			"maxAvg": 95.09,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "admn of injectns",
+			"maxAvg": 95.07,
+			"minPass": 79,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "master eng proj",
+			"maxAvg": 95,
+			"minPass": 2,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "master eng proj",
+			"maxAvg": 95,
+			"minPass": 2,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adlt psychpathlg",
+			"maxAvg": 95,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adlt psychpathlg",
+			"maxAvg": 95,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "m.sc major essay",
+			"maxAvg": 95,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thesis",
+			"maxAvg": 95,
+			"minPass": 2,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thesis",
+			"maxAvg": 95,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thesis",
+			"maxAvg": 95,
+			"minPass": 2,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thesis",
+			"maxAvg": 95,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "spc tpcs macroec",
+			"maxAvg": 95,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "spc tpcs macroec",
+			"maxAvg": 95,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ict educ ethics",
+			"maxAvg": 95,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ict educ ethics",
+			"maxAvg": 95,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "coll&uni teachng",
+			"maxAvg": 95,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mult des anal rs",
+			"maxAvg": 95,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mult des anal rs",
+			"maxAvg": 95,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "spec tpcs kin",
+			"maxAvg": 95,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ubc singers",
+			"maxAvg": 95,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ubc singers",
+			"maxAvg": 95,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mntl hlth concrn",
+			"maxAvg": 95,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mntl hlth concrn",
+			"maxAvg": 95,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "msc thesis",
+			"maxAvg": 95,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "eval src evidenc",
+			"maxAvg": 95,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "directed study",
+			"maxAvg": 95,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "coll&uni teachng",
+			"maxAvg": 94.94,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "coaching effctv",
+			"maxAvg": 94.92,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "eth&profl issues",
+			"maxAvg": 94.92,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "classroom mgmt",
+			"maxAvg": 94.88,
+			"minPass": 25,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cur dev e df&hrd",
+			"maxAvg": 94.88,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res meth educ",
+			"maxAvg": 94.88,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "admn of injectns",
+			"maxAvg": 94.87,
+			"minPass": 121,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "txt pol& id cdev",
+			"maxAvg": 94.86,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "txt pol& id cdev",
+			"maxAvg": 94.86,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prg child sp lrn",
+			"maxAvg": 94.86,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prg child sp lrn",
+			"maxAvg": 94.86,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ths prop: biotec",
+			"maxAvg": 94.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ths prop: biotec",
+			"maxAvg": 94.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "stats methlgy i",
+			"maxAvg": 94.75,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "stats methlgy i",
+			"maxAvg": 94.75,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res mthd in educ",
+			"maxAvg": 94.75,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "classroom mgmt",
+			"maxAvg": 94.75,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mt-anl qnt rs sy",
+			"maxAvg": 94.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mt-anl qnt rs sy",
+			"maxAvg": 94.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "eth & prof clin",
+			"maxAvg": 94.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "power syst dynam",
+			"maxAvg": 94.71,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "power syst dynam",
+			"maxAvg": 94.71,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "",
+			"maxAvg": 94.7,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv human gene",
+			"maxAvg": 94.7,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv human gene",
+			"maxAvg": 94.7,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "quant fld theory",
+			"maxAvg": 94.7,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "",
+			"maxAvg": 94.7,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hier lin modelng",
+			"maxAvg": 94.69,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hier lin modelng",
+			"maxAvg": 94.69,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ind skl vis imp",
+			"maxAvg": 94.67,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ind skl vis imp",
+			"maxAvg": 94.67,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "algebra ii",
+			"maxAvg": 94.67,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "probability i",
+			"maxAvg": 94.67,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "probability i",
+			"maxAvg": 94.67,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "schl counselling",
+			"maxAvg": 94.56,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "curric as&interv",
+			"maxAvg": 94.56,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "pr mental health",
+			"maxAvg": 94.56,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "computl ling 1",
+			"maxAvg": 94.5,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "computl ling 1",
+			"maxAvg": 94.5,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "basic princ meas",
+			"maxAvg": 94.5,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "acad assess schl",
+			"maxAvg": 94.5,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "frst ntns rsorcs",
+			"maxAvg": 94.5,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "frst ntns rsorcs",
+			"maxAvg": 94.5,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv rad biophys",
+			"maxAvg": 94.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv rad biophys",
+			"maxAvg": 94.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "lrn'g disablties",
+			"maxAvg": 94.48,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rsrch methdlgy",
+			"maxAvg": 94.44,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "audi adv prc ii",
+			"maxAvg": 94.44,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "constr strat",
+			"maxAvg": 94.42,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prev spts inj i",
+			"maxAvg": 94.42,
+			"minPass": 119,
+			"avgFail": 0.5
+		},
+		{
+			"sections_title": "tpc int-cel traf",
+			"maxAvg": 94.4,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tpc int-cel traf",
+			"maxAvg": 94.4,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "educ stds autism",
+			"maxAvg": 94.4,
+			"minPass": 35,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sbst use addictn",
+			"maxAvg": 94.36,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sbst use addictn",
+			"maxAvg": 94.36,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "lrn'g disablties",
+			"maxAvg": 94.34,
+			"minPass": 31,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ecolg plant bioc",
+			"maxAvg": 94.33,
+			"minPass": 23,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ecolg plant bioc",
+			"maxAvg": 94.33,
+			"minPass": 23,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thesis",
+			"maxAvg": 94.33,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cr-fc grwth&dev",
+			"maxAvg": 94.33,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "acad assess schl",
+			"maxAvg": 94.33,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intr dyn systems",
+			"maxAvg": 94.33,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intr dyn systems",
+			"maxAvg": 94.33,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "directed study",
+			"maxAvg": 94.33,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "found ed tech",
+			"maxAvg": 94.29,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "project & report",
+			"maxAvg": 94.27,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prin behav anlys",
+			"maxAvg": 94.25,
+			"minPass": 16,
+			"avgFail": 0.33
+		},
+		{
+			"sections_title": "intro musc thry",
+			"maxAvg": 94.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "surgical rsrch",
+			"maxAvg": 94.25,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tch'g hghly able",
+			"maxAvg": 94.24,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "typ atyp inf/ch",
+			"maxAvg": 94.23,
+			"minPass": 27,
+			"avgFail": 0.21
+		},
+		{
+			"sections_title": "phrm in practc 1",
+			"maxAvg": 94.23,
+			"minPass": 218,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "phrm in practc 1",
+			"maxAvg": 94.23,
+			"minPass": 218,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv hlth assess",
+			"maxAvg": 94.21,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv hlth assess",
+			"maxAvg": 94.21,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "",
+			"maxAvg": 94.2,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "crit spec ed",
+			"maxAvg": 94.2,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "crit spec ed",
+			"maxAvg": 94.2,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cor des ed res",
+			"maxAvg": 94.18,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "curr hist contxt",
+			"maxAvg": 94.17,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "curr hist contxt",
+			"maxAvg": 94.17,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "algb topology i",
+			"maxAvg": 94.17,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "research problem",
+			"maxAvg": 94.17,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "research problem",
+			"maxAvg": 94.17,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ldrshp, ethics",
+			"maxAvg": 94.15,
+			"minPass": 120,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ldrshp, ethics",
+			"maxAvg": 94.15,
+			"minPass": 120,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "assess lrn diffi",
+			"maxAvg": 94.14,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "curric issu",
+			"maxAvg": 94.13,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ed st dvl ds inc",
+			"maxAvg": 94.08,
+			"minPass": 39,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intrv ch&ad bh d",
+			"maxAvg": 94.08,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intrv ch&ad bh d",
+			"maxAvg": 94.08,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "appl hlth serv",
+			"maxAvg": 94.08,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "appl hlth serv",
+			"maxAvg": 94.08,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "educ theories",
+			"maxAvg": 94.06,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "educ theories",
+			"maxAvg": 94.06,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "crit spec ed",
+			"maxAvg": 94.05,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "found ed tech",
+			"maxAvg": 94.05,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "info tech&archvs",
+			"maxAvg": 94,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "info tech&archvs",
+			"maxAvg": 94,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hearing sci ii",
+			"maxAvg": 94,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hearing sci ii",
+			"maxAvg": 94,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thry of automata",
+			"maxAvg": 94,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thry of automata",
+			"maxAvg": 94,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thesis",
+			"maxAvg": 94,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rsc trd edu admn",
+			"maxAvg": 94,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res mthd in educ",
+			"maxAvg": 94,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thy cognt assess",
+			"maxAvg": 94,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tech arts hum",
+			"maxAvg": 94,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fisheries mngmt",
+			"maxAvg": 94,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fisheries mngmt",
+			"maxAvg": 94,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "contemp players",
+			"maxAvg": 94,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "contemp players",
+			"maxAvg": 94,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "chldren&families",
+			"maxAvg": 94,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "chldren&families",
+			"maxAvg": 94,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv hlth assess",
+			"maxAvg": 94,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "msn major essay",
+			"maxAvg": 94,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rehab learning",
+			"maxAvg": 94,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "exp des anl ed",
+			"maxAvg": 93.95,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "specific lrn dis",
+			"maxAvg": 93.94,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "electronics lab",
+			"maxAvg": 93.93,
+			"minPass": 25,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "comm disorders",
+			"maxAvg": 93.91,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "comm disorders",
+			"maxAvg": 93.91,
+			"minPass": 33,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "electronics lab",
+			"maxAvg": 93.91,
+			"minPass": 53,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "coll&uni teachng",
+			"maxAvg": 93.91,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "typ atyp inf/ch",
+			"maxAvg": 93.9,
+			"minPass": 27,
+			"avgFail": 0.3
+		},
+		{
+			"sections_title": "sociocult determ",
+			"maxAvg": 93.89,
+			"minPass": 36,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hn dev, lrn, cul",
+			"maxAvg": 93.88,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dev scale&measur",
+			"maxAvg": 93.86,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dev scale&measur",
+			"maxAvg": 93.86,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fam nrs pract",
+			"maxAvg": 93.86,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv int seminar",
+			"maxAvg": 93.82,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prin behav anlys",
+			"maxAvg": 93.81,
+			"minPass": 21,
+			"avgFail": 0.5
+		},
+		{
+			"sections_title": "fluor microscpy",
+			"maxAvg": 93.8,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fluor microscpy",
+			"maxAvg": 93.8,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "nanosc model&sim",
+			"maxAvg": 93.8,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "nanosc model&sim",
+			"maxAvg": 93.8,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "algebra i",
+			"maxAvg": 93.8,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "algebra i",
+			"maxAvg": 93.8,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prt diff equa i",
+			"maxAvg": 93.8,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "phyl ms aud func",
+			"maxAvg": 93.79,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "phyl ms aud func",
+			"maxAvg": 93.79,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sem sociol educ",
+			"maxAvg": 93.78,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sem sociol educ",
+			"maxAvg": 93.78,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res mthd in educ",
+			"maxAvg": 93.78,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ed prg hghly abl",
+			"maxAvg": 93.78,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "harmonic anal i",
+			"maxAvg": 93.78,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "audi prctcm iii",
+			"maxAvg": 93.75,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "audi prctcm iii",
+			"maxAvg": 93.75,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "as in s&s disord",
+			"maxAvg": 93.75,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "as in s&s disord",
+			"maxAvg": 93.75,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "diff geometry i",
+			"maxAvg": 93.75,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "crit apprais lit",
+			"maxAvg": 93.75,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "crit apprais lit",
+			"maxAvg": 93.75,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "crit spec ed",
+			"maxAvg": 93.74,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "syst rev hlth rs",
+			"maxAvg": 93.73,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "syst rev hlth rs",
+			"maxAvg": 93.73,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "trends & topics",
+			"maxAvg": 93.72,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "kinder curriclm",
+			"maxAvg": 93.72,
+			"minPass": 32,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "kinder curriclm",
+			"maxAvg": 93.72,
+			"minPass": 32,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "classroom mgmt",
+			"maxAvg": 93.72,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "asmnt spec needs",
+			"maxAvg": 93.71,
+			"minPass": 17,
+			"avgFail": 0.25
+		},
+		{
+			"sections_title": "cross-cltr cnsl",
+			"maxAvg": 93.7,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cross-cltr cnsl",
+			"maxAvg": 93.7,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res mthd in educ",
+			"maxAvg": 93.7,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "incl bl vis-imp",
+			"maxAvg": 93.69,
+			"minPass": 35,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "exp des anl ed",
+			"maxAvg": 93.68,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "grad prac",
+			"maxAvg": 93.67,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "grad prac",
+			"maxAvg": 93.67,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thesis",
+			"maxAvg": 93.67,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prof,eth&lgl iss",
+			"maxAvg": 93.67,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prof,eth&lgl iss",
+			"maxAvg": 93.67,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ed st dvl ds inc",
+			"maxAvg": 93.65,
+			"minPass": 40,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "acad assess schl",
+			"maxAvg": 93.64,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res mthd in educ",
+			"maxAvg": 93.6,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "",
+			"maxAvg": 93.6,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "functional analy",
+			"maxAvg": 93.6,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv immunogeneti",
+			"maxAvg": 93.6,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv immunogeneti",
+			"maxAvg": 93.6,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dsgn&anl smp&sub",
+			"maxAvg": 93.59,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dsgn&anl smp&sub",
+			"maxAvg": 93.59,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cad algrthm i cr",
+			"maxAvg": 93.58,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cad algrthm i cr",
+			"maxAvg": 93.58,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rev res curr&ped",
+			"maxAvg": 93.56,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "specific lrn dis",
+			"maxAvg": 93.56,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "pediatric audio",
+			"maxAvg": 93.54,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "pediatric audio",
+			"maxAvg": 93.54,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "problty & stat",
+			"maxAvg": 93.52,
+			"minPass": 56,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "problty & stat",
+			"maxAvg": 93.52,
+			"minPass": 56,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "honours thesis",
+			"maxAvg": 93.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "honours thesis",
+			"maxAvg": 93.5,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "complex analy",
+			"maxAvg": 93.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "complex analy",
+			"maxAvg": 93.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "probability i",
+			"maxAvg": 93.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "linear vibrtns",
+			"maxAvg": 93.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "linear vibrtns",
+			"maxAvg": 93.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "m.sc. thesis",
+			"maxAvg": 93.5,
+			"minPass": 2,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "primary care iii",
+			"maxAvg": 93.5,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "primary care iii",
+			"maxAvg": 93.5,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "soc & econ measu",
+			"maxAvg": 93.47,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "soc & econ measu",
+			"maxAvg": 93.47,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res mthd in educ",
+			"maxAvg": 93.47,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv geotechnics",
+			"maxAvg": 93.47,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv geotechnics",
+			"maxAvg": 93.47,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prob-bsd lrn bio",
+			"maxAvg": 93.45,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prob-bsd lrn bio",
+			"maxAvg": 93.45,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hist poplr music",
+			"maxAvg": 93.45,
+			"minPass": 148,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hist poplr music",
+			"maxAvg": 93.45,
+			"minPass": 148,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "org&admin hi edu",
+			"maxAvg": 93.44,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "org&admin hi edu",
+			"maxAvg": 93.44,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "surv bhvr dis ch",
+			"maxAvg": 93.42,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ldrshp ethcs pol",
+			"maxAvg": 93.41,
+			"minPass": 88,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ldrshp ethcs pol",
+			"maxAvg": 93.41,
+			"minPass": 88,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adu edu pro",
+			"maxAvg": 93.4,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adu edu pro",
+			"maxAvg": 93.4,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv hlth assess",
+			"maxAvg": 93.4,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fst ntns soc iss",
+			"maxAvg": 93.4,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fst ntns soc iss",
+			"maxAvg": 93.4,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "honours thesis",
+			"maxAvg": 93.38,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "pln pe,sp&ex prg",
+			"maxAvg": 93.37,
+			"minPass": 108,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "lrn'g disablties",
+			"maxAvg": 93.35,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "contem players",
+			"maxAvg": 93.35,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "contem players",
+			"maxAvg": 93.35,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res meth educ",
+			"maxAvg": 93.34,
+			"minPass": 47,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "labour economics",
+			"maxAvg": 93.33,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "labour economics",
+			"maxAvg": 93.33,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "crit spec ed",
+			"maxAvg": 93.33,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thy cognt assess",
+			"maxAvg": 93.33,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "orch repertoire",
+			"maxAvg": 93.33,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "meas health care",
+			"maxAvg": 93.33,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "meas health care",
+			"maxAvg": 93.33,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "quantum mech ii",
+			"maxAvg": 93.31,
+			"minPass": 29,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "quantum mech ii",
+			"maxAvg": 93.31,
+			"minPass": 29,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "home ec: 2nd ii",
+			"maxAvg": 93.3,
+			"minPass": 30,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "home ec: 2nd ii",
+			"maxAvg": 93.3,
+			"minPass": 30,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "pulmonry pthphyl",
+			"maxAvg": 93.29,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "pulmonry pthphyl",
+			"maxAvg": 93.29,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res mthd in educ",
+			"maxAvg": 93.27,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "curric iss&thry",
+			"maxAvg": 93.25,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tch'g hghly able",
+			"maxAvg": 93.25,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "item respns thry",
+			"maxAvg": 93.25,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "item respns thry",
+			"maxAvg": 93.25,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "genome analysis",
+			"maxAvg": 93.25,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "genome analysis",
+			"maxAvg": 93.25,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro psychthrpy",
+			"maxAvg": 93.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "advancd span iii",
+			"maxAvg": 93.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "std in sign lang",
+			"maxAvg": 93.23,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "std in sign lang",
+			"maxAvg": 93.23,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intr hindi-urdu",
+			"maxAvg": 93.22,
+			"minPass": 23,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intr hindi-urdu",
+			"maxAvg": 93.22,
+			"minPass": 23,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "lang dev life",
+			"maxAvg": 93.2,
+			"minPass": 35,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "lang dev life",
+			"maxAvg": 93.2,
+			"minPass": 35,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "crit anly sci ed",
+			"maxAvg": 93.2,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "crit anly sci ed",
+			"maxAvg": 93.2,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "specific lrn dis",
+			"maxAvg": 93.2,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thr lng&lit rsrc",
+			"maxAvg": 93.2,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thr lng&lit rsrc",
+			"maxAvg": 93.2,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "complex analy",
+			"maxAvg": 93.2,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "research problem",
+			"maxAvg": 93.2,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hlth tech asmnt",
+			"maxAvg": 93.2,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hlth tech asmnt",
+			"maxAvg": 93.2,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tech arts hum",
+			"maxAvg": 93.19,
+			"minPass": 29,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tech comm skills",
+			"maxAvg": 93.17,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "able&creatv lrnr",
+			"maxAvg": 93.15,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "found ed tech",
+			"maxAvg": 93.14,
+			"minPass": 21,
+			"avgFail": 0.4
+		},
+		{
+			"sections_title": "sem r prpty dv&p",
+			"maxAvg": 93.12,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sem r prpty dv&p",
+			"maxAvg": 93.12,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "incl bl vis-imp",
+			"maxAvg": 93.11,
+			"minPass": 70,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "des tech",
+			"maxAvg": 93.11,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "combinatorial op",
+			"maxAvg": 93.11,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "combinatorial op",
+			"maxAvg": 93.11,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "curric as&interv",
+			"maxAvg": 93.1,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "phyl ms aud func",
+			"maxAvg": 93.09,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "socl&emtl assess",
+			"maxAvg": 93.08,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "socl&emtl assess",
+			"maxAvg": 93.08,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "exptl med method",
+			"maxAvg": 93.08,
+			"minPass": 28,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "eco-based mgmt",
+			"maxAvg": 93.07,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "eco-based mgmt",
+			"maxAvg": 93.07,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "eth&profl issues",
+			"maxAvg": 93.07,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "concepts in onco",
+			"maxAvg": 93.07,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "concepts in onco",
+			"maxAvg": 93.07,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "contem players",
+			"maxAvg": 93.06,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "food theor app",
+			"maxAvg": 93.05,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sound design",
+			"maxAvg": 93.05,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sound design",
+			"maxAvg": 93.05,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hmec ii sec c&p",
+			"maxAvg": 93.04,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tops public plcy",
+			"maxAvg": 93.04,
+			"minPass": 28,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv std min area",
+			"maxAvg": 93,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "master's thesis",
+			"maxAvg": 93,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "behav economics",
+			"maxAvg": 93,
+			"minPass": 2,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "behav economics",
+			"maxAvg": 93,
+			"minPass": 2,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thry&rs soc cont",
+			"maxAvg": 93,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thry&rs soc cont",
+			"maxAvg": 93,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "semicon thy appl",
+			"maxAvg": 93,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "semicon thy appl",
+			"maxAvg": 93,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "crit spec ed",
+			"maxAvg": 93,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ecol plnt bioch",
+			"maxAvg": 93,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ecol plnt bioch",
+			"maxAvg": 93,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tec comm skls ii",
+			"maxAvg": 93,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tec comm skls ii",
+			"maxAvg": 93,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ital lit cult",
+			"maxAvg": 93,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ital lit cult",
+			"maxAvg": 93,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mch tool str&vib",
+			"maxAvg": 93,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mch tool str&vib",
+			"maxAvg": 93,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro musc thry",
+			"maxAvg": 93,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "perinatal epidem",
+			"maxAvg": 93,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "perinatal epidem",
+			"maxAvg": 93,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "seminar",
+			"maxAvg": 93,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ms thesis",
+			"maxAvg": 93,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "seminar",
+			"maxAvg": 93,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "math prblm slvng",
+			"maxAvg": 92.96,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "soc-psych fndtns",
+			"maxAvg": 92.92,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "soc-psych fndtns",
+			"maxAvg": 92.92,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "career counselng",
+			"maxAvg": 92.91,
+			"minPass": 33,
+			"avgFail": 0.5
+		},
+		{
+			"sections_title": "socl&emtl assess",
+			"maxAvg": 92.9,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res mthd in educ",
+			"maxAvg": 92.89,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mtrl manufact",
+			"maxAvg": 92.89,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mtrl manufact",
+			"maxAvg": 92.89,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "soc wrk & justce",
+			"maxAvg": 92.88,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "obsv&doc erly ch",
+			"maxAvg": 92.87,
+			"minPass": 31,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "obsv&doc erly ch",
+			"maxAvg": 92.87,
+			"minPass": 31,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "educ stds autism",
+			"maxAvg": 92.87,
+			"minPass": 39,
+			"avgFail": 0.33
+		},
+		{
+			"sections_title": "audi prctcm iv",
+			"maxAvg": 92.85,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "socl&emtl assess",
+			"maxAvg": 92.85,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "admn of injectns",
+			"maxAvg": 92.85,
+			"minPass": 126,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "env phil & educ",
+			"maxAvg": 92.83,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "socl&emtl assess",
+			"maxAvg": 92.83,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "exp des anl ed",
+			"maxAvg": 92.83,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rsch surgical pr",
+			"maxAvg": 92.83,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rsch surgical pr",
+			"maxAvg": 92.83,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cross-cltr cnsl",
+			"maxAvg": 92.8,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thesis",
+			"maxAvg": 92.8,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prof prct larc",
+			"maxAvg": 92.8,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prof prct larc",
+			"maxAvg": 92.8,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "probability ii",
+			"maxAvg": 92.78,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "qual mth res des",
+			"maxAvg": 92.78,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hn dev, lrn, cul",
+			"maxAvg": 92.77,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "curric iss&thry",
+			"maxAvg": 92.76,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "constr strat",
+			"maxAvg": 92.76,
+			"minPass": 17,
+			"avgFail": 0.29
+		},
+		{
+			"sections_title": "masc thesis",
+			"maxAvg": 92.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thry of automata",
+			"maxAvg": 92.75,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mth&mdl ptrl&gch",
+			"maxAvg": 92.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mth&mdl ptrl&gch",
+			"maxAvg": 92.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ed prg hghly abl",
+			"maxAvg": 92.75,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prt diff equa i",
+			"maxAvg": 92.75,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "probability ii",
+			"maxAvg": 92.75,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "eng mtls lab",
+			"maxAvg": 92.74,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fdns highr educ",
+			"maxAvg": 92.73,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fdns highr educ",
+			"maxAvg": 92.73,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "career planning",
+			"maxAvg": 92.71,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "comp animal phyl",
+			"maxAvg": 92.71,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cog lang proc ed",
+			"maxAvg": 92.7,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cog lang proc ed",
+			"maxAvg": 92.7,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cl pro prim care",
+			"maxAvg": 92.69,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "seismic rsp strc",
+			"maxAvg": 92.67,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "seismic rsp strc",
+			"maxAvg": 92.67,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thesis",
+			"maxAvg": 92.67,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "asmnt spec needs",
+			"maxAvg": 92.67,
+			"minPass": 27,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "combinatorial op",
+			"maxAvg": 92.67,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "seminar",
+			"maxAvg": 92.67,
+			"minPass": 35,
+			"avgFail": 1
+		},
+		{
+			"sections_title": "vocal techniques",
+			"maxAvg": 92.67,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "vocal techniques",
+			"maxAvg": 92.67,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "pr mental health",
+			"maxAvg": 92.67,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "pr mental health",
+			"maxAvg": 92.67,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "admn of injectns",
+			"maxAvg": 92.66,
+			"minPass": 120,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rev res curr&ped",
+			"maxAvg": 92.64,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "curric iss&thry",
+			"maxAvg": 92.63,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thry&prc prg evl",
+			"maxAvg": 92.63,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thry&prc prg evl",
+			"maxAvg": 92.63,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "meas thry&integr",
+			"maxAvg": 92.63,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "meas thry&integr",
+			"maxAvg": 92.63,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rdngs orch rep",
+			"maxAvg": 92.63,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rdngs orch rep",
+			"maxAvg": 92.63,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rl div hlth expr",
+			"maxAvg": 92.62,
+			"minPass": 118,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rl div hlth expr",
+			"maxAvg": 92.62,
+			"minPass": 118,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "project & report",
+			"maxAvg": 92.61,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv comp archtct",
+			"maxAvg": 92.6,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv comp archtct",
+			"maxAvg": 92.6,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "modl dynam systm",
+			"maxAvg": 92.59,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "modl dynam systm",
+			"maxAvg": 92.59,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tpcs path rsrch",
+			"maxAvg": 92.58,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tpcs path rsrch",
+			"maxAvg": 92.58,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cond matter ii",
+			"maxAvg": 92.58,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cond matter ii",
+			"maxAvg": 92.58,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "crystal structre",
+			"maxAvg": 92.57,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "crystal structre",
+			"maxAvg": 92.57,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prin chem separ",
+			"maxAvg": 92.5,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prin chem separ",
+			"maxAvg": 92.5,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "",
+			"maxAvg": 92.5,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "market structure",
+			"maxAvg": 92.5,
+			"minPass": 2,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "market structure",
+			"maxAvg": 92.5,
+			"minPass": 2,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tpcs sociol educ",
+			"maxAvg": 92.5,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tpcs sociol educ",
+			"maxAvg": 92.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ad top vlsi desg",
+			"maxAvg": 92.5,
+			"minPass": 2,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ad top vlsi desg",
+			"maxAvg": 92.5,
+			"minPass": 2,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "solid earth sci",
+			"maxAvg": 92.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "solid earth sci",
+			"maxAvg": 92.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "assess lrn diffi",
+			"maxAvg": 92.5,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "acad assess schl",
+			"maxAvg": 92.5,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "discourse & talk",
+			"maxAvg": 92.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "discourse & talk",
+			"maxAvg": 92.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "coll&uni teachng",
+			"maxAvg": 92.5,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sem hum mtr perf",
+			"maxAvg": 92.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro sanskrit",
+			"maxAvg": 92.5,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro sanskrit",
+			"maxAvg": 92.5,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hn dev: inf-adlt",
+			"maxAvg": 92.49,
+			"minPass": 31,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "amplification ii",
+			"maxAvg": 92.45,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "amplification ii",
+			"maxAvg": 92.45,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "case res&analys",
+			"maxAvg": 92.45,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "des tech",
+			"maxAvg": 92.45,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "soc-psych fndtns",
+			"maxAvg": 92.44,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thy cognt assess",
+			"maxAvg": 92.43,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fdmt inj biomech",
+			"maxAvg": 92.43,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fdmt inj biomech",
+			"maxAvg": 92.43,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "des tech",
+			"maxAvg": 92.42,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "costume constr",
+			"maxAvg": 92.41,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "costume constr",
+			"maxAvg": 92.41,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "gen&cell therapy",
+			"maxAvg": 92.4,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "gen&cell therapy",
+			"maxAvg": 92.4,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "family counsl ii",
+			"maxAvg": 92.4,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "family counsl ii",
+			"maxAvg": 92.4,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "student seminar",
+			"maxAvg": 92.4,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rs mth&sem orbi",
+			"maxAvg": 92.4,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "discrete math",
+			"maxAvg": 92.4,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "discrete math",
+			"maxAvg": 92.4,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "complex analy i",
+			"maxAvg": 92.4,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ed st dvl ds inc",
+			"maxAvg": 92.39,
+			"minPass": 28,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prog pln & eval",
+			"maxAvg": 92.39,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "socl&emtl assess",
+			"maxAvg": 92.38,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prof,eth&lgl iss",
+			"maxAvg": 92.38,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "animal dvl gntcs",
+			"maxAvg": 92.36,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "animal dvl gntcs",
+			"maxAvg": 92.36,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "family counsl ii",
+			"maxAvg": 92.35,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "audi adv prc i",
+			"maxAvg": 92.33,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thesis",
+			"maxAvg": 92.33,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "socl&emtl assess",
+			"maxAvg": 92.33,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "admn ldrshp nurs",
+			"maxAvg": 92.33,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "admn ldrshp nurs",
+			"maxAvg": 92.33,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "costume constr",
+			"maxAvg": 92.32,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "urbn trans systm",
+			"maxAvg": 92.3,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "urbn trans systm",
+			"maxAvg": 92.3,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "assess lrn diffi",
+			"maxAvg": 92.3,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "appl lear theor",
+			"maxAvg": 92.3,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mthds asymp anal",
+			"maxAvg": 92.3,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "third-year russ",
+			"maxAvg": 92.3,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "third-year russ",
+			"maxAvg": 92.3,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sem medical anth",
+			"maxAvg": 92.29,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sem medical anth",
+			"maxAvg": 92.29,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "acquired lng dis",
+			"maxAvg": 92.29,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "acquired lng dis",
+			"maxAvg": 92.29,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "",
+			"maxAvg": 92.29,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "clinical clerkship",
+			"maxAvg": 92.29,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "clinical clerkship",
+			"maxAvg": 92.29,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "career counselng",
+			"maxAvg": 92.28,
+			"minPass": 29,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "drug safety",
+			"maxAvg": 92.28,
+			"minPass": 43,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "drug safety",
+			"maxAvg": 92.28,
+			"minPass": 43,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "frst busn enterp",
+			"maxAvg": 92.27,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "frst busn enterp",
+			"maxAvg": 92.27,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "info services i",
+			"maxAvg": 92.26,
+			"minPass": 39,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tpc cytosk&cl mo",
+			"maxAvg": 92.25,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hn dev: inf-adlt",
+			"maxAvg": 92.25,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cur dev e df&hrd",
+			"maxAvg": 92.25,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cultural studies",
+			"maxAvg": 92.25,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cultural studies",
+			"maxAvg": 92.25,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sem theor",
+			"maxAvg": 92.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sem theor",
+			"maxAvg": 92.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "int sem in sw th",
+			"maxAvg": 92.23,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intr stat rs edu",
+			"maxAvg": 92.22,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intr stat rs edu",
+			"maxAvg": 92.22,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hn dev, lrn, cul",
+			"maxAvg": 92.22,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "coll&uni teachng",
+			"maxAvg": 92.22,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ind peo frst lnd",
+			"maxAvg": 92.22,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ind peo frst lnd",
+			"maxAvg": 92.22,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "contxt ed policy",
+			"maxAvg": 92.2,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "contxt ed policy",
+			"maxAvg": 92.2,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "algebra ii",
+			"maxAvg": 92.2,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "pcol anaesthesia",
+			"maxAvg": 92.2,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "pcol anaesthesia",
+			"maxAvg": 92.2,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "quant fld theory",
+			"maxAvg": 92.2,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prin&meth rsch i",
+			"maxAvg": 92.19,
+			"minPass": 26,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prin&meth rsch i",
+			"maxAvg": 92.19,
+			"minPass": 26,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rsc trd edu admn",
+			"maxAvg": 92.19,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "lit review ii",
+			"maxAvg": 92.17,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro tech prod",
+			"maxAvg": 92.15,
+			"minPass": 48,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro tech prod",
+			"maxAvg": 92.15,
+			"minPass": 48,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tpc cytosk&cl mo",
+			"maxAvg": 92.14,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "curric iss&thry",
+			"maxAvg": 92.14,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "genetics& ethics",
+			"maxAvg": 92.14,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "genetics& ethics",
+			"maxAvg": 92.14,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prog pln & eval",
+			"maxAvg": 92.14,
+			"minPass": 35,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "curr iss oral hl",
+			"maxAvg": 92.13,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "crit spec ed",
+			"maxAvg": 92.13,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "exptl med method",
+			"maxAvg": 92.12,
+			"minPass": 28,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "micb eco genomic",
+			"maxAvg": 92.12,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "micb eco genomic",
+			"maxAvg": 92.12,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ch&ad psyco-path",
+			"maxAvg": 92.11,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "biology research",
+			"maxAvg": 92.1,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "role tcher guid",
+			"maxAvg": 92.1,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "comp animal phyl",
+			"maxAvg": 92.1,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv int seminar",
+			"maxAvg": 92.09,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cnt tme stchastc",
+			"maxAvg": 92.08,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cnt tme stchastc",
+			"maxAvg": 92.08,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv int seminar",
+			"maxAvg": 92.08,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "imprv pblic hlth",
+			"maxAvg": 92.08,
+			"minPass": 49,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "imprv pblic hlth",
+			"maxAvg": 92.08,
+			"minPass": 49,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "landsc plan&mgmt",
+			"maxAvg": 92.07,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "landsc plan&mgmt",
+			"maxAvg": 92.07,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "urb dsgn thr&met",
+			"maxAvg": 92.07,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "urb dsgn thr&met",
+			"maxAvg": 92.07,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "counsl adolescnt",
+			"maxAvg": 92.06,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rev res curr&ped",
+			"maxAvg": 92.06,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tech in hlthcare",
+			"maxAvg": 92.06,
+			"minPass": 218,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tech in hlthcare",
+			"maxAvg": 92.06,
+			"minPass": 218,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "math prblm slvng",
+			"maxAvg": 92.05,
+			"minPass": 42,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "found ed tech",
+			"maxAvg": 92.05,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "clinical dec ii",
+			"maxAvg": 92.04,
+			"minPass": 80,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fnd bdy dsgn:bsc",
+			"maxAvg": 92,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fnd bdy dsgn:bsc",
+			"maxAvg": 92,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "bndry-lyr metrly",
+			"maxAvg": 92,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "bndry-lyr metrly",
+			"maxAvg": 92,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "biology research",
+			"maxAvg": 92,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "topics plnt bioc",
+			"maxAvg": 92,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "topics plnt bioc",
+			"maxAvg": 92,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "child's lit",
+			"maxAvg": 92,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "urbn engr m&m",
+			"maxAvg": 92,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "urbn engr m&m",
+			"maxAvg": 92,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "student seminar",
+			"maxAvg": 92,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "curric iss&thry",
+			"maxAvg": 92,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res mthd in educ",
+			"maxAvg": 92,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "islnd wild mgmt",
+			"maxAvg": 92,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "py-sc asp ph act",
+			"maxAvg": 92,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "graduating paper",
+			"maxAvg": 92,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ptl dif eqn flud",
+			"maxAvg": 92,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ptl dif eqn flud",
+			"maxAvg": 92,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "diff geometry i",
+			"maxAvg": 92,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv eng acoustcs",
+			"maxAvg": 92,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv eng acoustcs",
+			"maxAvg": 92,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "proj mec studies",
+			"maxAvg": 92,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "seminar",
+			"maxAvg": 92,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "perinatl epidlgy",
+			"maxAvg": 92,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "perinatl epidlgy",
+			"maxAvg": 92,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prog pln & eval",
+			"maxAvg": 92,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "admn of injectns",
+			"maxAvg": 91.95,
+			"minPass": 94,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rev res curr&ped",
+			"maxAvg": 91.94,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "home/schl/cmnty",
+			"maxAvg": 91.93,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv hlth assess",
+			"maxAvg": 91.93,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv hlth assess",
+			"maxAvg": 91.93,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sem in autism",
+			"maxAvg": 91.92,
+			"minPass": 27,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "primary care iii",
+			"maxAvg": 91.92,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rehab learning",
+			"maxAvg": 91.92,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "curric iss&thry",
+			"maxAvg": 91.91,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "admn ldrshp nurs",
+			"maxAvg": 91.91,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ind skl vis imp",
+			"maxAvg": 91.9,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "motivation educ",
+			"maxAvg": 91.9,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "motivation educ",
+			"maxAvg": 91.9,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "clinical dec i",
+			"maxAvg": 91.89,
+			"minPass": 78,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "anat phys stats",
+			"maxAvg": 91.89,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "anat phys stats",
+			"maxAvg": 91.89,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "lit review ii",
+			"maxAvg": 91.88,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "txt pol& id cdev",
+			"maxAvg": 91.88,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "bioenrgtc ph act",
+			"maxAvg": 91.88,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "clin pharcknetcs",
+			"maxAvg": 91.88,
+			"minPass": 57,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "clin pharcknetcs",
+			"maxAvg": 91.88,
+			"minPass": 57,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tpcs appl biolgy",
+			"maxAvg": 91.86,
+			"minPass": 21,
+			"avgFail": 1
+		},
+		{
+			"sections_title": "tpcs app econ i",
+			"maxAvg": 91.86,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tpcs app econ i",
+			"maxAvg": 91.86,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "arch learn systs",
+			"maxAvg": 91.86,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "arch learn systs",
+			"maxAvg": 91.86,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "probability ii",
+			"maxAvg": 91.86,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "quantum elctrdyn",
+			"maxAvg": 91.85,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "quantum elctrdyn",
+			"maxAvg": 91.85,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "econ thry ii",
+			"maxAvg": 91.84,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "econ thry ii",
+			"maxAvg": 91.84,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tpcs biomed eng",
+			"maxAvg": 91.83,
+			"minPass": 23,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tpcs biomed eng",
+			"maxAvg": 91.83,
+			"minPass": 23,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "assess lrn diffi",
+			"maxAvg": 91.83,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "classroom mgmt",
+			"maxAvg": 91.83,
+			"minPass": 36,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv hum mole gen",
+			"maxAvg": 91.83,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv hum mole gen",
+			"maxAvg": 91.83,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "practice praxis",
+			"maxAvg": 91.83,
+			"minPass": 116,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "practice praxis",
+			"maxAvg": 91.83,
+			"minPass": 116,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "eth & prof clin",
+			"maxAvg": 91.83,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "career counselng",
+			"maxAvg": 91.82,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "stats methods",
+			"maxAvg": 91.82,
+			"minPass": 28,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "stats methods",
+			"maxAvg": 91.82,
+			"minPass": 28,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dev scale&measur",
+			"maxAvg": 91.82,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sowk practice ii",
+			"maxAvg": 91.82,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ldrshp educ org",
+			"maxAvg": 91.81,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ldrship pub hlth",
+			"maxAvg": 91.81,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "appl heterog cat",
+			"maxAvg": 91.8,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "appl heterog cat",
+			"maxAvg": 91.8,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "basic intvw skls",
+			"maxAvg": 91.8,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "expl methodology",
+			"maxAvg": 91.8,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "expl methodology",
+			"maxAvg": 91.8,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "probability ii",
+			"maxAvg": 91.8,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "clbrtv piano ii",
+			"maxAvg": 91.8,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "clbrtv piano ii",
+			"maxAvg": 91.8,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "systmtc pcol lab",
+			"maxAvg": 91.8,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "systmtc pcol lab",
+			"maxAvg": 91.8,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "software eng",
+			"maxAvg": 91.79,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "software eng",
+			"maxAvg": 91.79,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "macroecon ii",
+			"maxAvg": 91.79,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "macroecon ii",
+			"maxAvg": 91.79,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res mthd in educ",
+			"maxAvg": 91.79,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hn dev, lrn, cul",
+			"maxAvg": 91.79,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "expermntl micb",
+			"maxAvg": 91.79,
+			"minPass": 56,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "expermntl micb",
+			"maxAvg": 91.79,
+			"minPass": 56,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "clinical skills",
+			"maxAvg": 91.79,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "clinical skills",
+			"maxAvg": 91.79,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tpcs path rsrch",
+			"maxAvg": 91.79,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tch'g hghly able",
+			"maxAvg": 91.77,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hearng and noise",
+			"maxAvg": 91.75,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hearng and noise",
+			"maxAvg": 91.75,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "elem number thry",
+			"maxAvg": 91.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "elem number thry",
+			"maxAvg": 91.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "relativty & elec",
+			"maxAvg": 91.75,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "relativty & elec",
+			"maxAvg": 91.75,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "des tech",
+			"maxAvg": 91.74,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tpcs flu disord",
+			"maxAvg": 91.73,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tpcs flu disord",
+			"maxAvg": 91.73,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "stat infrnce i",
+			"maxAvg": 91.73,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "stat infrnce i",
+			"maxAvg": 91.73,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "group counsling",
+			"maxAvg": 91.71,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prt diff equa i",
+			"maxAvg": 91.71,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res meth educ",
+			"maxAvg": 91.7,
+			"minPass": 23,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "leis & disbl prs",
+			"maxAvg": 91.7,
+			"minPass": 123,
+			"avgFail": 1
+		},
+		{
+			"sections_title": "soci environ",
+			"maxAvg": 91.7,
+			"minPass": 46,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sch lrc prog",
+			"maxAvg": 91.68,
+			"minPass": 25,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sch lrc prog",
+			"maxAvg": 91.68,
+			"minPass": 25,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fnc hmn ant h&n",
+			"maxAvg": 91.67,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fnc hmn ant h&n",
+			"maxAvg": 91.67,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "self-tuning ctrl",
+			"maxAvg": 91.67,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "self-tuning ctrl",
+			"maxAvg": 91.67,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro excp child",
+			"maxAvg": 91.67,
+			"minPass": 36,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "algb topology i",
+			"maxAvg": 91.67,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "info tech&archvs",
+			"maxAvg": 91.63,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "grn nanoelec dev",
+			"maxAvg": 91.63,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "grn nanoelec dev",
+			"maxAvg": 91.63,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "lrn'g disablties",
+			"maxAvg": 91.63,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "serv for chld",
+			"maxAvg": 91.63,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "serv for chld",
+			"maxAvg": 91.63,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "phar care aborig",
+			"maxAvg": 91.63,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "phar care aborig",
+			"maxAvg": 91.63,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intr stat rs edu",
+			"maxAvg": 91.62,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hn dev, lrn, cul",
+			"maxAvg": 91.62,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "masc thesis",
+			"maxAvg": 91.6,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "bioanalyt chem",
+			"maxAvg": 91.6,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "bioanalyt chem",
+			"maxAvg": 91.6,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "honours seminar",
+			"maxAvg": 91.6,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "honours seminar",
+			"maxAvg": 91.6,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tpcs sociol educ",
+			"maxAvg": 91.6,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "appl lear theor",
+			"maxAvg": 91.6,
+			"minPass": 30,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dgtl img & text",
+			"maxAvg": 91.6,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dgtl img & text",
+			"maxAvg": 91.6,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "contemp players",
+			"maxAvg": 91.6,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro psychthrpy",
+			"maxAvg": 91.6,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "clinical res des",
+			"maxAvg": 91.6,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "clinical res des",
+			"maxAvg": 91.6,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "advancd span iii",
+			"maxAvg": 91.6,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res mthd in educ",
+			"maxAvg": 91.58,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "family counsl ii",
+			"maxAvg": 91.57,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "educ stds autism",
+			"maxAvg": 91.57,
+			"minPass": 28,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "shpbld proj mgmt",
+			"maxAvg": 91.57,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "shpbld proj mgmt",
+			"maxAvg": 91.57,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv tpcs stl str",
+			"maxAvg": 91.56,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intr stat rs edu",
+			"maxAvg": 91.56,
+			"minPass": 32,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "num anly prtl df",
+			"maxAvg": 91.56,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cave mn sys: d&p",
+			"maxAvg": 91.56,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cave mn sys: d&p",
+			"maxAvg": 91.56,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv conc pharmac",
+			"maxAvg": 91.56,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rsc trd edu admn",
+			"maxAvg": 91.55,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tech mlc biol&ex",
+			"maxAvg": 91.55,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tech mlc biol&ex",
+			"maxAvg": 91.55,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "project & report",
+			"maxAvg": 91.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "basic intvw skls",
+			"maxAvg": 91.5,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "counslng adults",
+			"maxAvg": 91.5,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "counslng adults",
+			"maxAvg": 91.5,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "endo micro-surg",
+			"maxAvg": 91.5,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ph d resrch sem",
+			"maxAvg": 91.5,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ph d resrch sem",
+			"maxAvg": 91.5,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rev res curr&ped",
+			"maxAvg": 91.5,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mth e: bynd erly",
+			"maxAvg": 91.5,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mth e: bynd erly",
+			"maxAvg": 91.5,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "power elec dsgn",
+			"maxAvg": 91.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mech erth quake",
+			"maxAvg": 91.5,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mech erth quake",
+			"maxAvg": 91.5,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "curric as&interv",
+			"maxAvg": 91.5,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "inst mthd chalng",
+			"maxAvg": 91.5,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "inst mthd chalng",
+			"maxAvg": 91.5,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dante's div com",
+			"maxAvg": 91.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dante's div com",
+			"maxAvg": 91.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "analyt num thry",
+			"maxAvg": 91.5,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "analyt num thry",
+			"maxAvg": 91.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ethics mtrnycare",
+			"maxAvg": 91.5,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ethics mtrnycare",
+			"maxAvg": 91.5,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ms thesis",
+			"maxAvg": 91.5,
+			"minPass": 2,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "log & crit think",
+			"maxAvg": 91.5,
+			"minPass": 2,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "nat resrce mngmt",
+			"maxAvg": 91.5,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "behav assessment",
+			"maxAvg": 91.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "behav assessment",
+			"maxAvg": 91.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cog/beh interven",
+			"maxAvg": 91.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cog/beh interven",
+			"maxAvg": 91.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "meas in practice",
+			"maxAvg": 91.5,
+			"minPass": 2,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "major proj prt 1",
+			"maxAvg": 91.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sc dsgn std i",
+			"maxAvg": 91.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sc dsgn std i",
+			"maxAvg": 91.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "com adult educ",
+			"maxAvg": 91.48,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mus&mov elem c&p",
+			"maxAvg": 91.48,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mus&mov elem c&p",
+			"maxAvg": 91.48,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prob mgmt models",
+			"maxAvg": 91.47,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prob mgmt models",
+			"maxAvg": 91.47,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rev res curr&ped",
+			"maxAvg": 91.47,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ldrshp educ org",
+			"maxAvg": 91.47,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hlth promo prac",
+			"maxAvg": 91.47,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hlth promo prac",
+			"maxAvg": 91.47,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "desig & analys 2",
+			"maxAvg": 91.46,
+			"minPass": 140,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "desig & analys 2",
+			"maxAvg": 91.46,
+			"minPass": 140,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intr stat rs edu",
+			"maxAvg": 91.46,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "stdy educ organ",
+			"maxAvg": 91.45,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ict educ ethics",
+			"maxAvg": 91.44,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv conc rehb rs",
+			"maxAvg": 91.44,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prof comms strat",
+			"maxAvg": 91.43,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prof comms strat",
+			"maxAvg": 91.43,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv immunogeneti",
+			"maxAvg": 91.42,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "astronomical lab",
+			"maxAvg": 91.4,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "acous & art phon",
+			"maxAvg": 91.4,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "lie theory i",
+			"maxAvg": 91.4,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv conc pharmac",
+			"maxAvg": 91.4,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "seminar",
+			"maxAvg": 91.4,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "eval src evidenc",
+			"maxAvg": 91.4,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hlth srv res i",
+			"maxAvg": 91.4,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "forecasting mgmt",
+			"maxAvg": 91.38,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "forecasting mgmt",
+			"maxAvg": 91.38,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "math operations",
+			"maxAvg": 91.38,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "qlt rsrch mthd",
+			"maxAvg": 91.38,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "real analysis ii",
+			"maxAvg": 91.38,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "real analysis ii",
+			"maxAvg": 91.38,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "complex analy",
+			"maxAvg": 91.38,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "analyt num thry",
+			"maxAvg": 91.38,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "curric iss&thry",
+			"maxAvg": 91.36,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adlt edu pract",
+			"maxAvg": 91.36,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "qlt mthd ed psy",
+			"maxAvg": 91.36,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "top food nu hea",
+			"maxAvg": 91.36,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "urb dsgn thr&met",
+			"maxAvg": 91.36,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "assess plan eval",
+			"maxAvg": 91.36,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "text tech",
+			"maxAvg": 91.35,
+			"minPass": 23,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "com adult educ",
+			"maxAvg": 91.33,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sp-lg pth prc i",
+			"maxAvg": 91.33,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "counslng adults",
+			"maxAvg": 91.33,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "eng report",
+			"maxAvg": 91.33,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prg child sp lrn",
+			"maxAvg": 91.33,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "specific lrn dis",
+			"maxAvg": 91.33,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cur iss ntr&dis",
+			"maxAvg": 91.33,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intr mod diff ge",
+			"maxAvg": 91.33,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intr mod diff ge",
+			"maxAvg": 91.33,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rl div hlth expr",
+			"maxAvg": 91.33,
+			"minPass": 118,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv tpcs tmbr st",
+			"maxAvg": 91.32,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv tpcs tmbr st",
+			"maxAvg": 91.32,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "microelectromech",
+			"maxAvg": 91.32,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "microelectromech",
+			"maxAvg": 91.32,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "lit review i",
+			"maxAvg": 91.3,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "appl lear theor",
+			"maxAvg": 91.3,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prev spts inj ii",
+			"maxAvg": 91.3,
+			"minPass": 78,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "audi prctcm iii",
+			"maxAvg": 91.29,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "stat sig proc",
+			"maxAvg": 91.29,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "stat sig proc",
+			"maxAvg": 91.29,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "phono intervent",
+			"maxAvg": 91.27,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "phono intervent",
+			"maxAvg": 91.27,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "vid eth ed res",
+			"maxAvg": 91.27,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "vid eth ed res",
+			"maxAvg": 91.27,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "reas & dec-mking",
+			"maxAvg": 91.27,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "reas & dec-mking",
+			"maxAvg": 91.27,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "select libr res",
+			"maxAvg": 91.26,
+			"minPass": 27,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "select libr res",
+			"maxAvg": 91.26,
+			"minPass": 27,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "resource-bsd tch",
+			"maxAvg": 91.26,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "resource-bsd tch",
+			"maxAvg": 91.26,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "honours thesis",
+			"maxAvg": 91.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "alg in bioin",
+			"maxAvg": 91.25,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "alg in bioin",
+			"maxAvg": 91.25,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "implant therapy",
+			"maxAvg": 91.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "endo lit rev ii",
+			"maxAvg": 91.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hmec ii sec c&p",
+			"maxAvg": 91.25,
+			"minPass": 23,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "socl&emtl assess",
+			"maxAvg": 91.25,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "elm prticle phys",
+			"maxAvg": 91.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "elm prticle phys",
+			"maxAvg": 91.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "assm intrv techn",
+			"maxAvg": 91.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "assm intrv techn",
+			"maxAvg": 91.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "aborig pb health",
+			"maxAvg": 91.25,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "aborig pb health",
+			"maxAvg": 91.25,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dgtl libraries",
+			"maxAvg": 91.24,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dgtl libraries",
+			"maxAvg": 91.24,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "database design",
+			"maxAvg": 91.23,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "database design",
+			"maxAvg": 91.23,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "comp comm protcl",
+			"maxAvg": 91.22,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "comp comm protcl",
+			"maxAvg": 91.22,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "machine learn i",
+			"maxAvg": 91.22,
+			"minPass": 54,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "machine learn i",
+			"maxAvg": 91.22,
+			"minPass": 54,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res mthd in educ",
+			"maxAvg": 91.22,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res mthd in educ",
+			"maxAvg": 91.22,
+			"minPass": 23,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "design & bioassy",
+			"maxAvg": 91.22,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "design & bioassy",
+			"maxAvg": 91.22,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "plant genomics",
+			"maxAvg": 91.21,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "plant genomics",
+			"maxAvg": 91.21,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "career planning",
+			"maxAvg": 91.21,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "2nd lang assess: c&e app",
+			"maxAvg": 91.2,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "pain res & thera",
+			"maxAvg": 91.2,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "pain res & thera",
+			"maxAvg": 91.2,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "can soci plcy",
+			"maxAvg": 91.2,
+			"minPass": 30,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "basic intvw skls",
+			"maxAvg": 91.18,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res mthd in educ",
+			"maxAvg": 91.18,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro excp child",
+			"maxAvg": 91.18,
+			"minPass": 28,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "psnl soc dv adlt",
+			"maxAvg": 91.17,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "int field school",
+			"maxAvg": 91.17,
+			"minPass": 52,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "int field school",
+			"maxAvg": 91.17,
+			"minPass": 52,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "stat mth hydrlgy",
+			"maxAvg": 91.17,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "stat mth hydrlgy",
+			"maxAvg": 91.17,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "seminar",
+			"maxAvg": 91.17,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "pharm mgmt",
+			"maxAvg": 91.16,
+			"minPass": 43,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "lit review i",
+			"maxAvg": 91.15,
+			"minPass": 26,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rsc trd edu admn",
+			"maxAvg": 91.15,
+			"minPass": 26,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fsh econ & mgmnt",
+			"maxAvg": 91.14,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fsh econ & mgmnt",
+			"maxAvg": 91.14,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "pertrb diff equa",
+			"maxAvg": 91.14,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "pertrb diff equa",
+			"maxAvg": 91.14,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "biol p hlth prac",
+			"maxAvg": 91.14,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "int thry counsel",
+			"maxAvg": 91.13,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "network analysis",
+			"maxAvg": 91.13,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "network analysis",
+			"maxAvg": 91.13,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "acquired lng dis",
+			"maxAvg": 91.1,
+			"minPass": 30,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ord diff equtns",
+			"maxAvg": 91.1,
+			"minPass": 50,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "perf study ii",
+			"maxAvg": 91.1,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "perf study ii",
+			"maxAvg": 91.1,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "stdy educ organ",
+			"maxAvg": 91.09,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "aural rehb i",
+			"maxAvg": 91.08,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "aural rehb i",
+			"maxAvg": 91.08,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "topcs macroecon",
+			"maxAvg": 91.08,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "topcs macroecon",
+			"maxAvg": 91.08,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "classroom mgmt",
+			"maxAvg": 91.07,
+			"minPass": 30,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "qlt rsrch mthd",
+			"maxAvg": 91.07,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mvmt exp yg chld",
+			"maxAvg": 91.07,
+			"minPass": 97,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv steel design",
+			"maxAvg": 91.06,
+			"minPass": 50,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv steel design",
+			"maxAvg": 91.06,
+			"minPass": 50,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cs phar sci iv",
+			"maxAvg": 91.02,
+			"minPass": 46,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hearng and noise",
+			"maxAvg": 91,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "diag audio ii",
+			"maxAvg": 91,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "diag audio ii",
+			"maxAvg": 91,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "m.a. sc. thesis",
+			"maxAvg": 91,
+			"minPass": 2,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "m.a. sc. thesis",
+			"maxAvg": 91,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "plant molec lab",
+			"maxAvg": 91,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "plant molec lab",
+			"maxAvg": 91,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tech cel&dev bio",
+			"maxAvg": 91,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tech cel&dev bio",
+			"maxAvg": 91,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "air polutn cntrl",
+			"maxAvg": 91,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "air polutn cntrl",
+			"maxAvg": 91,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "anly civl sys",
+			"maxAvg": 91,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "anly civl sys",
+			"maxAvg": 91,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "int thry counsel",
+			"maxAvg": 91,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "role tcher guid",
+			"maxAvg": 91,
+			"minPass": 16,
+			"avgFail": 0.5
+		},
+		{
+			"sections_title": "ph d resrch sem",
+			"maxAvg": 91,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thy rea adu lea",
+			"maxAvg": 91,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thy rea adu lea",
+			"maxAvg": 91,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "multimedia sys",
+			"maxAvg": 91,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv volcanology",
+			"maxAvg": 91,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv volcanology",
+			"maxAvg": 91,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv field earth",
+			"maxAvg": 91,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv field earth",
+			"maxAvg": 91,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "m.eng. grad papr",
+			"maxAvg": 91,
+			"minPass": 2,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "bayesn dcsn anl",
+			"maxAvg": 91,
+			"minPass": 2,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "bayesn dcsn anl",
+			"maxAvg": 91,
+			"minPass": 2,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "forest oper's i",
+			"maxAvg": 91,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intr hindi-urdu",
+			"maxAvg": 91,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "seminar",
+			"maxAvg": 91,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "biolgy of cancer",
+			"maxAvg": 91,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "biolgy of cancer",
+			"maxAvg": 91,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "commnty & popltn",
+			"maxAvg": 91,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv quant design",
+			"maxAvg": 91,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv quant design",
+			"maxAvg": 91,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sch adv rsrch pr",
+			"maxAvg": 91,
+			"minPass": 1,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "directed reading",
+			"maxAvg": 91,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "directed reading",
+			"maxAvg": 91,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "clinical dec i",
+			"maxAvg": 90.99,
+			"minPass": 80,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "an meth epid res",
+			"maxAvg": 90.99,
+			"minPass": 70,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "lang dev&dis sch",
+			"maxAvg": 90.95,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "lang dev&dis sch",
+			"maxAvg": 90.95,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "math prblm slvng",
+			"maxAvg": 90.95,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "group counsling",
+			"maxAvg": 90.94,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "basic princ meas",
+			"maxAvg": 90.94,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mthds asymp anal",
+			"maxAvg": 90.94,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "anat phys stats",
+			"maxAvg": 90.94,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro to pcol",
+			"maxAvg": 90.93,
+			"minPass": 29,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro to pcol",
+			"maxAvg": 90.93,
+			"minPass": 29,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hist anth thght",
+			"maxAvg": 90.92,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hist anth thght",
+			"maxAvg": 90.92,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "biology research",
+			"maxAvg": 90.92,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res mthd in educ",
+			"maxAvg": 90.91,
+			"minPass": 23,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "med tech project",
+			"maxAvg": 90.9,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "psnl soc dv adlt",
+			"maxAvg": 90.9,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "stat meth hd bio",
+			"maxAvg": 90.9,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "stat meth hd bio",
+			"maxAvg": 90.9,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "career counselng",
+			"maxAvg": 90.89,
+			"minPass": 57,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res meth educ",
+			"maxAvg": 90.89,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "text tech",
+			"maxAvg": 90.89,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv can soc plcy",
+			"maxAvg": 90.89,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "stdy educ organ",
+			"maxAvg": 90.88,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv microsys des",
+			"maxAvg": 90.88,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv microsys des",
+			"maxAvg": 90.88,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dir fld st sp&ph",
+			"maxAvg": 90.88,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "pharcgy prm care",
+			"maxAvg": 90.88,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "pharcgy prm care",
+			"maxAvg": 90.88,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "high ed pol",
+			"maxAvg": 90.87,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "high ed pol",
+			"maxAvg": 90.87,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tpcs cell comm",
+			"maxAvg": 90.86,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ldrshp educ org",
+			"maxAvg": 90.86,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "quant an fish i",
+			"maxAvg": 90.86,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fam nrs pract",
+			"maxAvg": 90.85,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "curric iss&thry",
+			"maxAvg": 90.84,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "iss public hlth",
+			"maxAvg": 90.84,
+			"minPass": 25,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "or microbi&immun",
+			"maxAvg": 90.83,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dig comm&tpcs ag",
+			"maxAvg": 90.83,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fin el heat tran",
+			"maxAvg": 90.83,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rdtn dosimetry",
+			"maxAvg": 90.83,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rdtn dosimetry",
+			"maxAvg": 90.83,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "typ atyp inf/ch",
+			"maxAvg": 90.82,
+			"minPass": 33,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sup indg inftnts",
+			"maxAvg": 90.81,
+			"minPass": 31,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sup indg inftnts",
+			"maxAvg": 90.81,
+			"minPass": 31,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "primary care ii",
+			"maxAvg": 90.81,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "primary care ii",
+			"maxAvg": 90.81,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ch&ad psyco-path",
+			"maxAvg": 90.8,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "research seminar",
+			"maxAvg": 90.8,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "expl methodology",
+			"maxAvg": 90.78,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "concepts in onco",
+			"maxAvg": 90.78,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "aural rehb i",
+			"maxAvg": 90.77,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "biol p hlth prac",
+			"maxAvg": 90.77,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tpcs flu disord",
+			"maxAvg": 90.75,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ths: biotech tpc",
+			"maxAvg": 90.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ths: biotech tpc",
+			"maxAvg": 90.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "quant mech chem",
+			"maxAvg": 90.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "quant mech chem",
+			"maxAvg": 90.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "int thry counsel",
+			"maxAvg": 90.75,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "wavelets",
+			"maxAvg": 90.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "wavelets",
+			"maxAvg": 90.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "int nut fld stdy",
+			"maxAvg": 90.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "t & l kind & prm",
+			"maxAvg": 90.75,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "t & l kind & prm",
+			"maxAvg": 90.75,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cardiovas path",
+			"maxAvg": 90.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cardiovas path",
+			"maxAvg": 90.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "shpbld proj mgmt",
+			"maxAvg": 90.75,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "bibliog & resrch",
+			"maxAvg": 90.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "bibliog & resrch",
+			"maxAvg": 90.75,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hlth & soc care",
+			"maxAvg": 90.74,
+			"minPass": 23,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hlth srv res i",
+			"maxAvg": 90.73,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sem in botany",
+			"maxAvg": 90.71,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sem in botany",
+			"maxAvg": 90.71,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "artif intell 2",
+			"maxAvg": 90.71,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "artif intell 2",
+			"maxAvg": 90.71,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "pharm mgmt",
+			"maxAvg": 90.71,
+			"minPass": 220,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "land water semnr",
+			"maxAvg": 90.71,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "land water semnr",
+			"maxAvg": 90.71,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sp-lg pth pr iii",
+			"maxAvg": 90.7,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sp-lg pth pr iii",
+			"maxAvg": 90.7,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rdiothrpy phy ii",
+			"maxAvg": 90.7,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rdiothrpy phy ii",
+			"maxAvg": 90.7,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "honours seminar",
+			"maxAvg": 90.7,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "min & soc",
+			"maxAvg": 90.69,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "min & soc",
+			"maxAvg": 90.69,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "econometrics",
+			"maxAvg": 90.68,
+			"minPass": 28,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "econometrics",
+			"maxAvg": 90.68,
+			"minPass": 28,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hazard anal food",
+			"maxAvg": 90.68,
+			"minPass": 25,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hazard anal food",
+			"maxAvg": 90.68,
+			"minPass": 25,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "chrn hlth iss",
+			"maxAvg": 90.68,
+			"minPass": 59,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mole & cell biol",
+			"maxAvg": 90.68,
+			"minPass": 38,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mole & cell biol",
+			"maxAvg": 90.68,
+			"minPass": 38,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mangmt info orgs",
+			"maxAvg": 90.67,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "group counsling",
+			"maxAvg": 90.67,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "research in cnps",
+			"maxAvg": 90.67,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "research in cnps",
+			"maxAvg": 90.67,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "stdy educ organ",
+			"maxAvg": 90.67,
+			"minPass": 30,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv mineralogy",
+			"maxAvg": 90.67,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv mineralogy",
+			"maxAvg": 90.67,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intr tch ch lit",
+			"maxAvg": 90.67,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rehab theory",
+			"maxAvg": 90.67,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rehab theory",
+			"maxAvg": 90.67,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "biol p hlth prac",
+			"maxAvg": 90.67,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "soc detrmin hlth",
+			"maxAvg": 90.67,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "soc detrmin hlth",
+			"maxAvg": 90.67,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "can soci plcy",
+			"maxAvg": 90.66,
+			"minPass": 53,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ldrshp educ org",
+			"maxAvg": 90.65,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "rsrch evidence",
+			"maxAvg": 90.65,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv int seminar",
+			"maxAvg": 90.65,
+			"minPass": 48,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "basic intvw skls",
+			"maxAvg": 90.64,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "group counsling",
+			"maxAvg": 90.64,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res tch & lrn sc",
+			"maxAvg": 90.64,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res tch & lrn sc",
+			"maxAvg": 90.64,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "iss public hlth",
+			"maxAvg": 90.64,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "educ prc nurs",
+			"maxAvg": 90.63,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv conc pharmac",
+			"maxAvg": 90.63,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "lab expl earth",
+			"maxAvg": 90.62,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "first nat soc is",
+			"maxAvg": 90.62,
+			"minPass": 29,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "case integr i",
+			"maxAvg": 90.61,
+			"minPass": 80,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "qst, theor, mthd",
+			"maxAvg": 90.6,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "qst, theor, mthd",
+			"maxAvg": 90.6,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res meth educ",
+			"maxAvg": 90.6,
+			"minPass": 20,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "functional analy",
+			"maxAvg": 90.6,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dyn mdl elec",
+			"maxAvg": 90.58,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dyn mdl elec",
+			"maxAvg": 90.58,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv tpcs mole bi",
+			"maxAvg": 90.57,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv tpcs mole bi",
+			"maxAvg": 90.57,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ict educ ethics",
+			"maxAvg": 90.57,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "educ stds autism",
+			"maxAvg": 90.57,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "text tech",
+			"maxAvg": 90.57,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "real analysis i",
+			"maxAvg": 90.57,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "real analysis i",
+			"maxAvg": 90.57,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "urbn restructing",
+			"maxAvg": 90.57,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "urbn restructing",
+			"maxAvg": 90.57,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hlth & human sec",
+			"maxAvg": 90.57,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hlth & human sec",
+			"maxAvg": 90.57,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mth ed: crnt iss",
+			"maxAvg": 90.56,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mth ed: crnt iss",
+			"maxAvg": 90.56,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "lab expl earth",
+			"maxAvg": 90.56,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv immunogeneti",
+			"maxAvg": 90.55,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "classroom mgmt",
+			"maxAvg": 90.54,
+			"minPass": 26,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res mthd in educ",
+			"maxAvg": 90.53,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hmec ii sec c&p",
+			"maxAvg": 90.52,
+			"minPass": 23,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "min eco fin",
+			"maxAvg": 90.52,
+			"minPass": 25,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "as in s&s disord",
+			"maxAvg": 90.5,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "energy enginring",
+			"maxAvg": 90.5,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "energy enginring",
+			"maxAvg": 90.5,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "clin endo yr 2",
+			"maxAvg": 90.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ldr adm aim educ",
+			"maxAvg": 90.5,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "acad assess schl",
+			"maxAvg": 90.5,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "text tech",
+			"maxAvg": 90.5,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ptl dif eqn flud",
+			"maxAvg": 90.5,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "research seminar",
+			"maxAvg": 90.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "assess plan eval",
+			"maxAvg": 90.5,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "basic russian ii",
+			"maxAvg": 90.5,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "coast terr esyst",
+			"maxAvg": 90.48,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "compensation",
+			"maxAvg": 90.46,
+			"minPass": 39,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "compensation",
+			"maxAvg": 90.46,
+			"minPass": 39,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hn dev: inf-adlt",
+			"maxAvg": 90.46,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "scene painting i",
+			"maxAvg": 90.46,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "scene painting i",
+			"maxAvg": 90.46,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "masc thesis dev",
+			"maxAvg": 90.45,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "masc thesis dev",
+			"maxAvg": 90.45,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "qlt mthd ed psy",
+			"maxAvg": 90.45,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "biophys pharm i",
+			"maxAvg": 90.45,
+			"minPass": 155,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "biophys pharm i",
+			"maxAvg": 90.45,
+			"minPass": 155,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "soc detrmin hlth",
+			"maxAvg": 90.45,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "comp animal phyl",
+			"maxAvg": 90.45,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "envr'tl lab anly",
+			"maxAvg": 90.44,
+			"minPass": 25,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "envr'tl lab anly",
+			"maxAvg": 90.44,
+			"minPass": 25,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "family counsl ii",
+			"maxAvg": 90.44,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "econ, cont, fina",
+			"maxAvg": 90.44,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "econ, cont, fina",
+			"maxAvg": 90.44,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "size of things",
+			"maxAvg": 90.44,
+			"minPass": 39,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "size of things",
+			"maxAvg": 90.44,
+			"minPass": 39,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "teaching of psyc",
+			"maxAvg": 90.44,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tpcs flu disord",
+			"maxAvg": 90.43,
+			"minPass": 30,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "complex analysis",
+			"maxAvg": 90.43,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "complex analysis",
+			"maxAvg": 90.43,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mgmt sc meth",
+			"maxAvg": 90.43,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "diag img & rdoph",
+			"maxAvg": 90.43,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "diag img & rdoph",
+			"maxAvg": 90.43,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "biology research",
+			"maxAvg": 90.42,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "oral pathology",
+			"maxAvg": 90.42,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "stdy educ organ",
+			"maxAvg": 90.42,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "appl lear theor",
+			"maxAvg": 90.41,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "educ theories",
+			"maxAvg": 90.4,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dta anl at,er&oc",
+			"maxAvg": 90.4,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "quant an fish i",
+			"maxAvg": 90.4,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "design & bioassy",
+			"maxAvg": 90.4,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "trns sys pl&anly",
+			"maxAvg": 90.39,
+			"minPass": 28,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "trns sys pl&anly",
+			"maxAvg": 90.39,
+			"minPass": 28,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro to conserv",
+			"maxAvg": 90.39,
+			"minPass": 103,
+			"avgFail": 1.67
+		},
+		{
+			"sections_title": "res meth educ",
+			"maxAvg": 90.39,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "viral infec humn",
+			"maxAvg": 90.39,
+			"minPass": 28,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "viral infec humn",
+			"maxAvg": 90.39,
+			"minPass": 28,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "costum constr ii",
+			"maxAvg": 90.39,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "disord sp prod",
+			"maxAvg": 90.38,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "disord sp prod",
+			"maxAvg": 90.38,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "prg child sp lrn",
+			"maxAvg": 90.38,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res meth educ",
+			"maxAvg": 90.38,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hltcr systm anyl",
+			"maxAvg": 90.38,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "hltcr systm anyl",
+			"maxAvg": 90.38,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ldrshp educ org",
+			"maxAvg": 90.36,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "basic princ meas",
+			"maxAvg": 90.36,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cl pro prim care",
+			"maxAvg": 90.36,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "membrane str&fnc",
+			"maxAvg": 90.33,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "membrane str&fnc",
+			"maxAvg": 90.33,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thermodynamics",
+			"maxAvg": 90.33,
+			"minPass": 3,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "comm networks",
+			"maxAvg": 90.33,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "num tec oc,at&er",
+			"maxAvg": 90.33,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "num tec oc,at&er",
+			"maxAvg": 90.33,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv rock engnrng",
+			"maxAvg": 90.33,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv rock engnrng",
+			"maxAvg": 90.33,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "test constructio",
+			"maxAvg": 90.33,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "test constructio",
+			"maxAvg": 90.33,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "found ed tech",
+			"maxAvg": 90.33,
+			"minPass": 20,
+			"avgFail": 1
+		},
+		{
+			"sections_title": "h gwaii cse stdy",
+			"maxAvg": 90.33,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "crt anly iss&mth",
+			"maxAvg": 90.33,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "crt anly iss&mth",
+			"maxAvg": 90.33,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sem reprd biol",
+			"maxAvg": 90.33,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "sem reprd biol",
+			"maxAvg": 90.33,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "honours essay",
+			"maxAvg": 90.33,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "honours essay",
+			"maxAvg": 90.33,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "biol p hlth prac",
+			"maxAvg": 90.33,
+			"minPass": 27,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro rsrch educ",
+			"maxAvg": 90.32,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro rsrch educ",
+			"maxAvg": 90.32,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ldrship pub hlth",
+			"maxAvg": 90.31,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ldrship pub hlth",
+			"maxAvg": 90.31,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "text tech",
+			"maxAvg": 90.3,
+			"minPass": 23,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "thr lng&lit rsrc",
+			"maxAvg": 90.3,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ed st dvl ds inc",
+			"maxAvg": 90.29,
+			"minPass": 25,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv gsat concept",
+			"maxAvg": 90.29,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv gsat concept",
+			"maxAvg": 90.29,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res mthds kin",
+			"maxAvg": 90.29,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "org lrn res",
+			"maxAvg": 90.29,
+			"minPass": 31,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "org lrn res",
+			"maxAvg": 90.29,
+			"minPass": 31,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intr mod diff ge",
+			"maxAvg": 90.29,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv hlth assess",
+			"maxAvg": 90.29,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intermd sanskrit",
+			"maxAvg": 90.29,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intermd sanskrit",
+			"maxAvg": 90.29,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "cntrl com dis",
+			"maxAvg": 90.29,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "iss public hlth",
+			"maxAvg": 90.29,
+			"minPass": 34,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tech stat conslt",
+			"maxAvg": 90.29,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tech stat conslt",
+			"maxAvg": 90.29,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "tech comm skills",
+			"maxAvg": 90.28,
+			"minPass": 29,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mangmt info orgs",
+			"maxAvg": 90.27,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ch&ad psyco-path",
+			"maxAvg": 90.27,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "ch&ad psyco-path",
+			"maxAvg": 90.27,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "text tech",
+			"maxAvg": 90.27,
+			"minPass": 22,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "honours essay",
+			"maxAvg": 90.27,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "transprt'n eng 2",
+			"maxAvg": 90.26,
+			"minPass": 31,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "transprt'n eng 2",
+			"maxAvg": 90.26,
+			"minPass": 31,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "pharmacokinetics",
+			"maxAvg": 90.26,
+			"minPass": 152,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "membrane str&fnc",
+			"maxAvg": 90.25,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "optimiz eng syst",
+			"maxAvg": 90.25,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "optimiz eng syst",
+			"maxAvg": 90.25,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "endo lit rev i",
+			"maxAvg": 90.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "assess lrn diffi",
+			"maxAvg": 90.25,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mltvar&vctr calc",
+			"maxAvg": 90.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "med lab toxiclgy",
+			"maxAvg": 90.25,
+			"minPass": 24,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "drugs &intercell",
+			"maxAvg": 90.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "drugs &intercell",
+			"maxAvg": 90.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro exper phys",
+			"maxAvg": 90.25,
+			"minPass": 4,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "digtl med: intro",
+			"maxAvg": 90.24,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "digtl med: intro",
+			"maxAvg": 90.24,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "complex fluids",
+			"maxAvg": 90.24,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "complex fluids",
+			"maxAvg": 90.24,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "app mng scie i",
+			"maxAvg": 90.23,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "app mng scie i",
+			"maxAvg": 90.23,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "matrx struc anly",
+			"maxAvg": 90.22,
+			"minPass": 46,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "matrx struc anly",
+			"maxAvg": 90.22,
+			"minPass": 46,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "info services i",
+			"maxAvg": 90.22,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "info services i",
+			"maxAvg": 90.22,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "aborignl forestr",
+			"maxAvg": 90.21,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "aborignl forestr",
+			"maxAvg": 90.21,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "montry thry pol",
+			"maxAvg": 90.21,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "montry thry pol",
+			"maxAvg": 90.21,
+			"minPass": 18,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "des tech",
+			"maxAvg": 90.21,
+			"minPass": 19,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "3d mdl cost est",
+			"maxAvg": 90.2,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv geo fld dyn",
+			"maxAvg": 90.2,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv geo fld dyn",
+			"maxAvg": 90.2,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mech nat defrmtn",
+			"maxAvg": 90.2,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "mech nat defrmtn",
+			"maxAvg": 90.2,
+			"minPass": 5,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "expl methodology",
+			"maxAvg": 90.2,
+			"minPass": 15,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "qlt rsrch mthd",
+			"maxAvg": 90.2,
+			"minPass": 40,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "appl lear theor",
+			"maxAvg": 90.2,
+			"minPass": 41,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fst ntns soc iss",
+			"maxAvg": 90.2,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "soc wrk & justce",
+			"maxAvg": 90.2,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "exer physolgy ii",
+			"maxAvg": 90.19,
+			"minPass": 27,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "jazz ensemble",
+			"maxAvg": 90.19,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adul educ",
+			"maxAvg": 90.18,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intr stat rs edu",
+			"maxAvg": 90.18,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "natural res econ",
+			"maxAvg": 90.18,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "natural res econ",
+			"maxAvg": 90.18,
+			"minPass": 11,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fuel cell system",
+			"maxAvg": 90.17,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "fuel cell system",
+			"maxAvg": 90.17,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "basic russian ii",
+			"maxAvg": 90.17,
+			"minPass": 6,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adul educ",
+			"maxAvg": 90.16,
+			"minPass": 31,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "res mthd in educ",
+			"maxAvg": 90.14,
+			"minPass": 28,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv compsit mtrl",
+			"maxAvg": 90.14,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv compsit mtrl",
+			"maxAvg": 90.14,
+			"minPass": 7,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dramaturgy",
+			"maxAvg": 90.14,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dramaturgy",
+			"maxAvg": 90.14,
+			"minPass": 21,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "labour economics",
+			"maxAvg": 90.13,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "complex adapt sy",
+			"maxAvg": 90.13,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "complex adapt sy",
+			"maxAvg": 90.13,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv int sem in sw th",
+			"maxAvg": 90.13,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "directed study",
+			"maxAvg": 90.13,
+			"minPass": 8,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv speech scie",
+			"maxAvg": 90.12,
+			"minPass": 25,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "adv speech scie",
+			"maxAvg": 90.12,
+			"minPass": 25,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "role tcher guid",
+			"maxAvg": 90.12,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "opt&dcs anl civl",
+			"maxAvg": 90.11,
+			"minPass": 132,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "opt&dcs anl civl",
+			"maxAvg": 90.11,
+			"minPass": 132,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "comp comm protcl",
+			"maxAvg": 90.11,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "work & learning",
+			"maxAvg": 90.11,
+			"minPass": 9,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "intro to conserv",
+			"maxAvg": 90.1,
+			"minPass": 137,
+			"avgFail": 5
+		},
+		{
+			"sections_title": "doctoral seminar",
+			"maxAvg": 90.1,
+			"minPass": 10,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "exp des anl ed",
+			"maxAvg": 90.09,
+			"minPass": 23,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "health care team",
+			"maxAvg": 90.09,
+			"minPass": 56,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "health care team",
+			"maxAvg": 90.09,
+			"minPass": 56,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dentalhyg prac i",
+			"maxAvg": 90.08,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dentalhyg prac i",
+			"maxAvg": 90.08,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dta anl at,er&oc",
+			"maxAvg": 90.08,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "art song int prf",
+			"maxAvg": 90.08,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "art song int prf",
+			"maxAvg": 90.08,
+			"minPass": 13,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "urban transport",
+			"maxAvg": 90.08,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "urban transport",
+			"maxAvg": 90.08,
+			"minPass": 12,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "primary care iii",
+			"maxAvg": 90.07,
+			"minPass": 14,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "soil dynamics",
+			"maxAvg": 90.06,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "soil dynamics",
+			"maxAvg": 90.06,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "trad adult edu",
+			"maxAvg": 90.06,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "trad adult edu",
+			"maxAvg": 90.06,
+			"minPass": 17,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "stat lit nursing",
+			"maxAvg": 90.06,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "stat lit nursing",
+			"maxAvg": 90.06,
+			"minPass": 16,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "soc wrk & justce",
+			"maxAvg": 90.06,
+			"minPass": 33,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "soc wrk & justce",
+			"maxAvg": 90.06,
+			"minPass": 33,
+			"avgFail": 0
+		},
+		{
+			"sections_title": "dev wkshp/sem",
+			"maxAvg": 90.02,
+			"minPass": 62,
+			"avgFail": 0
+		}
+	]
+}

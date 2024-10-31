@@ -1,3 +1,4 @@
+import { InsightError } from "../../controller/IInsightFacade";
 import Item from "../query/Item";
 
 export default class Section extends Item {
@@ -37,6 +38,11 @@ export default class Section extends Item {
 		this.audit = audit;
 	}
 
+	public hasField(comparisonField: string): boolean {
+        const fields = ["uuid", "id", "title", "instructor", "dept", "year", "avg", "pass", "fail", "audit"];
+        return fields.includes(comparisonField);
+    }
+
 	public getField(comparisonField: string): any {
 		switch (comparisonField) {
 			case "uuid":
@@ -60,7 +66,7 @@ export default class Section extends Item {
 			case "audit":
 				return this.getAudit();
 			default:
-				throw new Error("Error: Called getField() with an invalid comparisonField arg.");
+				throw new InsightError("Error: Called getField() with an invalid comparisonField arg.");
 		}
 	}
 

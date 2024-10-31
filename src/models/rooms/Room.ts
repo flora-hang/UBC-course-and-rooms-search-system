@@ -1,3 +1,4 @@
+import { InsightError } from "../../controller/IInsightFacade";
 import Item from "../query/Item";
 
 export default class Room extends Item {
@@ -64,9 +65,14 @@ export default class Room extends Item {
 			case "address":
 				return this.getAddress();
 			default:
-				throw new Error("Error: Called getField() with an invalid comparisonField arg.");
+				throw new InsightError("Called getField() with an invalid comparisonField arg.");
 		}
 	}
+
+    public hasField(comparisonField: string): boolean {
+        const fields = ["fullname", "shortname", "number", "name", "seats", "type", "furniture", "href", "lat", "lon", "address"];
+        return fields.includes(comparisonField);
+    }
 
 	public getUniqueIdentifier(): string {
 		return this.getName();

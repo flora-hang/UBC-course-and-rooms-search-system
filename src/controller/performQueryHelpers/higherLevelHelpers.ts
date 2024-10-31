@@ -145,10 +145,8 @@ function validateColumnsAndApplyKeys(
 		}
 	});
 
-	const seen = new Set<string>(); // seen apply keys
+	const seen = new Set<string>(); 
 	applyRules?.forEach((applyRule) => {
-		// console.log(seen);
-		// console.log("b", applyRule.applyKey);
 		if (seen.has(applyRule.applyKey)) {
 			throw new InsightError("APPLY contains duplicate key");
 		}
