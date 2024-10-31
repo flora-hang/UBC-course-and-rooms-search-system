@@ -473,6 +473,7 @@ describe("InsightFacade", function () {
 			it("[valid/groupWithOrderGroup.json] GROUP with ORDER using GROUP key", checkQuery);
 			it("[valid/moreGroupAndApply.json] 2 GROUP and 2 APPLY keys", checkQuery);
 			it("[valid/everythingRooms.json] use everything with rooms", checkQuery);
+			it("[valid/emptyApply.json] empty APPLY key", checkQuery);
 		});
 
 		describe.only("C2 new functionality: invalid queries", function () {
@@ -494,6 +495,9 @@ describe("InsightFacade", function () {
 			it("[invalid/noColumns.json] no COLUMNS key", checkQuery);
 			it("[invalid/noGroup.json] no GROUP key", checkQuery);
 			it("[invalid/underscoreApplykey.json] APPLY key with underscore", checkQuery);
+			it("[invalid/diffIdInApply.json] different id in APPLY", checkQuery);
+			it("[invalid/invalidApplyTargetKey.json] invalid APPLY target key", checkQuery);
+			it("[invalid/invalidDir.json] invalid DIRECTION", checkQuery);
 		});
 	});
 });
