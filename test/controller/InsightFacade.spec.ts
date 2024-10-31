@@ -474,9 +474,11 @@ describe("InsightFacade", function () {
 			it("[valid/moreGroupAndApply.json] 2 GROUP and 2 APPLY keys", checkQuery);
 			it("[valid/everythingRooms.json] use everything with rooms", checkQuery);
 			it("[valid/emptyApply.json] empty APPLY key", checkQuery);
+			it("[valid/moreApply.json] more APPLY keys", checkQuery);
+			it("[valid/moreGroup.json] more GROUP keys", checkQuery);
 		});
 
-		describe.only("C2 new functionality: invalid queries", function () {
+		describe("C2 new functionality: invalid queries", function () {
 			it("[invalid/invalidKeyTypeInApply.json] invalid key type in APPLY", checkQuery);
 			it("[invalid/columnKeyNotInGroup.json] column key not in GROUP", checkQuery);
 			it("[invalid/duplicateApplyKey.json] duplicate APPLY key", checkQuery); //
