@@ -321,7 +321,7 @@ describe("InsightFacade", function () {
 		});
 	});
 
-	describe("PerformQuery", function () {
+	describe.only("PerformQuery", function () {
 		/**
 		 * Loads the TestQuery specified in the test name and asserts the behaviour of performQuery.
 		 *
@@ -457,21 +457,12 @@ describe("InsightFacade", function () {
 		it("[valid/negativeNumberFilter.json] negative number in WHERE under LT", checkQuery);
 		it("[valid/zeroCharacterFilter.json] zero character in string under IS filter", checkQuery);
 
-		describe("C2: tests for new query functionality", function () {
+		describe("C2 new functionality: valid queries", function () {
 			it("[valid/simpleQueryTransformations.json] simple query transformations", checkQuery);
 			it("[valid/roomsQueryExample.json] rooms query example from spec", checkQuery);
-			it("[invalid/invalidKeyTypeInApply.json] invalid key type in APPLY", checkQuery);
 			it("[valid/nonNumericKeyForCount.json] non-numeric key for COUNT", checkQuery);
-			it("[invalid/duplicateApplyKey.json] duplicate APPLY key", checkQuery); //
 			it("[valid/validCount.json] valid query using COUNT", checkQuery);
-			it("[invalid/columnKeyNotInGroup.json] column key not in GROUP", checkQuery);
-			it("[invalid/columnKeyNotInApply.json] column key not in APPLY", checkQuery);
-			it("[invalid/sortKeyNotInColumns.json] sort key not in COLUMNS", checkQuery);
 			it("[valid/useLatLonSumQuery.json] valid query that uses lat, lon, and SUM", checkQuery);
-			it("[invalid/sectionsUsingRoomsKey.json] sections query using rooms key", checkQuery);
-			//!!! check that each item.getField() throws InsightError?
-			it("[invalid/roomsUsingSectionsKey.json] rooms query using sections key", checkQuery);
-			it("[invalid/diffDatasetIdInApply.json] different dataset id in APPLY", checkQuery);
 			it("[valid/applyNotInColumns.json] APPLY key not in COLUMNS", checkQuery);
 			it("[valid/twoApply.json] two APPLY keys", checkQuery);
 			it("[valid/twoOrderKeys.json] two ORDER keys", checkQuery); //shouldnt fail because of unique order
@@ -481,6 +472,28 @@ describe("InsightFacade", function () {
 			it("[valid/groupWithOrderApplykey.json] GROUP with ORDER using APPLY key", checkQuery);
 			it("[valid/groupWithOrderGroup.json] GROUP with ORDER using GROUP key", checkQuery);
 			it("[valid/moreGroupAndApply.json] 2 GROUP and 2 APPLY keys", checkQuery);
+			it("[valid/everythingRooms.json] use everything with rooms", checkQuery);
+		});
+
+		describe.only("C2 new functionality: invalid queries", function () {
+			it("[invalid/invalidKeyTypeInApply.json] invalid key type in APPLY", checkQuery);
+			it("[invalid/columnKeyNotInGroup.json] column key not in GROUP", checkQuery);
+			it("[invalid/duplicateApplyKey.json] duplicate APPLY key", checkQuery); //
+			it("[invalid/columnKeyNotInApply.json] column key not in APPLY", checkQuery);
+			it("[invalid/sortKeyNotInColumns.json] sort key not in COLUMNS", checkQuery);
+			it("[invalid/sectionsUsingRoomsKey.json] sections query using rooms key", checkQuery);
+			it("[invalid/roomsUsingSectionsKey.json] rooms query using sections key", checkQuery);
+			it("[invalid/diffDatasetIdInApply.json] different dataset id in APPLY", checkQuery);
+			it("[invalid/invalidApplytoken.json] invalid APPLY token", checkQuery);
+			it("[invalid/invalidKeyInGroup.json] invalid key in GROUP", checkQuery);
+			it("[invalid/invalidKeyTypeAvg.json] invalid key type in AVG", checkQuery);
+			it("[invalid/invalidKeyTypeMax.json] invalid key type in MAX", checkQuery);
+			it("[invalid/invalidKeyTypeMin.json] invalid key type in MIN", checkQuery);
+			it("[invalid/invalidKeyTypeSum.json] invalid key type in SUM", checkQuery);
+			it("[invalid/noApply.json] no APPLY key", checkQuery);
+			it("[invalid/noColumns.json] no COLUMNS key", checkQuery);
+			it("[invalid/noGroup.json] no GROUP key", checkQuery);
+			it("[invalid/underscoreApplykey.json] APPLY key with underscore", checkQuery);
 		});
 	});
 });

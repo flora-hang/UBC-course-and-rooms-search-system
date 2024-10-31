@@ -1,3 +1,4 @@
+import { InsightError } from "../../controller/IInsightFacade";
 import Item from "../query/Item";
 
 export default class Section extends Item {
@@ -60,7 +61,7 @@ export default class Section extends Item {
 			case "audit":
 				return this.getAudit();
 			default:
-				throw new Error("Error: Called getField() with an invalid comparisonField arg.");
+				throw new InsightError("Error: Called getField() with an invalid comparisonField arg.");
 		}
 	}
 
