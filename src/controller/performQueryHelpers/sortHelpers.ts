@@ -94,7 +94,7 @@ export function sortResultsGroup(
 ): Record<string, any>[][] {
 	// check if order is in columns, if not throw error
 	console.log("!!! in sortResultsGroup");
-	console.log("> sort: %o", sort);
+	// console.log("> sort: %o", sort);
 	// console.log("!!! columns: %o", columns);
 	// if ((sort.anyKey && !columns.includes(sort.anyKey)) || !columnsIncludesAllKeys(columns, sort.keys as string[])) {
 	// 	throw new InsightError("ORDER key must be in COLUMNS");
