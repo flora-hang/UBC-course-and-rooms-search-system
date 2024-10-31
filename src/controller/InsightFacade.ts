@@ -1,9 +1,4 @@
 import SectionsDataset from "../models/sections/SectionsDataset";
-import Section from "../models/sections/Section";
-import Item from "../models/query/Item";
-import Course from "../models/sections/Course";
-import SectionData from "../models/sections/SectionData";
-
 import {
 	IInsightFacade,
 	InsightDataset,
@@ -11,27 +6,19 @@ import {
 	InsightResult,
 	InsightError,
 	NotFoundError,
-	ResultTooLargeError,
 } from "./IInsightFacade";
-import {
-	filterItems,
-	sortResultsGroup,
-	selectColumns,
-	checkIds,
-	groupItems,
-	applyFunctionItems,
-	combine2,
-	returnResults,
-	sortResults,
-} from "./PerformQueryHelpers";
+// -------- dataset helpers ----------
+import { processZip } from "./datasetHelpers";
+// -------- perform query helpers ----------
+import { queryItemsDataset } from "./performQueryHelpers/higherLevelHelpers";
+import { checkIds } from "./performQueryHelpers/filterHelpers";
 import { extractRoomData } from "./addDatasetHelper";
+// ----------------------------------------
 import * as fsPromises from "fs/promises";
 import fs from "fs-extra";
-import JSZip from "jszip";
 import Query from "../models/query/Query";
 import { Dataset } from "../models/Dataset";
 import RoomsDataset from "../models/rooms/RoomsDataset";
-import ApplyRule from "../models/query/ApplyRule";
 
 // import { json } from "stream/consumers";
 
@@ -119,7 +106,7 @@ export default class InsightFacade implements IInsightFacade {
 			return Promise.reject(new InsightError("Content not in base64 format"));
 		}
 
-		const dataset: SectionsDataset = await this.processZip(id, content);
+		const dataset: SectionsDataset = await processZip(id, content);
 		this.datas.set(id, dataset);
 		const insight = dataset.getInsight();
 		this.insights.set(id, insight);
@@ -181,100 +168,6 @@ export default class InsightFacade implements IInsightFacade {
 		return dataset;
 	}
 
-	// JSZip = require("jszip");
-	// Function to validate section data
-	private validateSectionData(sectionData: SectionData): boolean {
-		const requiredFields = ["id", "Title", "Professor", "Subject", "Year", "Avg", "Pass", "Fail", "Audit"];
-
-		for (const field of requiredFields) {
-			if (!(field in sectionData)) {
-				return false; // return false
-			}
-		}
-
-		return true; // return true if all fields
-	}
-
-	private handleSections(course: Course, jsonData: SectionData[]): Course {
-		jsonData.map((sectionn: SectionData) => {
-			const {
-				id: uuid,
-				Course: id,
-				Title: title,
-				Professor: instructor,
-				Subject: dept,
-				Year: year,
-				Avg: avg,
-				Pass: pass,
-				Fail: fail,
-				Audit: audit,
-			} = sectionn;
-
-			// if sectionn is valid, then add the section
-			if (this.validateSectionData(sectionn)) {
-				// Create the section object if validation passes
-				const section = new Section(uuid, id, title, instructor, dept, year, avg, pass, fail, audit);
-				course.addSection(section);
-			}
-		});
-		return course;
-	}
-
-	// Function to process the zip file using Promises
-	private async processZip(id: string, content: string): Promise<SectionsDataset> {
-		const dataset = new SectionsDataset(id);
-
-		try {
-			const zip = await JSZip.loadAsync(content, { base64: true }); // Load zip asynchronously
-			const filteredFiles = this.filterFiles(zip);
-
-			// iterating through courses in dataset
-			const proms: Promise<string>[] = [];
-			const courses: Course[] = [];
-			filteredFiles.map((filename: string) => {
-				const courseName = filename.split("/")[1];
-				courses.push(new Course(courseName));
-				const f = zip.files[filename];
-				proms.push(f.async("string"));
-			});
-			const array = await Promise.all(proms); // Wait for all files to be processed
-
-			const handle: any = [];
-			array.forEach((element, index) => {
-				let jsonData: SectionData[] = [];
-				try {
-					jsonData = JSON.parse(element).result; // Assuming 'result' is an array of sections
-				} catch (_err) {
-					return; // skip this file
-				}
-				const course = courses[index];
-				handle.push(this.handleSections(course, jsonData));
-			});
-			const courseArray: Course[] = await Promise.all(handle);
-			dataset.addCourses(courseArray);
-		} catch (err) {
-			throw new InsightError(`Error processing zip file: ${(err as Error).message}`);
-		}
-
-		if (dataset.getTotalSections() === 0) {
-			return Promise.reject(new InsightError("No valid sections"));
-		}
-
-		return dataset;
-	}
-
-	private filterFiles(zip: JSZip): string[] {
-		const coursesFiles = Object.keys(zip.files).filter((filename) => filename.startsWith("courses/"));
-		const coursesFiltered: string[] = [];
-
-		for (const file of coursesFiles) {
-			if (file.split("/")[1].length !== 0 && !file.includes("_")) {
-				coursesFiltered.push(file);
-			}
-		}
-		return coursesFiltered;
-	}
-
 	public async performQuery(query: unknown): Promise<InsightResult[]> {
 		await this.loadInsights();
 
@@ -308,137 +201,7 @@ export default class InsightFacade implements IInsightFacade {
 			}
 			dataset = data;
 		}
-		console.log("> before calling this.queryItemsDataset");
-		return await this.queryItemsDataset(validQuery, dataset as SectionsDataset | RoomsDataset);
-	}
-
-	private async queryItemsDataset(
-		validQuery: Query,
-		dataset: SectionsDataset | RoomsDataset
-	): Promise<InsightResult[]> {
-		let finalResults: InsightResult[] = [];
-
-		const id = dataset.getId();
-
-		let items: Item[] = null as unknown as Item[];
-		if (dataset instanceof SectionsDataset) {
-			items = dataset.getSections();
-		} else if (dataset instanceof RoomsDataset) {
-			items = dataset.getRooms();
-		}
-		// console.log("!!! START OF FILTER ITEMS FUNC");
-		const filteredItems = filterItems(validQuery.WHERE.filter, items, id) as Item[];
-		console.log("> filtered items", filteredItems, filteredItems.length);
-		// console.log("!!! START OF OIPTIONS BLOCK PARSE");
-		// Parse OPTIONS block: Extract columns and order field
-		const columns = validQuery.OPTIONS.columns;
-		// const orderField = validQuery.OPTIONS.sort?.anyKey
-		// 	? validQuery.OPTIONS.sort?.anyKey
-		// 	: validQuery.OPTIONS.sort?.dir && validQuery.OPTIONS.sort?.keys
-		// 	? { dir: validQuery.OPTIONS.sort?.dir, keys: validQuery.OPTIONS.sort?.keys }
-		// 	: null;
-		const orderField = validQuery.OPTIONS.sort;
-		// console.log("!!! END OF OPTIONS BLOCK PARSE");
-		if (!validQuery.OPTIONS.sort?.anyKey && !!validQuery.OPTIONS.sort?.dir !== !!validQuery.OPTIONS.sort?.keys) {
-			throw new InsightError("Order is incorrect");
-		}
-
-		// Parse TRANSFORMATIONS block: Extract group and apply field
-		let groups: string[];
-		let applyRules: ApplyRule[];
-
-		if (validQuery.TRANSFORMATIONS) {
-			groups = validQuery.TRANSFORMATIONS?.group;
-			applyRules = validQuery.TRANSFORMATIONS?.apply;
-
-			// check that all COLUMNS keys must correspond to one of the GROUP keys or to applykeys
-			const applyKeys = applyRules.map((applyRule) => applyRule.applyKey);
-			const allValidKeys = new Set([...groups, ...applyKeys]);
-			columns.forEach((column) => {
-				if (!allValidKeys.has(column)) {
-					throw new InsightError("COLUMNS keys must correspond to one of the GROUP keys or to applykeys");
-				}
-			});
-
-			const seen = new Set<string>(); // seen apply keys
-			applyRules?.forEach((applyRule) => {
-				// console.log(seen);
-				// console.log("b", applyRule.applyKey);
-				if (seen.has(applyRule.applyKey)) {
-					throw new InsightError("APPLY contains duplicate key");
-				}
-				seen.add(applyRule.applyKey);
-			});
-			console.log("> checked for unique apply keys");
-
-			// group the items together
-			if (validQuery.TRANSFORMATIONS && !groups) {
-				throw new InsightError("Transformations must have a GROUP block");
-			} else if (validQuery.TRANSFORMATIONS && !applyRules) {
-				throw new InsightError("Transformations must have an APPLY block");
-			}
-			console.log("> checked for group and apply blocks");
-
-			// group the filtered results into specific groups
-			// const groupedItems = groups ? groupItems(filteredItems, groups) : null;
-			// console.log("> grouped items, size: ", groupedItems);
-			// apply specified APPLYTOKENs if given
-			// const applyItems = apply ? applyFunctionItems(groupedItems as (Section | Room)[][], apply) : null;
-			// console.log("> grouped and applied items, size: ", applyItems);
-
-			// const groupAndApply = combine(groupedItems, applyItems);
-
-			const groupedItems = groupItems(filteredItems, groups, id);
-			console.log("> grouped items length:", groupedItems?.length);
-			const appliedItems = applyFunctionItems(groupedItems, applyRules, id);
-			console.log("> applied items length:", appliedItems?.length);
-			const groupAndApply = combine2(groups, groupedItems, appliedItems);
-			console.log("> combined items length:", groupAndApply?.length);
-
-			if (orderField) {
-				const sortedItems = sortResultsGroup(groupAndApply, orderField, columns);
-				console.log("> sorted items:", sortedItems?.length);
-				finalResults = returnResults(sortedItems, columns);
-			} else {
-				finalResults = returnResults(groupAndApply, columns);
-			}
-		} else {
-			// sort without group and apply
-			if (orderField) {
-				finalResults = selectColumns(sortResults(filteredItems, orderField, columns), columns);
-			} else {
-				finalResults = selectColumns(filteredItems, columns);
-			}
-		}
-		// TODO: add new sort functionality
-		// IF TRANSFORMATION block and SORT given: sort the group items
-		// ELSE IF only SORT given and TRANSFORMATION block not given: sort the filtered items
-		// ELSE: return filtered items
-
-		// if (applyItems) {
-		// 	const sortedItems = orderField
-		// 		? groups && apply
-		// 			? sortResults(groupAndApply, orderField as any, columns)
-		// 			: sortResults(groupAndApply, orderField as any, columns)
-		// 		: applyItems;
-
-		// 	console.log("> sorted items, size: ", sortedItems);
-		// 	// sortedItems is a list of list of objects: [Room{}, Room{}, {maxSeats: 100}], []
-
-		// 	// // Select the required columns
-		// 	finalResults = selectColumns(sortedItems, columns);
-		// }
-
-		const maxSections = 5000;
-		// - check if filtered sections exceed 5000 sections limit
-		if (finalResults.length > maxSections) {
-			throw new ResultTooLargeError("results exceed size of 5000, size is: " + finalResults.length);
-		}
-		// console.log("> final results[0]:", finalResults[0]);
-		// console.log("> final results[1]:", finalResults[1]);
-		// console.log("> final results[2]:", finalResults[2]);
-		// console.log("> final results[3]:", finalResults[3]);
-		// console.log("> final results[4]:", finalResults[4]);
-		return finalResults;
+		// console.log("> before calling this.queryItemsDataset");
+		return await queryItemsDataset(validQuery, dataset as SectionsDataset | RoomsDataset);
 	}
 }
