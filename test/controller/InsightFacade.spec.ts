@@ -321,7 +321,7 @@ describe("InsightFacade", function () {
 		});
 	});
 
-	describe.only("PerformQuery", function () {
+	describe("PerformQuery", function () {
 		/**
 		 * Loads the TestQuery specified in the test name and asserts the behaviour of performQuery.
 		 *
@@ -477,7 +477,7 @@ describe("InsightFacade", function () {
 			it("[valid/moreApply.json] more APPLY keys", checkQuery);
 			it("[valid/moreGroup.json] more GROUP keys", checkQuery);
 			it("[valid/avgAvg.json] find AVG of sections_avg", checkQuery);
-			it.only("[valid/emptyCellsInTable.json] empty cells in resulting table", checkQuery);
+			it("[valid/emptyCellsInTable.json] empty cells in resulting table", checkQuery);
 		});
 
 		describe("C2 new functionality: invalid queries", function () {
@@ -504,6 +504,13 @@ describe("InsightFacade", function () {
 			it("[invalid/invalidDir.json] invalid DIRECTION", checkQuery);
 			it("[invalid/invalidKeyCount.json] invalid key in COUNT", checkQuery);
 			it("[invalid/invalidKeyMax.json] invalid key in MAX", checkQuery);
+		});
+
+		describe("C2: more coverage", function () {
+			it("[valid/mkeyFlagRoom.json] valid query using mkey flag in rooms", checkQuery);
+			it("[valid/mkeyFlagSections.json] valid query using mkey flag in sections", checkQuery);
+			it("[valid/diffIdGT.json] different id in GT", checkQuery);
+			it("[valid/useEQ.json] valid query using EQ", checkQuery);
 		});
 	});
 });
