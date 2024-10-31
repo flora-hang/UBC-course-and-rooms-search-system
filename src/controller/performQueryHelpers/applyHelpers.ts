@@ -18,6 +18,8 @@ export function applyFunctionItems(
 
 	// console.log("> before for loop, groupedItems: %o", groupedItems.length);
 	// console.log("> applyRules: %o", applyRules);
+	const itemKind: Section | Room = groupedItems[0][0];
+
 	for (const grp of groupedItems) {
 		// console.log("!!! group: %o", group);
 		const resultItem: any = {}; // To hold the result for the current group
@@ -25,20 +27,25 @@ export function applyFunctionItems(
 		applyRules.forEach((rule) => {
 			const { applyKey, applyToken, key } = rule;
 
+			if (applyKey.includes("_")) {
+				throw new InsightError("Invalid apply key");
+			}
+
 			const idOnly = key.split("_")[0];
 			if (idOnly !== id) {
 				throw new InsightError("id does not match in APPLY");
 			}
 			const keyOnly = key.split("_")[1];
-			// console.log("!!! key: %o", keyOnly);
+			if (!itemKind.hasField(keyOnly)) {
+				throw new InsightError("Invalid key in APPLY");
+			}
+			
 			if (applyToken !== "COUNT" && !mkeyFlag(keyOnly)) {
 				throw new InsightError("Invalid apply key");
 			}
-			// console.log("!!! key: %o", keyOnly);
 
 			// Extract values from the group based on the key
 			try {
-				//!!! just try-catch or check if key is valid?
 				// console.log("group: %o", group);
 				const values = grp.map((item) => (item as any)[keyOnly]);
 				// console.log("> values: %o", values);

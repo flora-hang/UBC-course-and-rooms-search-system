@@ -69,6 +69,11 @@ export default class Room extends Item {
 		}
 	}
 
+    public hasField(comparisonField: string): boolean {
+        const fields = ["fullname", "shortname", "number", "name", "seats", "type", "furniture", "href", "lat", "lon", "address"];
+        return fields.includes(comparisonField);
+    }
+
 	public getUniqueIdentifier(): string {
 		return this.getName();
 	}

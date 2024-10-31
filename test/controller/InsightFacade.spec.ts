@@ -498,6 +498,8 @@ describe("InsightFacade", function () {
 			it("[invalid/diffIdInApply.json] different id in APPLY", checkQuery);
 			it("[invalid/invalidApplyTargetKey.json] invalid APPLY target key", checkQuery);
 			it("[invalid/invalidDir.json] invalid DIRECTION", checkQuery);
+			it("[invalid/invalidKeyCount.json] invalid key in COUNT", checkQuery);
+			it("[invalid/invalidKeyMax.json] invalid key in MAX", checkQuery);
 		});
 	});
 });
