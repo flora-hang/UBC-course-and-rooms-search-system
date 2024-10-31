@@ -109,30 +109,7 @@ export async function parseTransformationsBlock(
 	const applyKeys = applyRules.map((applyRule) => applyRule.applyKey);
 	const allValidKeys = new Set([...groups, ...applyKeys]);
 
-	columns.forEach((column) => {
-		if (!allValidKeys.has(column)) {
-			throw new InsightError("COLUMNS keys must correspond to one of the GROUP keys or to applykeys");
-		}
-	});
-
-	const seen = new Set<string>(); // seen apply keys
-	applyRules?.forEach((applyRule) => {
-		// console.log(seen);
-		// console.log("b", applyRule.applyKey);
-		if (seen.has(applyRule.applyKey)) {
-			throw new InsightError("APPLY contains duplicate key");
-		}
-		seen.add(applyRule.applyKey);
-	});
-	// console.log("> checked for unique apply keys");
-
-	// group the items together
-	if (validQuery.TRANSFORMATIONS && !groups) {
-		throw new InsightError("Transformations must have a GROUP block");
-	} else if (validQuery.TRANSFORMATIONS && !applyRules) {
-		throw new InsightError("Transformations must have an APPLY block");
-	}
-	// console.log("> checked for group and apply blocks");
+	validateColumnsAndApplyKeys(columns, allValidKeys, applyRules, validQuery, groups);
 
 	// group the filtered results into specific groups
 	// const groupedItems = groups ? groupItems(filteredItems, groups) : null;
@@ -158,3 +135,30 @@ export async function parseTransformationsBlock(
 		return returnResults(groupAndApply, columns);
 	}
 }
+
+function validateColumnsAndApplyKeys(
+	columns: string[], allValidKeys: Set<string>, 
+	applyRules: ApplyRule[], validQuery: Query, groups: string[]): void {
+	columns.forEach((column) => {
+		if (!allValidKeys.has(column)) {
+			throw new InsightError("COLUMNS keys must correspond to one of the GROUP keys or to applykeys");
+		}
+	});
+
+	const seen = new Set<string>(); // seen apply keys
+	applyRules?.forEach((applyRule) => {
+		// console.log(seen);
+		// console.log("b", applyRule.applyKey);
+		if (seen.has(applyRule.applyKey)) {
+			throw new InsightError("APPLY contains duplicate key");
+		}
+		seen.add(applyRule.applyKey);
+	});
+
+	if (validQuery.TRANSFORMATIONS && !groups) {
+		throw new InsightError("Transformations must have a GROUP block");
+	} else if (validQuery.TRANSFORMATIONS && !applyRules) {
+		throw new InsightError("Transformations must have an APPLY block");
+	}
+}
+
