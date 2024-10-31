@@ -38,7 +38,7 @@ export function sortOrderString(order: string, columns: string[], items: Item[])
 	if (mkeyFlag(field)) {
 		items.sort((a, b) => a.getField(field) - b.getField(field));
 	} else {
-		items.sort((a, b) => a.getField(field).localeCompare(b.getField(field)));
+		items.sort((a, b) => (a.getField(field) > b.getField(field)) ? 1 : -1);
 	}
 }
 
@@ -74,7 +74,7 @@ export function sortOrderObject(
 			if (mkeyFlag(keyOnly)) {
 				comparison = aValue - bValue; // Numeric comparison
 			} else {
-				comparison = aValue.localeCompare(bValue); // String comparison
+				comparison = aValue > bValue ? 1 : -1; // String comparison
 			}
 
 			// If comparison is not equal, return based on direction
@@ -134,7 +134,7 @@ export function sortGroupOrderString(order: string, columns: string[], groupAndA
 				const bValue = b.find((obj: any) =>
 					Object.prototype.hasOwnProperty.call(obj, "rooms_shortname")
 				).rooms_shortname;
-				return aValue.localeCompare(bValue);
+				return (aValue > bValue) ? 1 : -1;
 			});
 		}
 	} else {
