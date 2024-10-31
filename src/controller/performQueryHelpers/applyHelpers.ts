@@ -1,4 +1,4 @@
-import ApplyRule, { useApply } from "../../models/query/ApplyRule";
+import ApplyRule, { ApplyToken, useApply } from "../../models/query/ApplyRule";
 import Room from "../../models/rooms/Room";
 import Section from "../../models/sections/Section";
 import { InsightError } from "../../controller/IInsightFacade";
@@ -27,22 +27,7 @@ export function applyFunctionItems(
 		applyRules.forEach((rule) => {
 			const { applyKey, applyToken, key } = rule;
 
-			if (applyKey.includes("_")) {
-				throw new InsightError("Invalid apply key");
-			}
-
-			const idOnly = key.split("_")[0];
-			if (idOnly !== id) {
-				throw new InsightError("id does not match in APPLY");
-			}
-			const keyOnly = key.split("_")[1];
-			if (!itemKind.hasField(keyOnly)) {
-				throw new InsightError("Invalid key in APPLY");
-			}
-			
-			if (applyToken !== "COUNT" && !mkeyFlag(keyOnly)) {
-				throw new InsightError("Invalid apply key");
-			}
+			const keyOnly = validateApplyKey(applyKey, key, id, itemKind, applyToken);
 
 			// Extract values from the group based on the key
 			try {
@@ -61,3 +46,24 @@ export function applyFunctionItems(
 	// console.log("> results: %o", results);
 	return results;
 }
+function validateApplyKey(applyKey: string, key: string, id: string, 
+	itemKind: Section | Room, applyToken: ApplyToken): string {
+	if (applyKey.includes("_")) {
+		throw new InsightError("Invalid apply key");
+	}
+
+	const idOnly = key.split("_")[0];
+	if (idOnly !== id) {
+		throw new InsightError("id does not match in APPLY");
+	}
+	const keyOnly = key.split("_")[1];
+	if (!itemKind.hasField(keyOnly)) {
+		throw new InsightError("Invalid key in APPLY");
+	}
+
+	if (applyToken !== "COUNT" && !mkeyFlag(keyOnly)) {
+		throw new InsightError("Invalid apply key");
+	}
+	return keyOnly;
+}
+
