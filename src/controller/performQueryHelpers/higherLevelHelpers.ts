@@ -124,14 +124,21 @@ export async function parseTransformationsBlock(
 
 	const groupedItems = groupItems(filteredItems, groups, id);
 	// console.log("> grouped items length:", groupedItems?.length);
+
+	const maxSections = 5000;
+	// - check if filtered sections exceed 5000 sections limit
+	if (groupedItems.length > maxSections) {
+		throw new ResultTooLargeError("groupedItems exceed size of 5000, size is: " + groupedItems.length);
+	}
+
 	const appliedItems = applyFunctionItems(groupedItems, applyRules, id);
 	// console.log("> applied items length:", appliedItems?.length);
 	const groupAndApply = combine2(groups, groupedItems, appliedItems);
-	// console.log("> combined items length:", groupAndApply?.length);
+	// console.log("> combined items: ", groupAndApply);
 
 	if (orderField) {
 		const sortedItems = sortResultsGroup(groupAndApply, orderField, columns);
-		// console.log("> sorted items:", sortedItems?.length);
+		// console.log("> sorted items:", sortedItems);
 		return returnResults(sortedItems, columns);
 	} else {
 		return returnResults(groupAndApply, columns);
