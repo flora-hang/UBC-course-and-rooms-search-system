@@ -36,22 +36,22 @@ export default class ApplyRule {
 export function useApply(resultItem: any, applyKey: string, applyToken: ApplyToken, values: any[]): void {
 	switch (applyToken) {
 		case "MAX": {
-			resultItem[applyKey] = Decimal.max(...values); // Get the maximum value
+			resultItem[applyKey] = Math.max(...values); // Get the maximum value
 			break;
 		}
 		case "MIN": {
-			resultItem[applyKey] = Decimal.min(...values); // Get the minimum value
+			resultItem[applyKey] = Math.min(...values); // Get the minimum value
 			break;
 		}
 		case "AVG": {
 			const total = values.reduce((sum, val) => Decimal.add(sum, new Decimal(val)), new Decimal(0));
 			const avg = total.toNumber() / values.length;
-			resultItem[applyKey] = new Decimal (avg.toFixed(ROUNDING_PRECISION)); // Round to two decimal places
+			resultItem[applyKey] = Number(avg.toFixed(ROUNDING_PRECISION)); // Round to two decimal places
 			break;
 		}
 		case "SUM": {
 			const sum = values.reduce((acc, val) => acc + val, 0);
-			resultItem[applyKey] = new Decimal(sum.toFixed(ROUNDING_PRECISION)); // Round to two decimal places
+			resultItem[applyKey] = Number(sum.toFixed(ROUNDING_PRECISION)); // Round to two decimal places
 			break;
 		}
 		case "COUNT": {
