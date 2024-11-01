@@ -124,49 +124,9 @@ export function sortGroupOrderString(order: string, columns: string[], groupAndA
 		const field: string = order.split("_")[1];
 		// console.log("!!! field: %o", field);
 		if (mkeyFlag(field)) {
-			groupAndApply.sort((a: Record<string, any>[], b: Record<string, any>[]) => {
-				let aValue = 0;
-				let bValue = 0;
-				for (const obj of a) {
-					const key = Object.keys(obj)[0];
-					const keyOnly = key.split("_")[1];
-					if (keyOnly === field) {
-						aValue = obj[key];
-					}
-				}
-				for (const obj of b) {
-					const key = Object.keys(obj)[0];
-					const keyOnly = key.split("_")[1];
-					if (keyOnly === field) {
-						bValue = obj[key];
-					}
-				}
-				return aValue - bValue;
-			});
+			sortStringNumeric(groupAndApply, field);
 		} else {
-			groupAndApply.sort((a: any, b: any) => { 
-				// console.log("Comparing:", a, b);
-				let aValue = "";
-				let bValue = "";
-				for (const obj of a) {
-					const key = Object.keys(obj)[0];
-					const keyOnly = key.split("_")[1];
-					if (keyOnly === field) {
-						aValue = obj[key];
-					}
-				}
-				for (const obj of b) {
-					const key = Object.keys(obj)[0];
-					const keyOnly = key.split("_")[1];
-					if (keyOnly === field) {
-						bValue = obj[key];
-					}
-				}
-				// console.log("!!! aValue: %o, bValue: %o", aValue, bValue);
-				// console.log("!!! aValue > bValue: %o", aValue > bValue);
-
-				return(aValue > bValue) ? 1 : -1;
-			});
+			sortStringNonNumeric(groupAndApply, field);
 		}
 	} else {
 		const key: string = order;
@@ -175,6 +135,53 @@ export function sortGroupOrderString(order: string, columns: string[], groupAndA
 		});
 	}
 
+}
+
+function sortStringNonNumeric(groupAndApply: Record<string, any>[][], field: string) {
+	groupAndApply.sort((a: any, b: any) => {
+		// console.log("Comparing:", a, b);
+		let aValue = "";
+		let bValue = "";
+		for (const obj of a) {
+			const key = Object.keys(obj)[0];
+			const keyOnly = key.split("_")[1];
+			if (keyOnly === field) {
+				aValue = obj[key];
+			}
+		}
+		for (const obj of b) {
+			const key = Object.keys(obj)[0];
+			const keyOnly = key.split("_")[1];
+			if (keyOnly === field) {
+				bValue = obj[key];
+			}
+		}
+		// console.log("!!! aValue: %o, bValue: %o", aValue, bValue);
+		// console.log("!!! aValue > bValue: %o", aValue > bValue);
+		return (aValue > bValue) ? 1 : -1;
+	});
+}
+
+function sortStringNumeric(groupAndApply: Record<string, any>[][], field: string) {
+	groupAndApply.sort((a: Record<string, any>[], b: Record<string, any>[]) => {
+		let aValue = 0;
+		let bValue = 0;
+		for (const obj of a) {
+			const key = Object.keys(obj)[0];
+			const keyOnly = key.split("_")[1];
+			if (keyOnly === field) {
+				aValue = obj[key];
+			}
+		}
+		for (const obj of b) {
+			const key = Object.keys(obj)[0];
+			const keyOnly = key.split("_")[1];
+			if (keyOnly === field) {
+				bValue = obj[key];
+			}
+		}
+		return aValue - bValue;
+	});
 }
 
 export function sortGroupOrderObject(
@@ -222,41 +229,9 @@ function compareValues(key: string, a: any, b: any): number {
 	if (key.includes("_")) {
 		const field: string = key.split("_")[1];
 		if (mkeyFlag(field)) {
-			let aValue = 0;
-			let bValue = 0;
-			for (const obj of a) {
-				const key1 = Object.keys(obj)[0]; //key1 to fix lint error
-				const keyOnly = key1.split("_")[1];
-				if (keyOnly === field) {
-					aValue = obj[key1];
-				}
-			}
-			for (const obj of b) {
-				const key2 = Object.keys(obj)[0];
-				const keyOnly = key2.split("_")[1];
-				if (keyOnly === field) {
-					bValue = obj[key2];
-				}
-			}
-			return aValue - bValue;
+			return sortObjectNumeric(a, field, b);
 		} else {
-			let aValue = "";
-			let bValue = "";
-			for (const obj of a) {
-				const key1 = Object.keys(obj)[0]; //key1 to fix lint error
-				const keyOnly = key1.split("_")[1];
-				if (keyOnly === field) {
-					aValue = obj[key1];
-				}
-			}
-			for (const obj of b) {
-				const key2 = Object.keys(obj)[0];
-				const keyOnly = key2.split("_")[1];
-				if (keyOnly === field) {
-					bValue = obj[key2];
-				}
-			}
-			return aValue > bValue ? 1 : -1;
+			return sortObjectNonNumeric(a, field, b);
 		}
 	} else {
 		// doesn't include "_"
@@ -266,5 +241,45 @@ function compareValues(key: string, a: any, b: any): number {
 	}
 	// console.log("!!! comparison: %o", comparison);
 	// return comparison;
+}
+
+function sortObjectNonNumeric(a: any, field: string, b: any) {
+	let aValue = "";
+	let bValue = "";
+	for (const obj of a) {
+		const key1 = Object.keys(obj)[0]; //key1 to fix lint error
+		const keyOnly = key1.split("_")[1];
+		if (keyOnly === field) {
+			aValue = obj[key1];
+		}
+	}
+	for (const obj of b) {
+		const key2 = Object.keys(obj)[0];
+		const keyOnly = key2.split("_")[1];
+		if (keyOnly === field) {
+			bValue = obj[key2];
+		}
+	}
+	return aValue > bValue ? 1 : -1;
+}
+
+function sortObjectNumeric(a: any, field: string, b: any) {
+	let aValue = 0;
+	let bValue = 0;
+	for (const obj of a) {
+		const key1 = Object.keys(obj)[0]; //key1 to fix lint error
+		const keyOnly = key1.split("_")[1];
+		if (keyOnly === field) {
+			aValue = obj[key1];
+		}
+	}
+	for (const obj of b) {
+		const key2 = Object.keys(obj)[0];
+		const keyOnly = key2.split("_")[1];
+		if (keyOnly === field) {
+			bValue = obj[key2];
+		}
+	}
+	return aValue - bValue;
 }
 
