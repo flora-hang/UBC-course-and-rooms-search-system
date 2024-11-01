@@ -1,0 +1,204 @@
+{
+	"title": "lessColumns",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"IS": {
+						"rooms_furniture": "*Tables*"
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sumSeats",
+				"maxLon"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"sumSeats",
+					"maxLon"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_shortname"
+			],
+			"APPLY": [
+				{
+					"minLat": {
+						"MIN": "rooms_lat"
+					}
+				},
+				{
+					"maxLon": {
+						"MAX": "rooms_lon"
+					}
+				},
+				{
+					"sumSeats": {
+						"SUM": "rooms_seats"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sumSeats": 1546,
+			"maxLon": -123.25364
+		},
+		{
+			"sumSeats": 1473,
+			"maxLon": -123.25468
+		},
+		{
+			"sumSeats": 1421,
+			"maxLon": -123.25431
+		},
+		{
+			"sumSeats": 897,
+			"maxLon": -123.24894
+		},
+		{
+			"sumSeats": 825,
+			"maxLon": -123.24494
+		},
+		{
+			"sumSeats": 724,
+			"maxLon": -123.2531
+		},
+		{
+			"sumSeats": 592,
+			"maxLon": -123.24673
+		},
+		{
+			"sumSeats": 538,
+			"maxLon": -123.24342
+		},
+		{
+			"sumSeats": 538,
+			"maxLon": -123.2521
+		},
+		{
+			"sumSeats": 537,
+			"maxLon": -123.25165
+		},
+		{
+			"sumSeats": 505,
+			"maxLon": -123.25533
+		},
+		{
+			"sumSeats": 503,
+			"maxLon": -123.24935
+		},
+		{
+			"sumSeats": 482,
+			"maxLon": -123.24467
+		},
+		{
+			"sumSeats": 440,
+			"maxLon": -123.24807
+		},
+		{
+			"sumSeats": 394,
+			"maxLon": -123.25623
+		},
+		{
+			"sumSeats": 354,
+			"maxLon": -123.24718
+		},
+		{
+			"sumSeats": 299,
+			"maxLon": -123.25027
+		},
+		{
+			"sumSeats": 289,
+			"maxLon": -123.24894
+		},
+		{
+			"sumSeats": 272,
+			"maxLon": -123.24886
+		},
+		{
+			"sumSeats": 263,
+			"maxLon": -123.24944
+		},
+		{
+			"sumSeats": 228,
+			"maxLon": -123.25318
+		},
+		{
+			"sumSeats": 216,
+			"maxLon": -123.2559
+		},
+		{
+			"sumSeats": 166,
+			"maxLon": -123.24842
+		},
+		{
+			"sumSeats": 160,
+			"maxLon": -123.24608
+		},
+		{
+			"sumSeats": 156,
+			"maxLon": -123.255534
+		},
+		{
+			"sumSeats": 150,
+			"maxLon": -123.25042
+		},
+		{
+			"sumSeats": 142,
+			"maxLon": -123.25179
+		},
+		{
+			"sumSeats": 133,
+			"maxLon": -123.25692
+		},
+		{
+			"sumSeats": 120,
+			"maxLon": -123.25583
+		},
+		{
+			"sumSeats": 108,
+			"maxLon": -123.25249
+		},
+		{
+			"sumSeats": 96,
+			"maxLon": -123.25374
+		},
+		{
+			"sumSeats": 96,
+			"maxLon": -123.25741
+		},
+		{
+			"sumSeats": 94,
+			"maxLon": -123.25237
+		},
+		{
+			"sumSeats": 80,
+			"maxLon": -123.25224
+		},
+		{
+			"sumSeats": 50,
+			"maxLon": -123.25198
+		},
+		{
+			"sumSeats": 44,
+			"maxLon": -123.25505
+		},
+		{
+			"sumSeats": 41,
+			"maxLon": -123.25655
+		},
+		{
+			"sumSeats": 28,
+			"maxLon": -123.24959
+		}
+	]
+}
