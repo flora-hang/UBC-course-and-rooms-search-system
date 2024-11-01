@@ -24,6 +24,7 @@ export default class ApplyRule {
 
 	public static buildQuery(object: any): ApplyRule {
 		const applyKey = Object.keys(object)[0];
+		console.log("applyKey: ", applyKey);
 		const nestedObject = object[applyKey];
 		const applyToken = Object.keys(nestedObject)[0] as ApplyToken;
 		const key = nestedObject[applyToken];
@@ -35,22 +36,22 @@ export default class ApplyRule {
 export function useApply(resultItem: any, applyKey: string, applyToken: ApplyToken, values: any[]): void {
 	switch (applyToken) {
 		case "MAX": {
-			resultItem[applyKey] = Math.max(...values); // Get the maximum value
+			resultItem[applyKey] = Decimal.max(...values); // Get the maximum value
 			break;
 		}
 		case "MIN": {
-			resultItem[applyKey] = Math.min(...values); // Get the minimum value
+			resultItem[applyKey] = Decimal.min(...values); // Get the minimum value
 			break;
 		}
 		case "AVG": {
 			const total = values.reduce((sum, val) => Decimal.add(sum, new Decimal(val)), new Decimal(0));
 			const avg = total.toNumber() / values.length;
-			resultItem[applyKey] = Number(avg.toFixed(ROUNDING_PRECISION)); // Round to two decimal places
+			resultItem[applyKey] = new Decimal (avg.toFixed(ROUNDING_PRECISION)); // Round to two decimal places
 			break;
 		}
 		case "SUM": {
 			const sum = values.reduce((acc, val) => acc + val, 0);
-			resultItem[applyKey] = Number(sum.toFixed(ROUNDING_PRECISION)); // Round to two decimal places
+			resultItem[applyKey] = new Decimal(sum.toFixed(ROUNDING_PRECISION)); // Round to two decimal places
 			break;
 		}
 		case "COUNT": {

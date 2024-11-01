@@ -477,7 +477,7 @@ describe("InsightFacade", function () {
 			it("[valid/moreApply.json] more APPLY keys", checkQuery);
 			it("[valid/moreGroup.json] more GROUP keys", checkQuery);
 			it("[valid/avgAvg.json] find AVG of sections_avg", checkQuery);
-			it.only("[valid/emptyCellsInTable.json] empty cells in resulting table", checkQuery);
+			it("[valid/emptyCellsInTable.json] empty cells in resulting table", checkQuery);
 		});
 
 		describe("C2 new functionality: invalid queries", function () {

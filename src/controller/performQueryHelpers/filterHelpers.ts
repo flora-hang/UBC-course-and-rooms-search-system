@@ -7,7 +7,7 @@ import { handleAND, handleOR, handleNOT, handleEQ, handleGT, handleLT, handleIS 
 export function filterItems(where: any, items: Item[], id: string): Item[] {
 	// If WHERE block is empty, return all items (no filtering)
 	// !!! get all items in the dataset
-	console.log("!!! in filterItems");
+	// console.log("!!! in filterItems");
 
 	if (where === undefined) {
 		return items;
@@ -52,7 +52,7 @@ export function filterItems(where: any, items: Item[], id: string): Item[] {
 		return handleIS(where, items, id);
 	}
 
-	console.log("---------------------------------");
+	// console.log("---------------------------------");
 	// If no valid operator is found, return all sections (shouldn't happen)
 	return items;
 }

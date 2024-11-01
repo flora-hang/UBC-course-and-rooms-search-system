@@ -1,7 +1,7 @@
 import { InsightResult } from "../../controller/IInsightFacade";
 
 export function returnResults(sortedItems: Record<string, any>[][], columns: string[]): InsightResult[] {
-	console.log("!!! in returnResults");
+	// console.log("!!! in returnResults");
 	return sortedItems.map((item) => {
 		const result: any = {};
 		// item.forEach((field) => {
@@ -24,7 +24,7 @@ function extractFields(field: Record<string, any>, columns: string[], result: Re
 
 export function selectColumns(items: any, columns: string[]): InsightResult[] {
 	// items is a list of list of objects: [Room{}, Room{}, {maxSeats: 100}], []
-	console.log("!!! in selectColumns");
+	// console.log("!!! in selectColumns");
 	// console.log("> columns: %o", columns); // all order keys in columns
 
 	// for (const column of columns) {

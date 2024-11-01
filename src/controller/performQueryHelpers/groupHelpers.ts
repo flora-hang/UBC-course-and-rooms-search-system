@@ -2,7 +2,7 @@ import { InsightError } from "../../controller/IInsightFacade";
 import Item from "../../models/query/Item";
 
 export function groupItems(items: Item[], groups: String[], id: string): any {
-	console.log("!!! in groupItems"); // items = filteredItems
+	// console.log("!!! in groupItems"); // items = filteredItems
 	// console.log("> groups: %o", groups);
 	// console.log("> items: %o", items);
 	const groupedItemsMap: Record<string, Item[]> = {}; // Item[] = groupedItems
@@ -35,8 +35,8 @@ export function groupItems(items: Item[], groups: String[], id: string): any {
 			groupedItemsMap[key].push(item);
 		}
 	});
-	console.log("---------------------------------");
-	console.log("in helper:", groupedItemsMap.length);
+	// console.log("---------------------------------");
+	// console.log("in helper:", groupedItemsMap.length);
 	return Object.values(groupedItemsMap);
 }
 
@@ -54,7 +54,7 @@ export function combine2(
 	groupedItems: Item[][],
 	appliedItems: Record<string, any>[][]
 ): Record<string, any>[][] {
-	console.log("!!! in combine2");
+	// console.log("!!! in combine2");
 	// console.log("> groups: %o", groups); // [ 'rooms_shortname', [length]: 1 ]
 	// console.log("> groupedItems: %o", groupedItems); // [ [Room{}], [Room{}, Room{}] ]
 	// console.log("> appliedItems: %o", appliedItems); // [ {maxSeats: 442}, {maxSeats: 350}]
@@ -75,7 +75,7 @@ export function combine2(
 		combinedItems[i] = combined;
 	}
 
-	console.log("---------------------------------");
+	// console.log("---------------------------------");
 	// console.log("> combinedItems: %o", combinedItems);
 	return combinedItems;
 }
