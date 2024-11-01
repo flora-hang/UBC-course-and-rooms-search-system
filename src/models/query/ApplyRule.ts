@@ -24,7 +24,7 @@ export default class ApplyRule {
 
 	public static buildQuery(object: any): ApplyRule {
 		const applyKey = Object.keys(object)[0];
-		console.log("applyKey: ", applyKey);
+		// console.log("applyKey: ", applyKey);
 		const nestedObject = object[applyKey];
 		const applyToken = Object.keys(nestedObject)[0] as ApplyToken;
 		const key = nestedObject[applyToken];

@@ -40,7 +40,7 @@ export function selectColumns(items: any, columns: string[]): InsightResult[] {
 		columns.forEach((column) => {
 			const columnNameWithoutDatasetID: string = column.split("_")[1];
 			if (columnNameWithoutDatasetID in item) {
-				selected[column] = item.getField(columnNameWithoutDatasetID);
+				selected[String(column)] = item.getField(columnNameWithoutDatasetID);
 			}
 		});
 		return selected;

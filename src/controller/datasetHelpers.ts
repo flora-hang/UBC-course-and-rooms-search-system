@@ -32,12 +32,19 @@ export function handleSections(course: Course, jsonData: SectionData[]): Course 
 			Pass: pass,
 			Fail: fail,
 			Audit: audit,
+			Section: sectionType,
 		} = sectionn;
+
+		// Set year to 1900 if Section is "overall"
+		const year1900 = 1900;
+		const sectionYear = sectionType === "overall" ? year1900 : Number(year);
+		// Ensure uuid is a string
+		const sectionUuid = String(uuid);
 
 		// if sectionn is valid, then add the section
 		if (validateSectionData(sectionn)) {
 			// Create the section object if validation passes
-			const section = new Section(uuid, id, title, instructor, dept, year, avg, pass, fail, audit);
+			const section = new Section(sectionUuid, id, title, instructor, dept, sectionYear, avg, pass, fail, audit);
 			course.addSection(section);
 		}
 	});
@@ -84,6 +91,17 @@ export async function processZip(id: string, content: string): Promise<SectionsD
 		return Promise.reject(new InsightError("No valid sections"));
 	}
 
+	// trying sth!!!
+	// const sections = dataset.getSections();
+	// for (const section of sections) {
+	//     section.uuid = String(section.uuid);
+	//     section.year = Number(section.year);
+	// }
+
+	//!!! Debugging
+	// console.log("> section: ", dataset.getSections()[0]);
+	// console.log("> uuid: ", dataset.getSections()[0].getUuid().toString());
+	// console.log("> uuid: ", String(dataset.getSections()[0].getUuid()));
 	return dataset;
 }
 
