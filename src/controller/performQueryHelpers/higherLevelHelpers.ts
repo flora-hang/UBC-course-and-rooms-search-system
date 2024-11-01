@@ -71,6 +71,8 @@ export async function queryItemsDataset(
 	if (finalResults.length > maxSections) {
 		throw new ResultTooLargeError("results exceed size of 5000, size is: " + finalResults.length);
 	}
+	// console.log("> final results:", finalResults);
+
 	// console.log("> final results[0]:", finalResults[0]);
 	// console.log("> final results[1]:", finalResults[1]);
 	// console.log("> final results[2]:", finalResults[2]);

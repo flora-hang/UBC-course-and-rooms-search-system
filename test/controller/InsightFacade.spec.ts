@@ -344,7 +344,13 @@ describe("InsightFacade", function () {
 				if (errorExpected) {
 					expect.fail(`performQuery resolved when it should have rejected with ${expected}`);
 				}
-				expect(result).to.deep.equal(expected);
+				// check each item
+				// expect(result.length).to.equal(expected.length);
+				// for (let i = 0; i < result.length; i++) {
+				// 	console.log("comparing", result[i], expected[i]);
+				// 	expect(result[i]).to.deep.equal(expected[i]);
+				// }
+				expect(result).to.deep.equal(expected); // original
 			} catch (err) {
 				if (!errorExpected) {
 					expect.fail(`performQuery threw unexpected error: ${err}`);
@@ -478,6 +484,9 @@ describe("InsightFacade", function () {
 			it("[valid/moreGroup.json] more GROUP keys", checkQuery);
 			it("[valid/avgAvg.json] find AVG of sections_avg", checkQuery);
 			it("[valid/emptyCellsInTable.json] empty cells in resulting table", checkQuery);
+			it("[valid/orderMaxLat.json] ORDER by MAX lat", checkQuery);
+			it("[valid/orderMinLon.json] ORDER by MIN lon", checkQuery);
+			it.only("[valid/orderSumSeatsMaxLon.json] ORDER by SUM seats, MAX lon", checkQuery);
 		});
 
 		describe("C2 new functionality: invalid queries", function () {
