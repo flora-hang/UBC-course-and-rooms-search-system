@@ -27,7 +27,6 @@ export function groupItems(items: Item[], groups: String[], id: string): any {
 				}
 			})
 			.join("_");
-		// console.log("!!! key: %o", key);
 
 		if (!groupedItemsMap[key]) {
 			groupedItemsMap[key] = [item];

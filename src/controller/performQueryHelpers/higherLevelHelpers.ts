@@ -124,6 +124,13 @@ export async function parseTransformationsBlock(
 
 	const groupedItems = groupItems(filteredItems, groups, id);
 	// console.log("> grouped items length:", groupedItems?.length);
+
+	const maxSections = 5000;
+	// - check if filtered sections exceed 5000 sections limit
+	if (groupedItems.length > maxSections) {
+		throw new ResultTooLargeError("groupedItems exceed size of 5000, size is: " + groupedItems.length);
+	}
+
 	const appliedItems = applyFunctionItems(groupedItems, applyRules, id);
 	// console.log("> applied items length:", appliedItems?.length);
 	const groupAndApply = combine2(groups, groupedItems, appliedItems);
