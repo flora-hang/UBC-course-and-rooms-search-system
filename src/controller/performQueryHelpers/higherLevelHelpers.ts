@@ -138,7 +138,7 @@ export async function parseTransformationsBlock(
 
 	if (orderField) {
 		const sortedItems = sortResultsGroup(groupAndApply, orderField, columns);
-		console.log("> sorted items:", sortedItems);
+		// console.log("> sorted items:", sortedItems);
 		return returnResults(sortedItems, columns);
 	} else {
 		return returnResults(groupAndApply, columns);

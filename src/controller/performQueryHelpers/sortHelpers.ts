@@ -125,8 +125,8 @@ export function sortGroupOrderString(order: string, columns: string[], groupAndA
 		// console.log("!!! field: %o", field);
 		if (mkeyFlag(field)) {
 			groupAndApply.sort((a: Record<string, any>[], b: Record<string, any>[]) => {
-				let aValue: number = 0;
-				let bValue: number = 0;
+				let aValue = 0;
+				let bValue = 0;
 				for (const obj of a) {
 					const key = Object.keys(obj)[0];
 					const keyOnly = key.split("_")[1];
@@ -146,8 +146,8 @@ export function sortGroupOrderString(order: string, columns: string[], groupAndA
 		} else {
 			groupAndApply.sort((a: any, b: any) => { 
 				// console.log("Comparing:", a, b);
-				let aValue: string = "";
-				let bValue: string = "";
+				let aValue = "";
+				let bValue = "";
 				for (const obj of a) {
 					const key = Object.keys(obj)[0];
 					const keyOnly = key.split("_")[1];
@@ -206,52 +206,54 @@ export function sortGroupOrderObject(
 
 			let comparison = 0;
 			// new stuff:
-			comparison = compareValues(key, a, b, comparison);
+			comparison = compareValues(key, a, b);
 			// console.log("!!! comparison: %o", comparison);
-			return dir === "UP" ? comparison : -comparison;
 
-			
+			// If comparison is not zero, return the result
+			if (comparison !== 0) {
+				return dir === "UP" ? comparison : -comparison;
+			}
 		}
 		return 0; // If all keys are equal
 	});
 }
 
-function compareValues(key: string, a: any, b: any, comparison: number): number {
+function compareValues(key: string, a: any, b: any): number {
 	if (key.includes("_")) {
 		const field: string = key.split("_")[1];
 		if (mkeyFlag(field)) {
-			let aValue: number = 0;
-			let bValue: number = 0;
+			let aValue = 0;
+			let bValue = 0;
 			for (const obj of a) {
-				const key = Object.keys(obj)[0];
-				const keyOnly = key.split("_")[1];
+				const key1 = Object.keys(obj)[0]; //key1 to fix lint error
+				const keyOnly = key1.split("_")[1];
 				if (keyOnly === field) {
-					aValue = obj[key];
+					aValue = obj[key1];
 				}
 			}
 			for (const obj of b) {
-				const key = Object.keys(obj)[0];
-				const keyOnly = key.split("_")[1];
+				const key2 = Object.keys(obj)[0];
+				const keyOnly = key2.split("_")[1];
 				if (keyOnly === field) {
-					bValue = obj[key];
+					bValue = obj[key2];
 				}
 			}
 			return aValue - bValue;
 		} else {
-			let aValue: string = "";
-			let bValue: string = "";
+			let aValue = "";
+			let bValue = "";
 			for (const obj of a) {
-				const key = Object.keys(obj)[0];
-				const keyOnly = key.split("_")[1];
+				const key1 = Object.keys(obj)[0]; //key1 to fix lint error
+				const keyOnly = key1.split("_")[1];
 				if (keyOnly === field) {
-					aValue = obj[key];
+					aValue = obj[key1];
 				}
 			}
 			for (const obj of b) {
-				const key = Object.keys(obj)[0];
-				const keyOnly = key.split("_")[1];
+				const key2 = Object.keys(obj)[0];
+				const keyOnly = key2.split("_")[1];
 				if (keyOnly === field) {
-					bValue = obj[key];
+					bValue = obj[key2];
 				}
 			}
 			return aValue > bValue ? 1 : -1;
