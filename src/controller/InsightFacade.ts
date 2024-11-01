@@ -184,7 +184,17 @@ export default class InsightFacade implements IInsightFacade {
 		// Build query object
 		const validQuery = Query.buildQuery(query);
 
-		const id = checkIds(validQuery);
+		let id = checkIds(validQuery);
+		//!!! id could be undefined if columns only contain APPLY keys
+
+		// but if id = undefined, then there exist GROUP
+		if (id === undefined && validQuery.TRANSFORMATIONS) {
+			id = validQuery.TRANSFORMATIONS?.group[0].split("_")[0];
+		} else if (id === undefined) {
+			return Promise.reject(new InsightError("Invalid query"));
+		}
+
+		// console.log("> id: ", id);
 		if (!this.insights.has(id)) {
 			throw new InsightError("Querying section that has not been added");
 		}
