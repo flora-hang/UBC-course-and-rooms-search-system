@@ -9,4 +9,5 @@ export default interface SectionData {
 	Pass: number;
 	Fail: number;
 	Audit: number;
+	Section: string;
 }

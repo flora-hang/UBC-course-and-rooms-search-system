@@ -347,9 +347,10 @@ describe("InsightFacade", function () {
 				// check each item
 				// expect(result.length).to.equal(expected.length);
 				// for (let i = 0; i < result.length; i++) {
-				// 	console.log("comparing", result[i], expected[i]);
-				// 	expect(result[i]).to.deep.equal(expected[i]);
+				// 	// console.log(result[i]);
+				// 	expect(expected).to.deep.include(result[i]);
 				// }
+				// expect(result).to.have.deep.members(expected); // order doesn't matter (everything should pass)
 				expect(result).to.deep.equal(expected); // original
 			} catch (err) {
 				if (!errorExpected) {

@@ -28,7 +28,7 @@ export async function queryItemsDataset(
 	} else if (dataset instanceof RoomsDataset) {
 		items = dataset.getRooms();
 	}
-	// console.log("!!! START OF FILTER ITEMS FUNC");
+	// console.log("> items:", items, items.length);
 	const filteredItems = filterItems(validQuery.WHERE.filter, items, id) as Item[];
 	// console.log("> filtered items", filteredItems, filteredItems.length);
 	// console.log("!!! START OF OIPTIONS BLOCK PARSE");
