@@ -1,0 +1,60 @@
+{
+	"title": "useEQ",
+	"input": {
+		"WHERE": {
+			"AND": [
+				{
+					"IS": {
+						"rooms_furniture": "*Tables*"
+					}
+				},
+				{
+					"EQ": {
+						"rooms_seats": 350
+					}
+				}
+			]
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"rooms_shortname",
+				"sumSeats"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"sumSeats"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"rooms_shortname"
+			],
+			"APPLY": [
+				{
+					"maxLat": {
+						"MAX": "rooms_lat"
+					}
+				},
+				{
+					"minLon": {
+						"MIN": "rooms_lon"
+					}
+				},
+				{
+					"sumSeats": {
+						"SUM": "rooms_seats"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"rooms_shortname": "LSC",
+			"sumSeats": 700
+		}
+	]
+}

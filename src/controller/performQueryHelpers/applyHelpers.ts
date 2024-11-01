@@ -9,7 +9,7 @@ export function applyFunctionItems(
 	applyRules: ApplyRule[],
 	id: string
 ): Record<string, any>[][] {
-	console.log("!!! in applyFunctionItems");
+	// console.log("!!! in applyFunctionItems");
 	if (!groupedItems) {
 		throw new InsightError("group key error");
 	}
@@ -42,7 +42,7 @@ export function applyFunctionItems(
 		// console.log("!!! resultItem: %o", resultItem);
 		results.push(resultItem); // Add the result item to results array
 	}
-	console.log("---------------------------------");
+	// console.log("---------------------------------");
 	// console.log("> results: %o", results);
 	return results;
 }

@@ -1,0 +1,594 @@
+{
+	"title": "mkeyFlagSections",
+	"input": {
+		"WHERE": {
+			"IS": {
+				"sections_dept": "*cpsc*"
+			}
+		},
+		"OPTIONS": {
+			"COLUMNS": [
+				"sections_instructor",
+				"avgAvg",
+				"maxPass",
+				"avgYear"
+			],
+			"ORDER": {
+				"dir": "DOWN",
+				"keys": [
+					"avgAvg",
+					"maxPass"
+				]
+			}
+		},
+		"TRANSFORMATIONS": {
+			"GROUP": [
+				"sections_instructor"
+			],
+			"APPLY": [
+				{
+					"avgAvg": {
+						"AVG": "sections_avg"
+					}
+				},
+				{
+					"maxPass": {
+						"MAX": "sections_pass"
+					}
+				},
+				{
+					"minFail": {
+						"MIN": "sections_fail"
+					}
+				},
+				{
+					"minAudit": {
+						"MIN": "sections_audit"
+					}
+				},
+				{
+					"avgYear": {
+						"AVG": "sections_year"
+					}
+				}
+			]
+		}
+	},
+	"errorExpected": false,
+	"expected": [
+		{
+			"sections_instructor": "awad, ahmed",
+			"avgAvg": 87.93,
+			"maxPass": 74,
+			"avgYear": 2015
+		},
+		{
+			"sections_instructor": "schmidt, mark",
+			"avgAvg": 86.17,
+			"maxPass": 171,
+			"avgYear": 2015
+		},
+		{
+			"sections_instructor": "hoos, holger",
+			"avgAvg": 85.37,
+			"maxPass": 32,
+			"avgYear": 2011
+		},
+		{
+			"sections_instructor": "dunfield, joshua",
+			"avgAvg": 84.39,
+			"maxPass": 105,
+			"avgYear": 2015
+		},
+		{
+			"sections_instructor": "booth, kellogg",
+			"avgAvg": 83.67,
+			"maxPass": 15,
+			"avgYear": 2007
+		},
+		{
+			"sections_instructor": "greenstreet, mark",
+			"avgAvg": 83.5,
+			"maxPass": 52,
+			"avgYear": 2012.83
+		},
+		{
+			"sections_instructor": "harvey, nicholas",
+			"avgAvg": 83.08,
+			"maxPass": 119,
+			"avgYear": 2012.75
+		},
+		{
+			"sections_instructor": "holmes, reid",
+			"avgAvg": 83.06,
+			"maxPass": 139,
+			"avgYear": 2015.33
+		},
+		{
+			"sections_instructor": "maclean, karon",
+			"avgAvg": 82.54,
+			"maxPass": 93,
+			"avgYear": 2011.81
+		},
+		{
+			"sections_instructor": "friedman, joel",
+			"avgAvg": 81.94,
+			"maxPass": 50,
+			"avgYear": 2010.92
+		},
+		{
+			"sections_instructor": "wohlstadter, eric",
+			"avgAvg": 81.78,
+			"maxPass": 156,
+			"avgYear": 2010.71
+		},
+		{
+			"sections_instructor": "beschastnikh, ivan",
+			"avgAvg": 81.52,
+			"maxPass": 112,
+			"avgYear": 2014.33
+		},
+		{
+			"sections_instructor": "garcia, ronald",
+			"avgAvg": 81.34,
+			"maxPass": 125,
+			"avgYear": 2013.2
+		},
+		{
+			"sections_instructor": "eiselt, kurt",
+			"avgAvg": 81.09,
+			"maxPass": 158,
+			"avgYear": 2011.05
+		},
+		{
+			"sections_instructor": "bridson, robert",
+			"avgAvg": 80.81,
+			"maxPass": 59,
+			"avgYear": 2010
+		},
+		{
+			"sections_instructor": "dawson, jessica",
+			"avgAvg": 80.75,
+			"maxPass": 104,
+			"avgYear": 2014.5
+		},
+		{
+			"sections_instructor": "poole, david",
+			"avgAvg": 80.55,
+			"maxPass": 139,
+			"avgYear": 2012.5
+		},
+		{
+			"sections_instructor": "dawson, jessica;maclean, karon",
+			"avgAvg": 80.24,
+			"maxPass": 24,
+			"avgYear": 2013
+		},
+		{
+			"sections_instructor": "murphy-hill, emerson",
+			"avgAvg": 80.18,
+			"maxPass": 74,
+			"avgYear": 2009
+		},
+		{
+			"sections_instructor": "carenini, giuseppe",
+			"avgAvg": 80.15,
+			"maxPass": 107,
+			"avgYear": 2011.36
+		},
+		{
+			"sections_instructor": "tsiknis, georgios",
+			"avgAvg": 80.07,
+			"maxPass": 162,
+			"avgYear": 2012.03
+		},
+		{
+			"sections_instructor": "de freitas, joao",
+			"avgAvg": 80.05,
+			"maxPass": 82,
+			"avgYear": 2010.83
+		},
+		{
+			"sections_instructor": "murphy, kevin",
+			"avgAvg": 79.78,
+			"maxPass": 36,
+			"avgYear": 2008
+		},
+		{
+			"sections_instructor": "krasic, charles",
+			"avgAvg": 79.76,
+			"maxPass": 54,
+			"avgYear": 2007.67
+		},
+		{
+			"sections_instructor": "wagner, alan",
+			"avgAvg": 79.62,
+			"maxPass": 55,
+			"avgYear": 2011.38
+		},
+		{
+			"sections_instructor": "luk, joseph",
+			"avgAvg": 79.14,
+			"maxPass": 79,
+			"avgYear": 2010.33
+		},
+		{
+			"sections_instructor": "mcgrenere, joanna",
+			"avgAvg": 78.83,
+			"maxPass": 118,
+			"avgYear": 2010.88
+		},
+		{
+			"sections_instructor": "bessmeltsev, mikhail",
+			"avgAvg": 78.7,
+			"maxPass": 65,
+			"avgYear": 2015
+		},
+		{
+			"sections_instructor": "palyart-lamarche, marc",
+			"avgAvg": 78.69,
+			"maxPass": 156,
+			"avgYear": 2014
+		},
+		{
+			"sections_instructor": "baniassad, elisa",
+			"avgAvg": 78.67,
+			"maxPass": 185,
+			"avgYear": 2014.2
+		},
+		{
+			"sections_instructor": "evans, william",
+			"avgAvg": 78.66,
+			"maxPass": 128,
+			"avgYear": 2011.83
+		},
+		{
+			"sections_instructor": "mackworth, alan",
+			"avgAvg": 78.48,
+			"maxPass": 93,
+			"avgYear": 2009.75
+		},
+		{
+			"sections_instructor": "dulat, margaret",
+			"avgAvg": 78.45,
+			"maxPass": 82,
+			"avgYear": 2011
+		},
+		{
+			"sections_instructor": "",
+			"avgAvg": 78.3,
+			"maxPass": 966,
+			"avgYear": 1915.32
+		},
+		{
+			"sections_instructor": "greif, chen",
+			"avgAvg": 77.69,
+			"maxPass": 91,
+			"avgYear": 2011.4
+		},
+		{
+			"sections_instructor": "voll, kimberly",
+			"avgAvg": 77.59,
+			"maxPass": 111,
+			"avgYear": 2009.83
+		},
+		{
+			"sections_instructor": "vuong, son",
+			"avgAvg": 77.03,
+			"maxPass": 46,
+			"avgYear": 2009
+		},
+		{
+			"sections_instructor": "sagaii, sara mahboubeh",
+			"avgAvg": 76.93,
+			"maxPass": 138,
+			"avgYear": 2015
+		},
+		{
+			"sections_instructor": "leyton-brown, kevin",
+			"avgAvg": 76.93,
+			"maxPass": 87,
+			"avgYear": 2011
+		},
+		{
+			"sections_instructor": "sheffer, alla",
+			"avgAvg": 76.76,
+			"maxPass": 52,
+			"avgYear": 2010.75
+		},
+		{
+			"sections_instructor": "pai, dinesh",
+			"avgAvg": 76.72,
+			"maxPass": 59,
+			"avgYear": 2013.5
+		},
+		{
+			"sections_instructor": "ernst, neil",
+			"avgAvg": 76.46,
+			"maxPass": 101,
+			"avgYear": 2011.33
+		},
+		{
+			"sections_instructor": "tompkins, david a d",
+			"avgAvg": 76.46,
+			"maxPass": 58,
+			"avgYear": 2011
+		},
+		{
+			"sections_instructor": "hu, alan",
+			"avgAvg": 76.38,
+			"maxPass": 136,
+			"avgYear": 2012.08
+		},
+		{
+			"sections_instructor": "ascher, uri michael;greif, chen",
+			"avgAvg": 76.32,
+			"maxPass": 54,
+			"avgYear": 2010
+		},
+		{
+			"sections_instructor": "knorr, edwin max",
+			"avgAvg": 76.15,
+			"maxPass": 179,
+			"avgYear": 2010.53
+		},
+		{
+			"sections_instructor": "ascher, uri michael",
+			"avgAvg": 75.95,
+			"maxPass": 64,
+			"avgYear": 2012
+		},
+		{
+			"sections_instructor": "lakshmanan, laks",
+			"avgAvg": 75.83,
+			"maxPass": 156,
+			"avgYear": 2012
+		},
+		{
+			"sections_instructor": "de volder, kris",
+			"avgAvg": 75.71,
+			"maxPass": 32,
+			"avgYear": 2008.33
+		},
+		{
+			"sections_instructor": "doucet, arnaud",
+			"avgAvg": 75.7,
+			"maxPass": 44,
+			"avgYear": 2008.5
+		},
+		{
+			"sections_instructor": "manuch, jan",
+			"avgAvg": 75.6,
+			"maxPass": 146,
+			"avgYear": 2014.4
+		},
+		{
+			"sections_instructor": "fritz, thomas",
+			"avgAvg": 75.57,
+			"maxPass": 62,
+			"avgYear": 2010
+		},
+		{
+			"sections_instructor": "munzner, tamara",
+			"avgAvg": 75.46,
+			"maxPass": 101,
+			"avgYear": 2011.67
+		},
+		{
+			"sections_instructor": "allen, meghan",
+			"avgAvg": 75.44,
+			"maxPass": 156,
+			"avgYear": 2011.16
+		},
+		{
+			"sections_instructor": "mitchell, ian",
+			"avgAvg": 75.39,
+			"maxPass": 147,
+			"avgYear": 2011.3
+		},
+		{
+			"sections_instructor": "cooper, kendra",
+			"avgAvg": 75.38,
+			"maxPass": 137,
+			"avgYear": 2014
+		},
+		{
+			"sections_instructor": "heidrich, wolfgang",
+			"avgAvg": 75.27,
+			"maxPass": 50,
+			"avgYear": 2008.5
+		},
+		{
+			"sections_instructor": "feeley, michael",
+			"avgAvg": 75.18,
+			"maxPass": 155,
+			"avgYear": 2011.71
+		},
+		{
+			"sections_instructor": "kiczales, gregor",
+			"avgAvg": 75.12,
+			"maxPass": 308,
+			"avgYear": 2012
+		},
+		{
+			"sections_instructor": "shepherd, david",
+			"avgAvg": 75.08,
+			"maxPass": 90,
+			"avgYear": 2007
+		},
+		{
+			"sections_instructor": "meyer, irmtraud margret",
+			"avgAvg": 74.81,
+			"maxPass": 101,
+			"avgYear": 2010.5
+		},
+		{
+			"sections_instructor": "wolfman, steven",
+			"avgAvg": 74.74,
+			"maxPass": 256,
+			"avgYear": 2011
+		},
+		{
+			"sections_instructor": "hutchinson, norman",
+			"avgAvg": 74.61,
+			"maxPass": 156,
+			"avgYear": 2011.85
+		},
+		{
+			"sections_instructor": "woodham, robert",
+			"avgAvg": 74.58,
+			"maxPass": 107,
+			"avgYear": 2010.5
+		},
+		{
+			"sections_instructor": "khosravi, hassan",
+			"avgAvg": 74.54,
+			"maxPass": 206,
+			"avgYear": 2014.25
+		},
+		{
+			"sections_instructor": "carter, paul martin",
+			"avgAvg": 74.38,
+			"maxPass": 161,
+			"avgYear": 2012.53
+		},
+		{
+			"sections_instructor": "gelbart, michael",
+			"avgAvg": 74.23,
+			"maxPass": 64,
+			"avgYear": 2015
+		},
+		{
+			"sections_instructor": "tung, frederick",
+			"avgAvg": 73.95,
+			"maxPass": 112,
+			"avgYear": 2015
+		},
+		{
+			"sections_instructor": "ng, raymond tak-yan",
+			"avgAvg": 73.93,
+			"maxPass": 155,
+			"avgYear": 2012.2
+		},
+		{
+			"sections_instructor": "kirkpatrick, bonnie;manuch, jan",
+			"avgAvg": 73.88,
+			"maxPass": 16,
+			"avgYear": 2012
+		},
+		{
+			"sections_instructor": "pottinger, rachel",
+			"avgAvg": 73.83,
+			"maxPass": 114,
+			"avgYear": 2011
+		},
+		{
+			"sections_instructor": "hutter, frank",
+			"avgAvg": 73.79,
+			"maxPass": 74,
+			"avgYear": 2010
+		},
+		{
+			"sections_instructor": "kirkpatrick, david",
+			"avgAvg": 73.69,
+			"maxPass": 56,
+			"avgYear": 2011.25
+		},
+		{
+			"sections_instructor": "conati, cristina",
+			"avgAvg": 73.48,
+			"maxPass": 108,
+			"avgYear": 2012
+		},
+		{
+			"sections_instructor": "aiello, william",
+			"avgAvg": 73.3,
+			"maxPass": 109,
+			"avgYear": 2013
+		},
+		{
+			"sections_instructor": "rees, tyrone",
+			"avgAvg": 73.18,
+			"maxPass": 27,
+			"avgYear": 2010
+		},
+		{
+			"sections_instructor": "murphy, gail",
+			"avgAvg": 72.88,
+			"maxPass": 151,
+			"avgYear": 2011.6
+		},
+		{
+			"sections_instructor": "schroeder, jonatan",
+			"avgAvg": 72.78,
+			"maxPass": 78,
+			"avgYear": 2014
+		},
+		{
+			"sections_instructor": "belleville, patrice",
+			"avgAvg": 72.73,
+			"maxPass": 209,
+			"avgYear": 2011.87
+		},
+		{
+			"sections_instructor": "berg, celina",
+			"avgAvg": 72.72,
+			"maxPass": 154,
+			"avgYear": 2015
+		},
+		{
+			"sections_instructor": "kotthoff, lars",
+			"avgAvg": 72.53,
+			"maxPass": 97,
+			"avgYear": 2015
+		},
+		{
+			"sections_instructor": "gao, xi",
+			"avgAvg": 72.03,
+			"maxPass": 145,
+			"avgYear": 2015
+		},
+		{
+			"sections_instructor": "little, james joseph",
+			"avgAvg": 71.77,
+			"maxPass": 154,
+			"avgYear": 2012.43
+		},
+		{
+			"sections_instructor": "acton, donald",
+			"avgAvg": 71.23,
+			"maxPass": 150,
+			"avgYear": 2011.69
+		},
+		{
+			"sections_instructor": "warfield, andrew",
+			"avgAvg": 71.22,
+			"maxPass": 70,
+			"avgYear": 2011
+		},
+		{
+			"sections_instructor": "malka, lior",
+			"avgAvg": 71.02,
+			"maxPass": 52,
+			"avgYear": 2009
+		},
+		{
+			"sections_instructor": "van de panne, michiel",
+			"avgAvg": 70.94,
+			"maxPass": 55,
+			"avgYear": 2012
+		},
+		{
+			"sections_instructor": "goldberg, murray",
+			"avgAvg": 69.25,
+			"maxPass": 62,
+			"avgYear": 2009
+		},
+		{
+			"sections_instructor": "darwish, mohammad mostafa",
+			"avgAvg": 68.77,
+			"maxPass": 88,
+			"avgYear": 2010
+		}
+	]
+}

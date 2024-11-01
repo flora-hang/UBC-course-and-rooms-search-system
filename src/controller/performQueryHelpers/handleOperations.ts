@@ -3,7 +3,7 @@ import { filterItems } from "./filterHelpers";
 import { InsightError } from "../../controller/IInsightFacade";
 
 export function handleAND(conditions: any[], items: Item[], id: string): Item[] {
-	console.log("--- handleAND ---");
+	// console.log("--- handleAND ---");
 	let results = items;
 
 	for (const condition of conditions) {
@@ -11,7 +11,7 @@ export function handleAND(conditions: any[], items: Item[], id: string): Item[] 
 		// console.log("handleAnd: %d\n", results.length);
 	}
 	// Merge all results (union)
-	console.log("handleAND: %d\n", results.length);
+	// console.log("handleAND: %d\n", results.length);
 	return results;
 }
 
@@ -51,7 +51,7 @@ export function handleEQ(condition: any, items: Item[], id: string): any {
 }
 
 export function handleGT(condition: any, items: Item[], id: string): any {
-	console.log("--- handleGT ---");
+	// console.log("--- handleGT ---");
 	const field: string = condition.mkey.split("_")[1]; // e.g. "avg"
 
 	const ID: string = condition.mkey.split("_")[0];
@@ -62,7 +62,7 @@ export function handleGT(condition: any, items: Item[], id: string): any {
 	// console.log("%d\n", condition.value);
 	// console.log(field);
 	const ret = items.filter((item) => item.getField(field) > condition.value);
-	console.log("handleGT: %d\n", ret.length);
+	// console.log("handleGT: %d\n", ret.length);
 	return ret as any;
 }
 
@@ -93,7 +93,7 @@ export function handleIS(condition: any, items: Item[], id: string): any {
 	}
 
 	const ret = items.filter((item) => item.getField(field) === condition.inputString);
-	console.log("handleIS: %d\n", ret.length);
+	// console.log("handleIS: %d\n", ret.length);
 	return ret as any;
 }
 

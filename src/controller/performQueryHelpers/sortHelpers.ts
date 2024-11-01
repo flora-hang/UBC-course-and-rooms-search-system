@@ -6,7 +6,7 @@ import { columnsIncludesAllKeys } from "./groupHelpers";
 
 export function sortResults(items: Item[], sort: Sort, columns: string[]): Item[] {
 	// check if order is in columns, if not throw error
-	console.log("!!! in sortResults");
+	// console.log("!!! in sortResults");
 	// console.log("!!! order: %o", sort);
 	// console.log("!!! columns: %o", columns);
 	// if ((sort.anyKey && !columns.includes(sort.anyKey))) {
@@ -32,7 +32,7 @@ export function sortOrderString(order: string, columns: string[], items: Item[])
 	if (!columns.includes(order)) {
 		throw new InsightError("ORDER key must be in COLUMNS");
 	}
-	console.log("!!! items: %o", items);
+	// console.log("!!! items: %o", items);
 	// if order is just something like: 'ORDER: ' ANYKEY
 	const field: string = order.split("_")[1];
 	if (mkeyFlag(field)) {
@@ -51,7 +51,7 @@ export function sortOrderObject(
 	if (!columnsIncludesAllKeys(columns, sort.keys as string[])) {
 		throw new InsightError("ORDER keys must be in COLUMNS");
 	}
-	console.log("!!! in else block");
+	// console.log("!!! in else block");
 	// if order is something like: 'ORDER: { dir:'  DIRECTION ', keys: [ ' ANYKEY_LIST '] }'
 	const { dir, keys } = order as any;
 
@@ -93,7 +93,7 @@ export function sortResultsGroup(
 	columns: string[]
 ): Record<string, any>[][] {
 	// check if order is in columns, if not throw error
-	console.log("!!! in sortResultsGroup");
+	// console.log("!!! in sortResultsGroup");
 	// console.log("> sort: %o", sort);
 	// console.log("!!! columns: %o", columns);
 	// if ((sort.anyKey && !columns.includes(sort.anyKey)) || !columnsIncludesAllKeys(columns, sort.keys as string[])) {
@@ -110,7 +110,7 @@ export function sortResultsGroup(
 	} else {
 		sortGroupOrderObject(order, columns, groupAndApply, sort);
 	}
-	console.log("---------------------------------");
+	// console.log("---------------------------------");
 	return groupAndApply;
 }
 
