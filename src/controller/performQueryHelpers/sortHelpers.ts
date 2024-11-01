@@ -137,7 +137,7 @@ export function sortGroupOrderString(order: string, columns: string[], groupAndA
 
 }
 
-function sortStringNonNumeric(groupAndApply: Record<string, any>[][], field: string) {
+function sortStringNonNumeric(groupAndApply: Record<string, any>[][], field: string): void {
 	groupAndApply.sort((a: any, b: any) => {
 		// console.log("Comparing:", a, b);
 		let aValue = "";
@@ -162,7 +162,7 @@ function sortStringNonNumeric(groupAndApply: Record<string, any>[][], field: str
 	});
 }
 
-function sortStringNumeric(groupAndApply: Record<string, any>[][], field: string) {
+function sortStringNumeric(groupAndApply: Record<string, any>[][], field: string): void {
 	groupAndApply.sort((a: Record<string, any>[], b: Record<string, any>[]) => {
 		let aValue = 0;
 		let bValue = 0;
@@ -243,7 +243,7 @@ function compareValues(key: string, a: any, b: any): number {
 	// return comparison;
 }
 
-function sortObjectNonNumeric(a: any, field: string, b: any) {
+function sortObjectNonNumeric(a: any, field: string, b: any): number {
 	let aValue = "";
 	let bValue = "";
 	for (const obj of a) {
@@ -263,7 +263,7 @@ function sortObjectNonNumeric(a: any, field: string, b: any) {
 	return aValue > bValue ? 1 : -1;
 }
 
-function sortObjectNumeric(a: any, field: string, b: any) {
+function sortObjectNumeric(a: any, field: string, b: any): number {
 	let aValue = 0;
 	let bValue = 0;
 	for (const obj of a) {
