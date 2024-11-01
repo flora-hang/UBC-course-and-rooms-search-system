@@ -134,11 +134,11 @@ export async function parseTransformationsBlock(
 	const appliedItems = applyFunctionItems(groupedItems, applyRules, id);
 	// console.log("> applied items length:", appliedItems?.length);
 	const groupAndApply = combine2(groups, groupedItems, appliedItems);
-	// console.log("> combined items length:", groupAndApply?.length);
+	// console.log("> combined items: ", groupAndApply);
 
 	if (orderField) {
 		const sortedItems = sortResultsGroup(groupAndApply, orderField, columns);
-		// console.log("> sorted items:", sortedItems?.length);
+		// console.log("> sorted items:", sortedItems);
 		return returnResults(sortedItems, columns);
 	} else {
 		return returnResults(groupAndApply, columns);

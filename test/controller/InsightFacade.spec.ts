@@ -347,7 +347,7 @@ describe("InsightFacade", function () {
 				// check each item
 				// expect(result.length).to.equal(expected.length);
 				// for (let i = 0; i < result.length; i++) {
-				// 	// console.log(result[i]);
+				// 	console.log(result[i]);
 				// 	expect(expected).to.deep.include(result[i]);
 				// }
 				// expect(result).to.have.deep.members(expected); // order doesn't matter (everything should pass)
@@ -488,6 +488,13 @@ describe("InsightFacade", function () {
 			it("[valid/lessColumns.json] some GROUP keys not in columns", checkQuery);
 			it("[valid/otherFurniture.json] other furniture query", checkQuery);
 			it("[valid/year2009.json] year 2009 query", checkQuery);
+			it("[valid/everyFilterRooms.json] use every filter with rooms", checkQuery);
+			it("[valid/orderRoomsNumber.json] order rooms by number", checkQuery);
+			it("[valid/orderRoomsMaxSeats.json] order rooms by max seats", checkQuery);
+			it("[valid/orderRoomsTwoApply.json] order rooms by two APPLY keys", checkQuery);
+			it("[valid/orderRoomsTwoApply2.json] order rooms by two APPLY keys #2", checkQuery);
+			it("[valid/orderRoomsShortnameUP.json] order rooms by shortname UP", checkQuery);
+			it("[valid/orderRoomsShortnameDOWN.json] order rooms by shortname DOWN", checkQuery);
 		});
 
 		describe("C2 new functionality: invalid queries", function () {

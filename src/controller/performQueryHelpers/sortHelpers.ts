@@ -124,16 +124,47 @@ export function sortGroupOrderString(order: string, columns: string[], groupAndA
 		const field: string = order.split("_")[1];
 		// console.log("!!! field: %o", field);
 		if (mkeyFlag(field)) {
-			groupAndApply.sort((a: any, b: any) => a.getField(field) - b.getField(field));
+			groupAndApply.sort((a: Record<string, any>[], b: Record<string, any>[]) => {
+				let aValue: number = 0;
+				let bValue: number = 0;
+				for (const obj of a) {
+					const key = Object.keys(obj)[0];
+					const keyOnly = key.split("_")[1];
+					if (keyOnly === field) {
+						aValue = obj[key];
+					}
+				}
+				for (const obj of b) {
+					const key = Object.keys(obj)[0];
+					const keyOnly = key.split("_")[1];
+					if (keyOnly === field) {
+						bValue = obj[key];
+					}
+				}
+				return aValue - bValue;
+			});
 		} else {
-			groupAndApply.sort((a: any, b: any) => {
+			groupAndApply.sort((a: any, b: any) => { 
 				// console.log("Comparing:", a, b);
-				const aValue = a.find((obj: any) =>
-					Object.prototype.hasOwnProperty.call(obj, "rooms_shortname")
-				).rooms_shortname;
-				const bValue = b.find((obj: any) =>
-					Object.prototype.hasOwnProperty.call(obj, "rooms_shortname")
-				).rooms_shortname;
+				let aValue: string = "";
+				let bValue: string = "";
+				for (const obj of a) {
+					const key = Object.keys(obj)[0];
+					const keyOnly = key.split("_")[1];
+					if (keyOnly === field) {
+						aValue = obj[key];
+					}
+				}
+				for (const obj of b) {
+					const key = Object.keys(obj)[0];
+					const keyOnly = key.split("_")[1];
+					if (keyOnly === field) {
+						bValue = obj[key];
+					}
+				}
+				// console.log("!!! aValue: %o, bValue: %o", aValue, bValue);
+				// console.log("!!! aValue > bValue: %o", aValue > bValue);
+
 				return (aValue > bValue) ? 1 : -1;
 			});
 		}
@@ -142,6 +173,7 @@ export function sortGroupOrderString(order: string, columns: string[], groupAndA
 		groupAndApply.sort((a: any, b: any) => {
 			// console.log("Comparing:", a, b);
 			// console.log("Order key:", order);
+			// console.log("a[a.length - 1][key]:", a[a.length - 1][key]);
 			return a[a.length - 1][key] - b[b.length - 1][key];
 		});
 	}
