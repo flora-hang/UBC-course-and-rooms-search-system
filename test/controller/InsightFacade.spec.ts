@@ -348,7 +348,7 @@ describe("InsightFacade", function () {
 				// expect(result.length).to.equal(expected.length);
 				// for (let i = 0; i < result.length; i++) {
 				// 	console.log(result[i]);
-				// 	expect(expected).to.deep.include(result[i]);
+				// 	expect(result[i]).to.deep.equal(expected[i]);
 				// }
 				// expect(result).to.have.deep.members(expected); // order doesn't matter (everything should pass)
 				expect(result).to.deep.equal(expected); // original
@@ -464,7 +464,7 @@ describe("InsightFacade", function () {
 		it("[valid/negativeNumberFilter.json] negative number in WHERE under LT", checkQuery);
 		it("[valid/zeroCharacterFilter.json] zero character in string under IS filter", checkQuery);
 
-		describe("C2 new functionality: valid queries", function () {
+		describe.only("C2 new functionality: valid queries", function () {
 			it("[valid/simpleQueryTransformations.json] simple query transformations", checkQuery);
 			it("[valid/roomsQueryExample.json] rooms query example from spec", checkQuery);
 			it("[valid/nonNumericKeyForCount.json] non-numeric key for COUNT", checkQuery);
@@ -483,7 +483,7 @@ describe("InsightFacade", function () {
 			it("[valid/emptyApply.json] empty APPLY key", checkQuery);
 			it("[valid/moreApply.json] more APPLY keys", checkQuery);
 			it("[valid/moreGroup.json] more GROUP keys", checkQuery);
-			it("[valid/avgAvg.json] find AVG of sections_avg", checkQuery);
+			it.only("[valid/avgAvg.json] find AVG of sections_avg", checkQuery);
 			it("[valid/emptyCellsInTable.json] empty cells in resulting table", checkQuery);
 			it("[valid/lessColumns.json] some GROUP keys not in columns", checkQuery);
 			it("[valid/otherFurniture.json] other furniture query", checkQuery);

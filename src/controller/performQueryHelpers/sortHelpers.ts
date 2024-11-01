@@ -165,18 +165,16 @@ export function sortGroupOrderString(order: string, columns: string[], groupAndA
 				// console.log("!!! aValue: %o, bValue: %o", aValue, bValue);
 				// console.log("!!! aValue > bValue: %o", aValue > bValue);
 
-				return (aValue > bValue) ? 1 : -1;
+				return(aValue > bValue) ? 1 : -1;
 			});
 		}
 	} else {
 		const key: string = order;
 		groupAndApply.sort((a: any, b: any) => {
-			// console.log("Comparing:", a, b);
-			// console.log("Order key:", order);
-			// console.log("a[a.length - 1][key]:", a[a.length - 1][key]);
 			return a[a.length - 1][key] - b[b.length - 1][key];
 		});
 	}
+
 }
 
 export function sortGroupOrderObject(
@@ -185,11 +183,12 @@ export function sortGroupOrderObject(
 	groupAndApply: Record<string, any>[][],
 	sort: Sort
 ): any {
+
 	order as { dir: string; keys: string[] };
 	if (!columnsIncludesAllKeys(columns, sort.keys as string[])) {
 		throw new InsightError("ORDER keys must be in COLUMNS");
 	}
-	// if order is something like: 'ORDER: { dir:'  DIRECTION ', keys: [ ' ANYKEY_LIST '] }'
+	// order is something like: 'ORDER: { dir:'  DIRECTION ', keys: [ ' ANYKEY_LIST '] }'
 	const { dir, keys } = order as any;
 
 	if (!Array.isArray(keys)) {
@@ -204,20 +203,66 @@ export function sortGroupOrderObject(
 		for (const key of keys as string[]) {
 			// console.log("!!! key: %o", key);
 			// console.log("!!! a: %o, b: %o", a, b);
-			const { aValue, bValue } = { aValue: a[a.length - 1][key], bValue: b[b.length - 1][key] };
-			// console.log("!!! aValue: %o, bValue: %o", aValue, bValue);
+
 			let comparison = 0;
+			// new stuff:
+			comparison = compareValues(key, a, b, comparison);
+			// console.log("!!! comparison: %o", comparison);
+			return dir === "UP" ? comparison : -comparison;
 
-			comparison = aValue - bValue;
-			// if (mkeyFlag(key)) {
-			// 	comparison = aValue - bValue; // Numeric comparison
-			// } else {
-			// 	comparison = aValue.localeCompare(bValue); // String comparison
-			// }
-
-			// If comparison is not equal, return based on direction
-			return comparison !== 0 ? (dir === "UP" ? comparison : -comparison) : 0;
+			
 		}
 		return 0; // If all keys are equal
 	});
 }
+
+function compareValues(key: string, a: any, b: any, comparison: number): number {
+	if (key.includes("_")) {
+		const field: string = key.split("_")[1];
+		if (mkeyFlag(field)) {
+			let aValue: number = 0;
+			let bValue: number = 0;
+			for (const obj of a) {
+				const key = Object.keys(obj)[0];
+				const keyOnly = key.split("_")[1];
+				if (keyOnly === field) {
+					aValue = obj[key];
+				}
+			}
+			for (const obj of b) {
+				const key = Object.keys(obj)[0];
+				const keyOnly = key.split("_")[1];
+				if (keyOnly === field) {
+					bValue = obj[key];
+				}
+			}
+			return aValue - bValue;
+		} else {
+			let aValue: string = "";
+			let bValue: string = "";
+			for (const obj of a) {
+				const key = Object.keys(obj)[0];
+				const keyOnly = key.split("_")[1];
+				if (keyOnly === field) {
+					aValue = obj[key];
+				}
+			}
+			for (const obj of b) {
+				const key = Object.keys(obj)[0];
+				const keyOnly = key.split("_")[1];
+				if (keyOnly === field) {
+					bValue = obj[key];
+				}
+			}
+			return aValue > bValue ? 1 : -1;
+		}
+	} else {
+		// doesn't include "_"
+		const { aValue, bValue } = { aValue: a[a.length - 1][key], bValue: b[b.length - 1][key] };
+		return aValue - bValue;
+		// console.log("!!! aValue - bValue: %o", aValue - bValue);
+	}
+	// console.log("!!! comparison: %o", comparison);
+	// return comparison;
+}
+
