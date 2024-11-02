@@ -4,5 +4,5 @@ export default abstract class Item {
 
 	public abstract getField(comparisonField: string): any;
 	public abstract getUniqueIdentifier(): string;
-    public abstract hasField(comparisonField: string): boolean;
+	public abstract hasField(comparisonField: string): boolean;
 }

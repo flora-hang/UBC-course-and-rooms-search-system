@@ -46,8 +46,13 @@ export function applyFunctionItems(
 	// console.log("> results: %o", results);
 	return results;
 }
-function validateApplyKey(applyKey: string, key: string, id: string, 
-	itemKind: Section | Room, applyToken: ApplyToken): string {
+function validateApplyKey(
+	applyKey: string,
+	key: string,
+	id: string,
+	itemKind: Section | Room,
+	applyToken: ApplyToken
+): string {
 	if (applyKey.includes("_")) {
 		throw new InsightError("Invalid apply key");
 	}
@@ -66,4 +71,3 @@ function validateApplyKey(applyKey: string, key: string, id: string,
 	}
 	return keyOnly;
 }
-

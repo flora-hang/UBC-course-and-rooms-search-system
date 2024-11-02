@@ -190,7 +190,7 @@ export default class InsightFacade implements IInsightFacade {
 		// but if id = undefined, then there exist GROUP
 		if (id === undefined && validQuery.TRANSFORMATIONS) {
 			id = validQuery.TRANSFORMATIONS?.group[0].split("_")[0];
-		} else if (id === undefined || typeof(validQuery.TRANSFORMATIONS) === "string") {
+		} else if (id === undefined || typeof validQuery.TRANSFORMATIONS === "string") {
 			return Promise.reject(new InsightError("Invalid query"));
 		}
 
