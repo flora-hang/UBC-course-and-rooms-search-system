@@ -495,9 +495,16 @@ describe("InsightFacade", function () {
 			it("[valid/orderRoomsTwoApply2.json] order rooms by two APPLY keys #2", checkQuery);
 			it("[valid/orderRoomsShortnameUP.json] order rooms by shortname UP", checkQuery);
 			it("[valid/orderRoomsShortnameDOWN.json] order rooms by shortname DOWN", checkQuery);
+			it("[valid/applyMAX.json] simple MAX query", checkQuery);
+			it("[valid/validMAX.json] Retrieve shortname and maximum seats where furniture includes 'Tables' and seats greater 300", checkQuery);
 		});
 
 		describe("C2 new functionality: invalid queries", function () {
+			it("[invalid/transformationsString.json] TRANSFORMATIONS is a string", checkQuery);
+			it("[invalid/transformationsNotValid.json] one invalid empty object", checkQuery);
+			it("[invalid/invalidTransformations.json] APPLY has one empty object which is invalid", checkQuery);
+			it("[invalid/groupingWithout_.json] max of seats WHERE furniture contains 'Tables' and seats > 300 and dir = UP", checkQuery);
+			it("[invalid/keyIDandkeydifferent.json] invalid group key", checkQuery);
 			it("[invalid/invalidKeyTypeInApply.json] invalid key type in APPLY", checkQuery);
 			it("[invalid/columnKeyNotInGroup.json] column key not in GROUP", checkQuery);
 			it("[invalid/duplicateApplyKey.json] duplicate APPLY key", checkQuery); //

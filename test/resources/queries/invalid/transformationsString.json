@@ -1,0 +1,25 @@
+{
+    "title": "TRANSFORMATIONS is a string",
+    "input": {
+        "WHERE": {
+            "GT": {
+                "rooms_seats": 304
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_shortname"
+            ],
+            "ORDER": {
+                "dir": "DOWN",
+                "keys": [
+                    "rooms_shortname"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": "rooms_shortname"
+
+    },
+    "errorExpected": true,
+	"expected": "InsightError"
+}

@@ -17,6 +17,9 @@ export function groupItems(items: Item[], groups: String[], id: string): any {
 				if (groupId !== id) {
 					throw new InsightError("id does not match in GROUP");
 				}
+				if (!grpStr.includes("_")) {
+					throw new InsightError("Invalid key in GROUP");
+				}
 				const property = grpStr.split("_")[1];
 				// console.log("!!! property: %o", property);
 				try {

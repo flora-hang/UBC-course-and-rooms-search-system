@@ -146,7 +146,7 @@ export async function parseTransformationsBlock(
 }
 
 function validateColumnsAndApplyKeys(
-	columns: string[], allValidKeys: Set<string>, 
+	columns: string[], allValidKeys: Set<string>,
 	applyRules: ApplyRule[], validQuery: Query, groups: string[]): void {
 	columns.forEach((column) => {
 		if (!allValidKeys.has(column)) {
@@ -154,7 +154,7 @@ function validateColumnsAndApplyKeys(
 		}
 	});
 
-	const seen = new Set<string>(); 
+	const seen = new Set<string>();
 	applyRules?.forEach((applyRule) => {
 		if (seen.has(applyRule.applyKey)) {
 			throw new InsightError("APPLY contains duplicate key");
