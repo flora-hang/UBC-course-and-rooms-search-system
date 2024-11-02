@@ -38,7 +38,7 @@ export function sortOrderString(order: string, columns: string[], items: Item[])
 	if (mkeyFlag(field)) {
 		items.sort((a, b) => a.getField(field) - b.getField(field));
 	} else {
-		items.sort((a, b) => (a.getField(field) > b.getField(field)) ? 1 : -1);
+		items.sort((a, b) => (a.getField(field) > b.getField(field) ? 1 : -1));
 	}
 }
 
@@ -134,7 +134,6 @@ export function sortGroupOrderString(order: string, columns: string[], groupAndA
 			return a[a.length - 1][key] - b[b.length - 1][key];
 		});
 	}
-
 }
 
 function sortStringNonNumeric(groupAndApply: Record<string, any>[][], field: string): void {
@@ -158,7 +157,7 @@ function sortStringNonNumeric(groupAndApply: Record<string, any>[][], field: str
 		}
 		// console.log("!!! aValue: %o, bValue: %o", aValue, bValue);
 		// console.log("!!! aValue > bValue: %o", aValue > bValue);
-		return (aValue > bValue) ? 1 : -1;
+		return aValue > bValue ? 1 : -1;
 	});
 }
 
@@ -190,7 +189,6 @@ export function sortGroupOrderObject(
 	groupAndApply: Record<string, any>[][],
 	sort: Sort
 ): any {
-
 	order as { dir: string; keys: string[] };
 	if (!columnsIncludesAllKeys(columns, sort.keys as string[])) {
 		throw new InsightError("ORDER keys must be in COLUMNS");
@@ -282,4 +280,3 @@ function sortObjectNumeric(a: any, field: string, b: any): number {
 	}
 	return aValue - bValue;
 }
-

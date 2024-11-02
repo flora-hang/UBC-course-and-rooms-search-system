@@ -146,8 +146,12 @@ export async function parseTransformationsBlock(
 }
 
 function validateColumnsAndApplyKeys(
-	columns: string[], allValidKeys: Set<string>,
-	applyRules: ApplyRule[], validQuery: Query, groups: string[]): void {
+	columns: string[],
+	allValidKeys: Set<string>,
+	applyRules: ApplyRule[],
+	validQuery: Query,
+	groups: string[]
+): void {
 	columns.forEach((column) => {
 		if (!allValidKeys.has(column)) {
 			throw new InsightError("COLUMNS keys must correspond to one of the GROUP keys or to applykeys");
@@ -168,4 +172,3 @@ function validateColumnsAndApplyKeys(
 		throw new InsightError("Transformations must have an APPLY block");
 	}
 }
-

@@ -39,9 +39,9 @@ export default class Section extends Item {
 	}
 
 	public hasField(comparisonField: string): boolean {
-        const fields = ["uuid", "id", "title", "instructor", "dept", "year", "avg", "pass", "fail", "audit"];
-        return fields.includes(comparisonField);
-    }
+		const fields = ["uuid", "id", "title", "instructor", "dept", "year", "avg", "pass", "fail", "audit"];
+		return fields.includes(comparisonField);
+	}
 
 	public getField(comparisonField: string): any {
 		switch (comparisonField) {
