@@ -1,0 +1,47 @@
+{
+	"title": "Retrieve shortname and maximum seats where furniture includes 'Tables' and seats greater 300",
+    "input": {
+        "WHERE": {
+            "AND": [
+                {
+                    "IS": {
+                        "rooms_furniture": "*Tab*"
+                    }
+                },
+                {
+                    "GT": {
+                        "rooms_seats": 350
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_shortname",
+                "maxSeats"
+            ],
+            "ORDER": {
+                "dir": "DOWN",
+                "keys": [
+                    "maxSeats"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "rooms_shortname"
+            ],
+            "APPLY": [
+                {
+                    "maxSeats": {
+                        "MAX": "rooms_seats"
+                    }
+                }
+            ]
+        }
+    },
+    "errorExpected": false,
+    "expected":[
+        {"rooms_shortname":"WOOD","maxSeats":503},{"rooms_shortname":"OSBO","maxSeats":442},{"rooms_shortname":"CIRS","maxSeats":426},{"rooms_shortname":"HEBB","maxSeats":375}
+    ]
+}

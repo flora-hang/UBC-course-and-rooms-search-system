@@ -1,0 +1,27 @@
+{
+    "title": "one invalid empty object",
+    "input": {
+        "WHERE": {
+            "GT": {
+                "rooms_seats": 300
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_shortname"
+            ],
+            "ORDER": {
+                "dir": "DOWN",
+                "keys": [
+                    "rooms_shortname"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "treehut": 3
+        }
+
+    },
+    "errorExpected": true,
+    "expected": "InsightError"
+}
