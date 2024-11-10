@@ -3,7 +3,7 @@ import request, { Response } from "supertest";
 import { StatusCodes } from "http-status-codes";
 import Log from "@ubccpsc310/folder-test/build/Log";
 
-describe("Facade C3", function () {
+describe.only("Facade C3", function () {
 	before(function () {
 		// TODO: start server here once and handle errors properly
 	});

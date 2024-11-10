@@ -185,7 +185,7 @@ export default class InsightFacade implements IInsightFacade {
 		const validQuery = Query.buildQuery(query);
 
 		let id = checkIds(validQuery);
-		//!!! id could be undefined if columns only contain APPLY keys
+		// id could be undefined if columns only contain APPLY keys
 
 		// but if id = undefined, then there exist GROUP
 		if (id === undefined && validQuery.TRANSFORMATIONS) {
