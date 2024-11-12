@@ -89,6 +89,7 @@ export default class Server {
 		this.express.get("/echo/:msg", Server.echo);
 
 		// TODO: your other endpoints should go here
+		// this.express.put("/dataset/:id/:kind", Server.addDataset);
 	}
 
 	// The next two methods handle the echo service.
