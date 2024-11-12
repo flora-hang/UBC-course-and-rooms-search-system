@@ -385,6 +385,7 @@ describe.only("Facade C3", function () {
 		const ENDPOINT_URL_GET = "/datasets";
 
 		try {
+			expect.fail(); // test
 			return request(SERVER_URL)
 				.put(ENDPOINT_URL)
 				.send(ZIP_FILE_DATA)
@@ -403,7 +404,7 @@ describe.only("Facade C3", function () {
 							Log.info("Status: " + getRes.status);
 							Log.info("Body: " + JSON.stringify(getRes.body));
 							expect(getRes.status).to.be.equal(StatusCodes.OK);
-							expect(getRes.body).to.have.property("result").that.is.a("string"); //!!! array
+							expect(getRes.body).to.have.property("result").that.is.an("array"); 
 							const expected = ["mysections"];
 							expect(getRes.body.result).to.deep.equal(expected);
 						})
