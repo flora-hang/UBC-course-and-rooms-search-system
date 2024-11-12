@@ -404,7 +404,7 @@ describe.only("Facade C3", function () {
 							Log.info("Status: " + getRes.status);
 							Log.info("Body: " + JSON.stringify(getRes.body));
 							expect(getRes.status).to.be.equal(StatusCodes.OK);
-							expect(getRes.body).to.have.property("result").that.is.an("array"); 
+							expect(getRes.body).to.have.property("result").that.is.an("array");
 							const expected = ["mysections"];
 							expect(getRes.body.result).to.deep.equal(expected);
 						})
