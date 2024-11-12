@@ -379,4 +379,51 @@ describe.only("Facade C3", function () {
 	});
 
 	// GET: resolve
+	it("GET resolve: test for list datasets", async function () {
+		const ENDPOINT_URL = "/dataset/mysections/sections"; // id: mysections, kind: sections
+		const ZIP_FILE_DATA = Buffer.from("../resources/archives/pair.zip");
+		const ENDPOINT_URL_GET = "/datasets";
+
+		try {
+			return request(SERVER_URL)
+				.put(ENDPOINT_URL)
+				.send(ZIP_FILE_DATA)
+				.set("Content-Type", "application/x-zip-compressed")
+				.then(async function (res: Response) {
+					expect(res.status).to.be.equal(StatusCodes.OK);
+					expect(res.body).to.have.property("result").that.is.an("array");
+					const expectedResult = ["mysections"];
+					expect(res.body.result).to.deep.equal(expectedResult);
+
+					return request(SERVER_URL)
+						.get(ENDPOINT_URL_GET)
+						.then(function (getRes: Response) {
+							Log.info("Received response from GET request");
+							Log.info("Response: " + getRes.text);
+							Log.info("Status: " + getRes.status);
+							Log.info("Body: " + JSON.stringify(getRes.body));
+							expect(getRes.status).to.be.equal(StatusCodes.OK);
+							expect(getRes.body).to.have.property("result").that.is.a("string"); //!!! array
+							const expected = ["mysections"];
+							expect(getRes.body.result).to.deep.equal(expected);
+						})
+						.catch(function (err) {
+							Log.error("Error in GET request");
+							Log.error(err);
+							expect.fail();
+						});
+				})
+				.catch(function (err) {
+					// some logging here please!
+					Log.error("Error in PUT request");
+					Log.error(err);
+					expect.fail();
+				});
+		} catch (err) {
+			Log.error("Exception caught during PUT/GET request");
+			Log.error(err);
+			expect.fail();
+			// and some more logging here!
+		}
+	});
 });
