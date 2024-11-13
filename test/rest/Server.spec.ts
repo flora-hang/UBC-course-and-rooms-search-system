@@ -6,7 +6,7 @@ import Server from "../../src/rest/Server";
 // import exp from "constants";
 // import { get } from "http";
 
-describe.only("Facade C3", function () {
+describe("Facade C3", function () {
 	const port = 4321;
 	let server: Server;
 	const SERVER_URL = "http://localhost:4321";
@@ -380,12 +380,13 @@ describe.only("Facade C3", function () {
 
 	// GET: resolve
 	it("GET resolve: test for list datasets", async function () {
+		expect.fail(); // test #check
 		const ENDPOINT_URL = "/dataset/mysections/sections"; // id: mysections, kind: sections
 		const ZIP_FILE_DATA = Buffer.from("../resources/archives/pair.zip");
 		const ENDPOINT_URL_GET = "/datasets";
 
 		try {
-			expect.fail(); // test
+			expect.fail(); // test #check
 			return request(SERVER_URL)
 				.put(ENDPOINT_URL)
 				.send(ZIP_FILE_DATA)
