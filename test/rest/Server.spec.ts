@@ -9,7 +9,7 @@ import * as fs from "fs-extra";
 // import exp from "constants";
 // import { get } from "http";
 
-describe.only("Facade C3", function () {
+describe("Facade C3", function () {
 	const port = 4321;
 	let server: Server;
 	const SERVER_URL = "http://localhost:4321";
@@ -230,7 +230,7 @@ describe.only("Facade C3", function () {
 	});
 
 	// POST: resolve
-	it.only("POST resolve: test for valid simple query", async function () {
+	it("POST resolve: test for valid simple query", async function () {
 		const ENDPOINT_URL = "/dataset/sections/sections";
 		const ENDPOINT_URL_QUERY = "/query";
 		const VALID_QUERY = {

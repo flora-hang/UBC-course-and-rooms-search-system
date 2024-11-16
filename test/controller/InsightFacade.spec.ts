@@ -319,6 +319,83 @@ describe("InsightFacade", function () {
 				expect.fail("Should not have thrown an error.");
 			}
 		});
+
+		it("fulfill: facade2 should be able to query sections dataset added by facade1", async function () {
+			try {
+				const facade1 = new InsightFacade();
+				await facade1.addDataset("sections", sections, InsightDatasetKind.Sections);
+				const VALID_QUERY = {
+					WHERE: {
+						GT: {
+							sections_avg: 97,
+						},
+					},
+					OPTIONS: {
+						COLUMNS: ["sections_dept", "sections_avg"],
+						ORDER: "sections_avg",
+					},
+				};
+				const expectedArray = [
+					{ sections_dept: "math", sections_avg: 97.09 },
+					{ sections_dept: "math", sections_avg: 97.09 },
+					{ sections_dept: "epse", sections_avg: 97.09 },
+					{ sections_dept: "epse", sections_avg: 97.09 },
+					{ sections_dept: "math", sections_avg: 97.25 },
+					{ sections_dept: "math", sections_avg: 97.25 },
+					{ sections_dept: "epse", sections_avg: 97.29 },
+					{ sections_dept: "epse", sections_avg: 97.29 },
+					{ sections_dept: "nurs", sections_avg: 97.33 },
+					{ sections_dept: "nurs", sections_avg: 97.33 },
+					{ sections_dept: "epse", sections_avg: 97.41 },
+					{ sections_dept: "epse", sections_avg: 97.41 },
+					{ sections_dept: "cnps", sections_avg: 97.47 },
+					{ sections_dept: "cnps", sections_avg: 97.47 },
+					{ sections_dept: "math", sections_avg: 97.48 },
+					{ sections_dept: "math", sections_avg: 97.48 },
+					{ sections_dept: "educ", sections_avg: 97.5 },
+					{ sections_dept: "nurs", sections_avg: 97.53 },
+					{ sections_dept: "nurs", sections_avg: 97.53 },
+					{ sections_dept: "epse", sections_avg: 97.67 },
+					{ sections_dept: "epse", sections_avg: 97.69 },
+					{ sections_dept: "epse", sections_avg: 97.78 },
+					{ sections_dept: "crwr", sections_avg: 98 },
+					{ sections_dept: "crwr", sections_avg: 98 },
+					{ sections_dept: "epse", sections_avg: 98.08 },
+					{ sections_dept: "nurs", sections_avg: 98.21 },
+					{ sections_dept: "nurs", sections_avg: 98.21 },
+					{ sections_dept: "epse", sections_avg: 98.36 },
+					{ sections_dept: "epse", sections_avg: 98.45 },
+					{ sections_dept: "epse", sections_avg: 98.45 },
+					{ sections_dept: "nurs", sections_avg: 98.5 },
+					{ sections_dept: "nurs", sections_avg: 98.5 },
+					{ sections_dept: "nurs", sections_avg: 98.58 },
+					{ sections_dept: "nurs", sections_avg: 98.58 },
+					{ sections_dept: "epse", sections_avg: 98.58 },
+					{ sections_dept: "epse", sections_avg: 98.58 },
+					{ sections_dept: "epse", sections_avg: 98.7 },
+					{ sections_dept: "nurs", sections_avg: 98.71 },
+					{ sections_dept: "nurs", sections_avg: 98.71 },
+					{ sections_dept: "eece", sections_avg: 98.75 },
+					{ sections_dept: "eece", sections_avg: 98.75 },
+					{ sections_dept: "epse", sections_avg: 98.76 },
+					{ sections_dept: "epse", sections_avg: 98.76 },
+					{ sections_dept: "epse", sections_avg: 98.8 },
+					{ sections_dept: "spph", sections_avg: 98.98 },
+					{ sections_dept: "spph", sections_avg: 98.98 },
+					{ sections_dept: "cnps", sections_avg: 99.19 },
+					{ sections_dept: "math", sections_avg: 99.78 },
+					{ sections_dept: "math", sections_avg: 99.78 },
+				];
+				const facade2 = new InsightFacade();
+				const result = await facade2.performQuery(VALID_QUERY);
+				expect(result.length).to.equal(expectedArray.length);
+				expect(result).to.have.deep.members(expectedArray);
+				expect(expectedArray).to.have.deep.members(result);
+			} catch (_err) {
+				console.log(_err);
+				expect.fail("Should not have thrown an error.");
+			}
+		});
 	});
 
 	describe("PerformQuery", function () {

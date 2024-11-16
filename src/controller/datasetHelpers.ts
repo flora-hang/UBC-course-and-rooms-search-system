@@ -19,7 +19,8 @@ export function validateSectionData(sectionData: SectionData): boolean {
 	return true; // return true if all fields
 }
 
-export function handleSections(course: Course, jsonData: SectionData[]): Course {
+export function handleSections(jsonData: SectionData[]): Section[] {
+	const sections: Section[] = [];
 	jsonData.map((sectionn: SectionData) => {
 		const {
 			id: uuid,
@@ -45,10 +46,10 @@ export function handleSections(course: Course, jsonData: SectionData[]): Course 
 		if (validateSectionData(sectionn)) {
 			// Create the section object if validation passes
 			const section = new Section(sectionUuid, id, title, instructor, dept, sectionYear, avg, pass, fail, audit);
-			course.addSection(section);
+			sections.push(section);
 		}
 	});
-	return course;
+	return sections;
 }
 
 // Function to process the zip file using Promises
@@ -61,10 +62,10 @@ export async function processZip(id: string, content: string): Promise<SectionsD
 
 		// iterating through courses in dataset
 		const proms: Promise<string>[] = [];
-		const courses: Course[] = [];
+		// const courses: Course[] = [];
 		filteredFiles.map((filename: string) => {
-			const courseName = filename.split("/")[1];
-			courses.push(new Course(courseName));
+			// const courseName = filename.split("/")[1];
+			// courses.push(new Course(courseName));
 			const f = zip.files[filename];
 			proms.push(f.async("string"));
 		});
@@ -78,11 +79,17 @@ export async function processZip(id: string, content: string): Promise<SectionsD
 			} catch (_err) {
 				return; // skip this file
 			}
-			const course = courses[index];
-			handle.push(handleSections(course, jsonData));
+			// const course = courses[index];
+			// handle.push(handleSections(course, jsonData));
+			const sections = handleSections(jsonData);
+			if (sections.length > 0) {
+				handle.push(...sections);
+			}
 		});
-		const courseArray: Course[] = await Promise.all(handle);
-		dataset.addCourses(courseArray);
+		// const courseArray: Course[] = await Promise.all(handle);
+		// dataset.addCourses(courseArray);
+		const sectionsArray = await Promise.all(handle);
+		dataset.setItems(sectionsArray);
 	} catch (err) {
 		throw new InsightError(`Error processing zip file: ${(err as Error).message}`);
 	}

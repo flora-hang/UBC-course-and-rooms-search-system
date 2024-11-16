@@ -137,7 +137,7 @@ export default class Server {
 	private static async performQuery(req: Request, res: Response): Promise<void> {
 		try {
 			const query = req.body;
-	
+
 			const insightFacade = new InsightFacade();
 			const result = await insightFacade.performQuery(query);
 			res.status(StatusCodes.OK).json({ result });

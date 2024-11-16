@@ -5,18 +5,20 @@ import Section from "./Section";
 
 export default class SectionsDataset extends Dataset {
 	private readonly id: string;
-	private readonly kind: InsightDatasetKind = InsightDatasetKind.Sections;
-	private Courses: Course[];
+	private kind: InsightDatasetKind = InsightDatasetKind.Sections;
+	// private Courses: Course[];
+	private sections: Section[];
 
 	constructor(id: string) {
 		super();
 		this.id = id;
-		this.Courses = [];
+		// this.Courses = [];
+		this.sections = [];
 	}
 
-	public addCourses(courses: Course[]): void {
-		this.Courses = courses;
-	}
+	// public addCourses(courses: Course[]): void {
+	// 	this.Courses = courses;
+	// }
 
 	public getId(): string {
 		return this.id;
@@ -27,21 +29,23 @@ export default class SectionsDataset extends Dataset {
 	}
 
 	public getTotalSections(): number {
-		let total = 0;
-		this.Courses.forEach((course) => (total += course.getNumSections()));
-		return total;
+		// let total = 0;
+		// this.Courses.forEach((course) => (total += course.getNumSections()));
+		// return total;
+		return this.sections.length;
 	}
 
-	public getCourses(): Course[] {
-		return this.Courses;
-	}
+	// public getCourses(): Course[] {
+	// 	return this.Courses;
+	// }
 
 	public getSections(): Section[] {
-		let sections: Section[] = [];
-		for (const course of this.Courses) {
-			sections = sections.concat(course.getSections());
-		}
-		return sections;
+		// let sections: Section[] = [];
+		// for (const course of this.Courses) {
+		// 	sections = sections.concat(course.getSections());
+		// }
+		// return sections;
+		return this.sections;
 	}
 
 	public getInsight(): InsightDataset {
@@ -50,5 +54,17 @@ export default class SectionsDataset extends Dataset {
 			kind: InsightDatasetKind.Sections,
 			numRows: this.getTotalSections(),
 		};
+	}
+
+	public setKind(kind: InsightDatasetKind): void {
+		this.kind = kind;
+	}
+
+	public getItems(): Section[] {
+		return this.getSections();
+	}
+
+	public setItems(sections: Section[]): void {
+		this.sections = sections;
 	}
 }
