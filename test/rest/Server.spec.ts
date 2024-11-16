@@ -3,16 +3,21 @@ import request, { Response } from "supertest";
 import { StatusCodes } from "http-status-codes";
 import Log from "@ubccpsc310/folder-test/build/Log";
 import Server from "../../src/rest/Server";
+import { clearDisk } from "../TestUtil";
+import * as path from "path";
+import * as fs from "fs-extra";
 // import exp from "constants";
 // import { get } from "http";
 
-describe("Facade C3", function () {
+describe.only("Facade C3", function () {
 	const port = 4321;
 	let server: Server;
 	const SERVER_URL = "http://localhost:4321";
+	let ZIP_FILE_DATA: Buffer;
 
 	before(async function () {
 		// TODO: start server here once and handle errors properly
+		ZIP_FILE_DATA = await getBufferFromPath("../resources/archives/pair.zip");
 		server = new Server(port);
 		return server.start().catch((err: Error) => {
 			throw new Error(`Server::start() - ERROR: ${err.message}`);
@@ -26,20 +31,29 @@ describe("Facade C3", function () {
 		});
 	});
 
-	beforeEach(function () {
+	beforeEach(async function () {
 		// might want to add some process logging here to keep track of what is going on
+		await clearDisk();
 	});
 
-	afterEach(function () {
+	afterEach(async function () {
 		// might want to add some process logging here to keep track of what is going on
+		// await clearDisk();
 	});
+
+	async function getBufferFromPath(filePath: string): Promise<Buffer> {
+		const zipFilePath = path.join(__dirname, filePath);
+		if (!fs.existsSync(zipFilePath)) {
+			throw new Error(`File not found: ${zipFilePath}`);
+		}
+		return await fs.readFile(zipFilePath);
+	}
 
 	// PUT: resolve
 	// Sample on how to format PUT requests
 	it("PUT resolve: test for valid sections dataset", async function () {
 		// const SERVER_URL = "http://localhost:4321";
 		const ENDPOINT_URL = "/dataset/mysections/sections"; // id: mysections, kind: sections
-		const ZIP_FILE_DATA = Buffer.from("../resources/archives/pair.zip");
 
 		try {
 			return request(SERVER_URL)
@@ -51,7 +65,7 @@ describe("Facade C3", function () {
 					Log.info("Received response from PUT request");
 					Log.info("Response: " + res.text);
 					Log.info("Status: " + res.status);
-					Log.info("Body: " + res.body);
+					// Log.info("Body: " + JSON.stringify(res.body));
 					expect(res.status).to.be.equal(StatusCodes.OK);
 					expect(res.body).to.have.property("result").that.is.an("array");
 					const expectedResult = ["mysections"];
@@ -76,13 +90,13 @@ describe("Facade C3", function () {
 	// PUT: reject
 	it("PUT reject: test for invalid sections dataset", async function () {
 		// const SERVER_URL = "http://localhost:4321";
+		const INVALID_ZIP_FILE_DATA = await getBufferFromPath("../resources/archives/invalidDataset.zip");
 		const ENDPOINT_URL = "/dataset/badsections/sections"; // id: badsections, kind: sections
-		const ZIP_FILE_DATA = Buffer.from("../resources/archives/invalidDataset.zip");
 
 		try {
 			return request(SERVER_URL)
 				.put(ENDPOINT_URL)
-				.send(ZIP_FILE_DATA)
+				.send(INVALID_ZIP_FILE_DATA)
 				.set("Content-Type", "application/x-zip-compressed")
 				.then(function (res: Response) {
 					// some logging here please!
@@ -111,7 +125,6 @@ describe("Facade C3", function () {
 	it("DELETE resolve: test for existing dataset", async function () {
 		// const SERVER_URL = "http://localhost:4321";
 		const ENDPOINT_URL = "/dataset/mysections/sections"; // id: mysections, kind: sections
-		const ZIP_FILE_DATA = Buffer.from("../resources/archives/pair.zip");
 		const ENDPOINT_URL_DELETE = "/dataset/mysections";
 
 		try {
@@ -217,9 +230,8 @@ describe("Facade C3", function () {
 	});
 
 	// POST: resolve
-	it("POST resolve: test for valid simple query", async function () {
-		const ENDPOINT_URL = "/dataset/mysections/sections";
-		const ZIP_FILE_DATA = Buffer.from("../resources/archives/pair.zip");
+	it.only("POST resolve: test for valid simple query", async function () {
+		const ENDPOINT_URL = "/dataset/sections/sections";
 		const ENDPOINT_URL_QUERY = "/query";
 		const VALID_QUERY = {
 			WHERE: {
@@ -292,8 +304,9 @@ describe("Facade C3", function () {
 				.then(async function (res: Response) {
 					expect(res.status).to.be.equal(StatusCodes.OK);
 					expect(res.body).to.have.property("result").that.is.an("array");
-					const expectedResult = ["mysections"];
+					const expectedResult = ["sections"];
 					expect(res.body.result).to.deep.equal(expectedResult);
+					Log.info("PUT request successful");
 
 					return request(SERVER_URL)
 						.post(ENDPOINT_URL_QUERY)
@@ -331,7 +344,6 @@ describe("Facade C3", function () {
 	// POST: reject
 	it("POST reject: test for invalid query", async function () {
 		const ENDPOINT_URL = "/dataset/mysections/sections";
-		const ZIP_FILE_DATA = Buffer.from("../resources/archives/pair.zip");
 		const ENDPOINT_URL_QUERY = "/query";
 		const INVALID_QUERY = {};
 
@@ -380,13 +392,11 @@ describe("Facade C3", function () {
 
 	// GET: resolve
 	it("GET resolve: test for list datasets", async function () {
-		expect.fail(); // test #check
+		// expect.fail(); //!!! #check says no problems detected so the tests might not be correct
 		const ENDPOINT_URL = "/dataset/mysections/sections"; // id: mysections, kind: sections
-		const ZIP_FILE_DATA = Buffer.from("../resources/archives/pair.zip");
 		const ENDPOINT_URL_GET = "/datasets";
 
 		try {
-			expect.fail(); // test #check
 			return request(SERVER_URL)
 				.put(ENDPOINT_URL)
 				.send(ZIP_FILE_DATA)

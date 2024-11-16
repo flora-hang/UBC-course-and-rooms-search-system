@@ -3,6 +3,8 @@ import { StatusCodes } from "http-status-codes";
 import Log from "@ubccpsc310/folder-test/build/Log";
 import * as http from "http";
 import cors from "cors";
+import InsightFacade from "../controller/InsightFacade";
+import { InsightDatasetKind, InsightError, NotFoundError } from "../controller/IInsightFacade";
 
 export default class Server {
 	private readonly port: number;
@@ -89,7 +91,75 @@ export default class Server {
 		this.express.get("/echo/:msg", Server.echo);
 
 		// TODO: your other endpoints should go here
-		// this.express.put("/dataset/:id/:kind", Server.addDataset);
+		this.express.put("/dataset/:id/:kind", Server.addDataset);
+		this.express.delete("/dataset/:id", Server.removeDataset);
+		this.express.post("/query", Server.performQuery);
+	}
+
+	private static async addDataset(req: Request, res: Response): Promise<void> {
+		try {
+			const id = req.params.id;
+			const kind = Server.mapStringToInsightDatasetKind(req.params.kind);
+			const content = req.body.toString("base64");
+
+			const insightFacade = new InsightFacade();
+			const result = await insightFacade.addDataset(id, content, kind);
+			res.status(StatusCodes.OK).json({ result });
+		} catch (err) {
+			Log.error("Server::addDataset(..) - error: " + err);
+			if (err instanceof Error) {
+				res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
+			} else {
+				res.status(StatusCodes.BAD_REQUEST).json({ error: "Unknown error" });
+			}
+		}
+	}
+
+	private static async removeDataset(req: Request, res: Response): Promise<void> {
+		try {
+			const id = req.params.id;
+
+			const insightFacade = new InsightFacade();
+			const result = await insightFacade.removeDataset(id);
+			res.status(StatusCodes.OK).json({ result });
+		} catch (err) {
+			Log.error("Server::removeDataset(..) - error: " + err);
+			if (err instanceof InsightError) {
+				res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
+			} else if (err instanceof NotFoundError) {
+				res.status(StatusCodes.NOT_FOUND).json({ error: err.message });
+			} else {
+				res.status(StatusCodes.BAD_REQUEST).json({ error: "Unknown error" });
+			}
+		}
+	}
+
+	private static async performQuery(req: Request, res: Response): Promise<void> {
+		try {
+			const query = req.body;
+	
+			const insightFacade = new InsightFacade();
+			const result = await insightFacade.performQuery(query);
+			res.status(StatusCodes.OK).json({ result });
+		} catch (err) {
+			Log.error("Server::performQuery(..) - error: " + err);
+			if (err instanceof Error) {
+				res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
+			} else {
+				res.status(StatusCodes.BAD_REQUEST).json({ error: "Unknown error" });
+			}
+		}
+	}
+
+	// Function to map string to InsightDatasetKind
+	private static mapStringToInsightDatasetKind(kind: string): InsightDatasetKind {
+		if (kind === "sections") {
+			return InsightDatasetKind.Sections;
+		} else if (kind === "rooms") {
+			return InsightDatasetKind.Rooms;
+		} else {
+			throw new Error("Invalid dataset kind");
+		}
 	}
 
 	// The next two methods handle the echo service.
