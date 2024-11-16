@@ -10,7 +10,7 @@ import { InsightDataset, InsightDatasetKind } from "../../src/controller/IInsigh
 // import exp from "constants";
 // import { get } from "http";
 
-describe("Facade C3", function () {
+describe.only("Facade C3", function () {
 	const port = 4321;
 	let server: Server;
 	const SERVER_URL = "http://localhost:4321";
@@ -44,9 +44,6 @@ describe("Facade C3", function () {
 
 	async function getBufferFromPath(filePath: string): Promise<Buffer> {
 		const zipFilePath = path.join(__dirname, filePath);
-		if (!fs.existsSync(zipFilePath)) {
-			throw new Error(`File not found: ${zipFilePath}`);
-		}
 		return await fs.readFile(zipFilePath);
 	}
 
