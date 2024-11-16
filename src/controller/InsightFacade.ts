@@ -203,50 +203,60 @@ export default class InsightFacade implements IInsightFacade {
 
 		switch (className) {
 			case "SectionsDataset": {
-				dataset = new SectionsDataset(id);
-				dataset.setKind(kind);
-				const restoredSections = items.map(
-					(item: any) =>
-						new Section(
-							item.uuid,
-							item.id,
-							item.title,
-							item.instructor,
-							item.dept,
-							item.year,
-							item.avg,
-							item.pass,
-							item.fail,
-							item.audit
-						)
-				);
-				dataset.setItems(restoredSections);
+				dataset = this.buildSectionsDataset(id, kind, items);
 				break;
 			}
 			case "RoomsDataset": {
-				dataset = new RoomsDataset(id);
-				dataset.setKind(kind);
-				const restoredRooms = items.map(
-					(item: any) =>
-						new Room(
-							item.fullname,
-							item.shortname,
-							item.number,
-							item.seats,
-							item.type,
-							item.furniture,
-							item.href,
-							item.lat,
-							item.lon,
-							item.address
-						)
-				);
-				dataset.setItems(restoredRooms);
+				dataset = this.buildRoomsDataset(id, kind, items);
 				break;
 			}
 			default:
 				throw new Error("Unknown dataset class");
 		}
+		return dataset;
+	}
+
+	private buildRoomsDataset(id: any, kind: any, items: any): RoomsDataset {
+		const dataset = new RoomsDataset(id);
+		dataset.setKind(kind);
+		const restoredRooms = items.map(
+			(item: any) =>
+				new Room(
+					item.fullname,
+					item.shortname,
+					item.number,
+					item.seats,
+					item.type,
+					item.furniture,
+					item.href,
+					item.lat,
+					item.lon,
+					item.address
+				)
+		);
+		dataset.setItems(restoredRooms);
+		return dataset;
+	}
+
+	private buildSectionsDataset(id: any, kind: any, items: any): SectionsDataset {
+		const dataset = new SectionsDataset(id);
+		dataset.setKind(kind);
+		const restoredSections = items.map(
+			(item: any) =>
+				new Section(
+					item.uuid,
+					item.id,
+					item.title,
+					item.instructor,
+					item.dept,
+					item.year,
+					item.avg,
+					item.pass,
+					item.fail,
+					item.audit
+				)
+		);
+		dataset.setItems(restoredSections);
 		return dataset;
 	}
 
