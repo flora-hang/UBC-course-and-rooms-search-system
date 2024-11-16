@@ -202,24 +202,52 @@ export default class InsightFacade implements IInsightFacade {
 		let dataset: Dataset;
 
 		switch (className) {
-			case "SectionsDataset":
+			case "SectionsDataset": {
 				dataset = new SectionsDataset(id);
 				dataset.setKind(kind);
 				const restoredSections = items.map(
-					(item: any) => new Section(item.uuid, item.id, item.title, item.instructor, item.dept, item.year, item.avg, item.pass, item.fail, item.audit)
+					(item: any) =>
+						new Section(
+							item.uuid,
+							item.id,
+							item.title,
+							item.instructor,
+							item.dept,
+							item.year,
+							item.avg,
+							item.pass,
+							item.fail,
+							item.audit
+						)
 				);
-    			dataset.setItems(restoredSections);
-				return dataset;
-			case "RoomsDataset":
+				dataset.setItems(restoredSections);
+				break;
+			}
+			case "RoomsDataset": {
 				dataset = new RoomsDataset(id);
 				dataset.setKind(kind);
 				const restoredRooms = items.map(
-					(item: any) => new Room(item.fullname, item.shortname, item.number, item.seats, item.type, item.furniture, item.href, item.lat, item.lon, item.address)
+					(item: any) =>
+						new Room(
+							item.fullname,
+							item.shortname,
+							item.number,
+							item.seats,
+							item.type,
+							item.furniture,
+							item.href,
+							item.lat,
+							item.lon,
+							item.address
+						)
 				);
 				dataset.setItems(restoredRooms);
+				break;
+			}
 			default:
 				throw new Error("Unknown dataset class");
 		}
+		return dataset;
 	}
 
 	public async performQuery(query: unknown): Promise<InsightResult[]> {

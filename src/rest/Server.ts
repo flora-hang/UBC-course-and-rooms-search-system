@@ -4,7 +4,7 @@ import Log from "@ubccpsc310/folder-test/build/Log";
 import * as http from "http";
 import cors from "cors";
 import InsightFacade from "../controller/InsightFacade";
-import { InsightDatasetKind, InsightError, NotFoundError } from "../controller/IInsightFacade";
+import { InsightDatasetKind, InsightError, NotFoundError, ResultTooLargeError } from "../controller/IInsightFacade";
 
 export default class Server {
 	private readonly port: number;
@@ -88,12 +88,13 @@ export default class Server {
 	private registerRoutes(): void {
 		// This is an example endpoint this you can invoke by accessing this URL in your browser:
 		// http://localhost:4321/echo/hello
-		this.express.get("/echo/:msg", Server.echo);
+		// this.express.get("/echo/:msg", Server.echo);
 
 		// TODO: your other endpoints should go here
 		this.express.put("/dataset/:id/:kind", Server.addDataset);
 		this.express.delete("/dataset/:id", Server.removeDataset);
 		this.express.post("/query", Server.performQuery);
+		this.express.get("/datasets", Server.listDatasets);
 	}
 
 	private static async addDataset(req: Request, res: Response): Promise<void> {
@@ -107,10 +108,10 @@ export default class Server {
 			res.status(StatusCodes.OK).json({ result });
 		} catch (err) {
 			Log.error("Server::addDataset(..) - error: " + err);
-			if (err instanceof Error) {
+			if (err instanceof InsightError) {
 				res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
 			} else {
-				res.status(StatusCodes.BAD_REQUEST).json({ error: "Unknown error" });
+				res.status(StatusCodes.BAD_REQUEST).json({ error: "not InsightError" });
 			}
 		}
 	}
@@ -129,7 +130,7 @@ export default class Server {
 			} else if (err instanceof NotFoundError) {
 				res.status(StatusCodes.NOT_FOUND).json({ error: err.message });
 			} else {
-				res.status(StatusCodes.BAD_REQUEST).json({ error: "Unknown error" });
+				res.status(StatusCodes.BAD_REQUEST).json({ error: "not InsightError/NotFoundError" });
 			}
 		}
 	}
@@ -143,10 +144,25 @@ export default class Server {
 			res.status(StatusCodes.OK).json({ result });
 		} catch (err) {
 			Log.error("Server::performQuery(..) - error: " + err);
-			if (err instanceof Error) {
+			if (err instanceof InsightError || err instanceof ResultTooLargeError) {
 				res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
 			} else {
-				res.status(StatusCodes.BAD_REQUEST).json({ error: "Unknown error" });
+				res.status(StatusCodes.BAD_REQUEST).json({ error: "not InsightError" });
+			}
+		}
+	}
+
+	private static async listDatasets(_req: Request, res: Response): Promise<void> {
+		try {
+			const insightFacade = new InsightFacade();
+			const result = await insightFacade.listDatasets();
+			res.status(StatusCodes.OK).json({ result });
+		} catch (err) {
+			Log.error("Server::listDatasets(..) - error: " + err);
+			if (err instanceof InsightError) {
+				res.status(StatusCodes.BAD_REQUEST).json({ error: err.message });
+			} else {
+				res.status(StatusCodes.BAD_REQUEST).json({ error: "not InsightError" });
 			}
 		}
 	}

@@ -1,6 +1,5 @@
 import { InsightDataset, InsightDatasetKind } from "../../controller/IInsightFacade";
 import { Dataset } from "../Dataset";
-import Course from "./Course";
 import Section from "./Section";
 
 export default class SectionsDataset extends Dataset {

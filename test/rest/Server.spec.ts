@@ -6,6 +6,7 @@ import Server from "../../src/rest/Server";
 import { clearDisk } from "../TestUtil";
 import * as path from "path";
 import * as fs from "fs-extra";
+import { InsightDataset, InsightDatasetKind } from "../../src/controller/IInsightFacade";
 // import exp from "constants";
 // import { get } from "http";
 
@@ -319,7 +320,9 @@ describe("Facade C3", function () {
 							Log.info("Body: " + JSON.stringify(res1.body));
 							expect(res1.status).to.be.equal(StatusCodes.OK);
 							expect(res1.body).to.have.property("result").that.is.an("array");
-							expect(res1.body.result).to.deep.equal(expectedArray);
+							expect(res1.body.result.length).to.equal(expectedArray.length);
+							expect(res1.body.result).to.deep.include.members(expectedArray);
+							expect(expectedArray).to.deep.include.members(res1.body.result);
 						})
 						.catch(function (err) {
 							Log.error("Error in POST request");
@@ -416,7 +419,12 @@ describe("Facade C3", function () {
 							Log.info("Body: " + JSON.stringify(getRes.body));
 							expect(getRes.status).to.be.equal(StatusCodes.OK);
 							expect(getRes.body).to.have.property("result").that.is.an("array");
-							const expected = ["mysections"];
+							const expectedInsight: InsightDataset = {
+								id: "mysections",
+								kind: InsightDatasetKind.Sections,
+								numRows: 64612,
+							};
+							const expected = [expectedInsight];
 							expect(getRes.body.result).to.deep.equal(expected);
 						})
 						.catch(function (err) {

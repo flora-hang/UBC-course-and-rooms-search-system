@@ -31,7 +31,7 @@ export async function extractRoomData(zipContent: string, datasetId: string): Pr
 	buildings.forEach((building) => {
 		allRooms.push(...building.getRooms());
 	});
-	dataset.setItems(allRooms);	
+	dataset.setItems(allRooms);
 
 	return dataset;
 }

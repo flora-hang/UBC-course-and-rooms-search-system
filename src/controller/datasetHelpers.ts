@@ -1,5 +1,4 @@
 import { InsightError } from "../controller/IInsightFacade";
-import Course from "../models/sections/Course";
 import Section from "../models/sections/Section";
 import SectionsDataset from "../models/sections/SectionsDataset";
 import SectionData from "../models/sections/SectionData";
@@ -72,7 +71,7 @@ export async function processZip(id: string, content: string): Promise<SectionsD
 		const array = await Promise.all(proms); // Wait for all files to be processed
 
 		const handle: any = [];
-		array.forEach((element, index) => {
+		array.forEach((element) => {
 			let jsonData: SectionData[] = [];
 			try {
 				jsonData = JSON.parse(element).result; // Assuming 'result' is an array of sections

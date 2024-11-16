@@ -1,6 +1,5 @@
 import { InsightDataset, InsightDatasetKind } from "../../controller/IInsightFacade";
 import { Dataset } from "../Dataset";
-import Building from "./Building";
 import Room from "./Room";
 
 export default class RoomsDataset extends Dataset {
