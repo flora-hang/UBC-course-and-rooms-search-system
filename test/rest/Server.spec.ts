@@ -10,7 +10,7 @@ import { InsightDataset, InsightDatasetKind } from "../../src/controller/IInsigh
 // import exp from "constants";
 // import { get } from "http";
 
-describe.only("Facade C3", function () {
+describe("Facade C3", function () {
 	const port = 4321;
 	let server: Server;
 	const SERVER_URL = "http://localhost:4321";
