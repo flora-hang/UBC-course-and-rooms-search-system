@@ -1,15 +1,27 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 
 const QueryPage = () => {
+	const { dataset } = useParams(); 
+	const navigate = useNavigate();
+	const location = useLocation();
+    const { state } = location || {}; // Retrieve state passed from Home
+    const { datasets } = state || {}; // Get datasets from passed state
+	
 	return (
 		<div className="flex flex-col max-w-sm mx-auto">
-			<a className="cursor-pointer w-16 p-2 bg-blue-500 text-white rounded shadow-lg hover:bg-blue-600 transition duration-300 ease-in-out transform hover:scale-105 text-center m-3">Home</a>
+			<button
+                className="cursor-pointer w-16 p-2 bg-blue-500 text-white rounded shadow-lg hover:bg-blue-600 transition duration-300 ease-in-out transform hover:scale-105 text-center m-3"
+                onClick={() => navigate("/", { state: { datasets }})}
+            >
+                Home
+            </button>
 			<header className="px-5 py-3 rounded-xl my-10 max-w-sm mx-auto bg-yellow-300">
 				{/* May need to change the link's to attribute !!!TODO: */}
 				{/* <Link to="/"> */}
 				{/* </Link> */}
-				<h1>Query</h1>
+				<h1>Query: {dataset}</h1>
 			</header>
 			<main className="flex flex-col gap-4">
 				<div>

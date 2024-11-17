@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import QueryPage from "./queryPage";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 const Home = () => {
-    const [datasets, setDatasets] = useState([]);
+    
+    const location = useLocation();
+    const { state } = location || {};
+    const datasets = state?.datasets || ["Dataset1", "Dataset2"];
+    const [setDatasets] = useState([]);
     const navigate = useNavigate();
     const handleDrop = (event) => {
         event.preventDefault();
@@ -21,10 +25,6 @@ const Home = () => {
         event.preventDefault();
     };
 
-    const navigateToQueryPage = (datasetName) => {
-        navigate(`/query/${encodeURIComponent(datasetName)}`);
-    };
-
 
     return (
         <div className="flex h-screen">
@@ -36,7 +36,10 @@ const Home = () => {
                         <button
                             key={dataset}
                             className="w-full p-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600"
-                            onClick={() => navigateToQueryPage(dataset)}
+                            onClick={() =>
+                                navigate(`/query/${dataset}`, {
+                                    state: { datasets }, // Passing datasets state
+                                })}
                         >
                             {dataset}
                         </button>
