@@ -19,6 +19,8 @@ import fs from "fs-extra";
 import Query from "../models/query/Query";
 import { Dataset } from "../models/Dataset";
 import RoomsDataset from "../models/rooms/RoomsDataset";
+import Section from "../models/sections/Section";
+import Room from "../models/rooms/Room";
 
 // import { json } from "stream/consumers";
 
@@ -90,7 +92,7 @@ export default class InsightFacade implements IInsightFacade {
 		const insight = dataset.getInsight();
 		this.insights.set(id, insight);
 
-		await this.saveDatasetToDisk(id);
+		await this.saveDatasetToDisk(id, dataset);
 		await this.saveInsights();
 
 		// return a string array containing the ids of all currently added datasets upon a successful add
@@ -111,7 +113,7 @@ export default class InsightFacade implements IInsightFacade {
 		const insight = dataset.getInsight();
 		this.insights.set(id, insight);
 
-		await this.saveDatasetToDisk(id);
+		await this.saveDatasetToDisk(id, dataset);
 		await this.saveInsights();
 
 		// return a string array containing the ids of all currently added datasets upon a successful add
@@ -153,18 +155,108 @@ export default class InsightFacade implements IInsightFacade {
 
 	// saves newly added dataset to disk
 	// assumes that the dataset corresponding to the id is already in the datasets map
-	private async saveDatasetToDisk(id: string): Promise<void> {
-		const newDataset = this.datas.get(id);
+	// private async saveDatasetToDisk(id: string): Promise<void> {
+	// 	const newDataset = this.datas.get(id);
+	// 	const file = this.dataDir + "/" + id + ".json";
+	// 	await fs.ensureDir(this.dataDir);
+	// 	await fs.writeJSON(file, newDataset);
+	// 	console.log("> Saved dataset: ", newDataset);
+	// }
+
+	// // loads dataset from disk
+	// // assumes that id is valid and corresponds to an existing dataset
+	// private async loadDatasetFromDisk(id: string): Promise<Dataset> {
+	// 	const file = this.dataDir + "/" + id + ".json";
+	// 	const dataset: Dataset = await fs.readJSON(file);
+	// 	console.log("> Loaded dataset: ", dataset);
+	// 	return dataset;
+	// }
+
+	private async saveDatasetToDisk(id: string, dataset: Dataset): Promise<void> {
 		const file = this.dataDir + "/" + id + ".json";
 		await fs.ensureDir(this.dataDir);
-		await fs.writeJSON(file, newDataset);
+		const serializedDataset = this.serializeDataset(dataset);
+		await fs.writeJSON(file, serializedDataset);
+		// console.log("> Saved dataset: ", serializedDataset);
 	}
 
-	// loads dataset from disk
-	// assumes that id is valid and corresponds to an existing dataset
 	private async loadDatasetFromDisk(id: string): Promise<Dataset> {
 		const file = this.dataDir + "/" + id + ".json";
-		const dataset: Dataset = await fs.readJSON(file);
+		const serializedDataset = await fs.readJSON(file);
+		const dataset = this.deserializeDataset(serializedDataset);
+		// console.log("> Loaded dataset: ", dataset);
+		return dataset;
+	}
+
+	private serializeDataset(dataset: Dataset): any {
+		return {
+			id: dataset.getId(),
+			kind: dataset.getKind(),
+			items: dataset.getItems(),
+			className: dataset.constructor.name,
+		};
+	}
+
+	private deserializeDataset(serialized: any): Dataset {
+		const { id, kind, items, className } = serialized;
+		let dataset: Dataset;
+
+		switch (className) {
+			case "SectionsDataset": {
+				dataset = this.buildSectionsDataset(id, kind, items);
+				break;
+			}
+			case "RoomsDataset": {
+				dataset = this.buildRoomsDataset(id, kind, items);
+				break;
+			}
+			default:
+				throw new Error("Unknown dataset class");
+		}
+		return dataset;
+	}
+
+	private buildRoomsDataset(id: any, kind: any, items: any): RoomsDataset {
+		const dataset = new RoomsDataset(id);
+		dataset.setKind(kind);
+		const restoredRooms = items.map(
+			(item: any) =>
+				new Room(
+					item.fullname,
+					item.shortname,
+					item.number,
+					item.seats,
+					item.type,
+					item.furniture,
+					item.href,
+					item.lat,
+					item.lon,
+					item.address
+				)
+		);
+		dataset.setItems(restoredRooms);
+		return dataset;
+	}
+
+	private buildSectionsDataset(id: any, kind: any, items: any): SectionsDataset {
+		const dataset = new SectionsDataset(id);
+		dataset.setKind(kind);
+		const restoredSections = items.map(
+			(item: any) =>
+				new Section(
+					item.uuid,
+					item.id,
+					item.title,
+					item.instructor,
+					item.dept,
+					item.year,
+					item.avg,
+					item.pass,
+					item.fail,
+					item.audit
+				)
+		);
+		dataset.setItems(restoredSections);
 		return dataset;
 	}
 
@@ -185,7 +277,7 @@ export default class InsightFacade implements IInsightFacade {
 		const validQuery = Query.buildQuery(query);
 
 		let id = checkIds(validQuery);
-		//!!! id could be undefined if columns only contain APPLY keys
+		// id could be undefined if columns only contain APPLY keys
 
 		// but if id = undefined, then there exist GROUP
 		if (id === undefined && validQuery.TRANSFORMATIONS) {

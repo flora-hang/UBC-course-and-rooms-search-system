@@ -27,7 +27,11 @@ export async function extractRoomData(zipContent: string, datasetId: string): Pr
 
 	// Step 2: Find the building table in index.htm
 	const buildings = await parseBuildingTable(document, zip);
-	dataset.addBuildings(buildings);
+	const allRooms: Room[] = [];
+	buildings.forEach((building) => {
+		allRooms.push(...building.getRooms());
+	});
+	dataset.setItems(allRooms);
 
 	return dataset;
 }
