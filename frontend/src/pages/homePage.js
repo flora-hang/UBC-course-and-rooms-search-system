@@ -2,18 +2,17 @@ import React, { useState } from "react";
 import QueryPage from "./queryPage";
 import { useNavigate, useLocation } from "react-router-dom";
 const Home = () => {
-    
+
     const location = useLocation();
     const { state } = location || {};
-    const datasets = state?.datasets || ["Dataset1", "Dataset2"];
-    const [setDatasets] = useState([]);
+    const [datasets, setDatasets] = useState(state?.datasets || []); //  useState(state?.datasets || ["Dataset1", "Dataset2"]); <-- for debugging
     const navigate = useNavigate();
     const handleDrop = (event) => {
         event.preventDefault();
 
         const files = Array.from(event.dataTransfer.files);
         const newDatasets = files.map((file) => file.name.replace(".zip", ""));
-        
+
         // Add unique datasets only
         setDatasets((prevDatasets) => {
             const existingNames = new Set(prevDatasets);
