@@ -1,6 +1,7 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
 import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { Bar } from 'react-chartjs-2';
 
 const QueryPage = () => {
 	const { dataset } = useParams();
@@ -17,10 +18,74 @@ const QueryPage = () => {
 			return;
 		};
 
+		// preprocess and query object to be sent to backend
+		const query = preprocessQuery();
+		const rawData = performQuery(query);
+		const tidyData = cleanData(rawData);
+
+		// TODO: Implement and improve upon this function
 		// Generate graphs here
+		const data = {
+			labels: tidyData.map(item => item[`${dataset}_${nominalValue}`]),
+			datasets: [
+				{
+					label: `${numericalValue}`,
+					data: tidyData.map(item => item[`${dataset}_${numericalValue}`]),
+					backgroundColor: 'rgba(75, 192, 192, 0.6)',
+					borderColor: 'rgba(75, 192, 192, 1)',
+					borderWidth: 1,
+				},
+			],
+		};
+
+		return (
+			<div className="w-1/2 mt-8">
+				<h2>Generated Graphs</h2>
+				<Bar data={data} />
+			</div>
+		);
 	};
 
+	const preprocessQuery = async () => {
+		// Perform query here
+		const direction = filterValue === "top10" ? "DOWN" : "UP";
+		const query = {
+			"WHERE": {},
+			"OPTIONS": {
+				"COLUMNS": [
+					`${dataset}_${nominalValue}`,
+					`${dataset}_${numericalValue}`
+				],
+				"ORDER": {
+					"dir": direction,
+					keys: `${dataset}_${numericalValue}`
+				}
+			}
+		};
+		return query;
+	};
 
+	const performQuery = async (query) => {
+		try {
+			const response = await fetch('/query', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(query)
+			});
+			const data = await response.json();
+			console.log(data);
+			// Handle the response data here
+			return data;
+		} catch (error) {
+			console.error('Error:', error);
+		}
+	};
+
+	const cleanData = (rawData) => {
+		return rawData.slice(0, 10); // Return top 10 results
+	};
 
 	return (
 		<div className="flex flex-col max-w-lg mx-auto">
