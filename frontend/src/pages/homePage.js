@@ -12,41 +12,45 @@ const Home = () => {
         const files = Array.from(event.dataTransfer.files);
     
         for (const file of files) {
-            const datasetId = file.name.replace(".zip", ""); // Extract dataset ID from the filename
-            const datasetKind = "sections"; // Example kind; adjust as needed
+            const reader = new FileReader();
     
-            try {
-                // Read the file as an ArrayBuffer
-                const reader = new FileReader();
-                reader.onload = async (e) => {
-                    const buffer = e.target.result; // Get raw binary data
-    
-                    // Make the PUT request to the server
-                    const response = await fetch(`/dataset/${datasetId}/${datasetKind}`, {
+            reader.onload = async (e) => {
+                const base64Content = e.target.result.split(",")[1]; // Get the base64 part
+                const datasetId = file.name.replace(".zip", "");
+                alert(datasetId);
+                alert(base64Content);
+                try {
+                    const response = await fetch(`http://localhost:4321/dataset/${datasetId}/sections`, {
                         method: "PUT",
                         headers: {
-                            "Content-Type": "application/octet-stream", // Inform the server of binary content
+                            "Content-Type": "application/zip",
                         },
-                        body: buffer, // Send raw buffer content
+                        body: file,
                     });
     
                     if (response.ok) {
-                        const { result } = await response.json();
+                        // const { result } = await response.json();
+                        // setDatasets((prevDatasets) => [...prevDatasets, datasetId]);
+                        const result = await response.body;
                         console.log("Dataset added successfully:", result);
-    
-                        // Update datasets state with new dataset ID
-                        setDatasets((prevDatasets) => [...prevDatasets, datasetId]);
+                        setDatasets((prevDatasets) => {
+                        if (!prevDatasets.includes(datasetId)) {
+                            return [...prevDatasets, datasetId];
+                        }
+                        return prevDatasets;
+                    });
                     } else {
-                        const { error } = await response.json();
-                        console.error("Error adding dataset:", error);
+                        const error = await response.json();
+                        console.error("Error adding dataset:", error.error);
+                        alert(`Failed to add dataset: ${error.error}`);
                     }
-                };
+                } catch (err) {
+                    console.error("Error during fetch:", err);
+                    alert("An error occurred while adding the dataset.");
+                }
+            };
     
-                // Read the file as a binary ArrayBuffer
-                reader.readAsArrayBuffer(file);
-            } catch (err) {
-                console.error("Error processing file:", err);
-            }
+            reader.readAsDataURL(file);
         }
     };
     

@@ -15,7 +15,7 @@ export default class Server {
 		Log.info(`Server::<init>( ${port} )`);
 		this.port = port;
 		this.express = express();
-
+	
 		this.registerMiddleware();
 		this.registerRoutes();
 
