@@ -1,24 +1,23 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-const Home = () => {
 
+const Home = () => {
     const location = useLocation();
     const { state } = location || {};
-    const [datasets, setDatasets] = useState(state?.datasets || []); //  useState(state?.datasets || ["Dataset1", "Dataset2"]); <-- for debugging
+    const [datasets, setDatasets] = useState(state?.datasets || []);
     const navigate = useNavigate();
+
     const handleDrop = async (event) => {
         event.preventDefault();
-    
+
         const files = Array.from(event.dataTransfer.files);
-    
+
         for (const file of files) {
             const reader = new FileReader();
-    
-            reader.onload = async (e) => {
-                const base64Content = e.target.result.split(",")[1]; // Get the base64 part
+
+            reader.onload = async () => {
                 const datasetId = file.name.replace(".zip", "");
-                alert(datasetId);
-                alert(base64Content);
+
                 try {
                     const response = await fetch(`http://localhost:4321/dataset/${datasetId}/sections`, {
                         method: "PUT",
@@ -27,38 +26,51 @@ const Home = () => {
                         },
                         body: file,
                     });
-    
+
                     if (response.ok) {
-                        // const { result } = await response.json();
-                        // setDatasets((prevDatasets) => [...prevDatasets, datasetId]);
-                        const result = await response.body;
+                        const result = await response.json();
                         console.log("Dataset added successfully:", result);
                         setDatasets((prevDatasets) => {
-                        if (!prevDatasets.includes(datasetId)) {
-                            return [...prevDatasets, datasetId];
-                        }
-                        return prevDatasets;
-                    });
+                            if (!prevDatasets.includes(datasetId)) {
+                                return [...prevDatasets, datasetId];
+                            }
+                            return prevDatasets;
+                        });
                     } else {
                         const error = await response.json();
-                        console.error("Error adding dataset:", error.error);
                         alert(`Failed to add dataset: ${error.error}`);
                     }
                 } catch (err) {
-                    console.error("Error during fetch:", err);
                     alert("An error occurred while adding the dataset.");
                 }
             };
-    
+
             reader.readAsDataURL(file);
         }
     };
-    
+
+    const handleDelete = async (datasetId) => {
+        try {
+            const response = await fetch(`http://localhost:4321/dataset/${datasetId}`, {
+                method: "DELETE",
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                alert(`Dataset deleted successfully: ${result.result}`);
+                setDatasets((prevDatasets) => prevDatasets.filter((id) => id !== datasetId));
+            } else {
+                const error = await response.json();
+                alert(`Failed to delete dataset: ${error.error}`);
+            }
+        } catch (err) {
+            alert("An error occurred while deleting the dataset.");
+        }
+    };
 
     const handleDragOver = (event) => {
         event.preventDefault();
     };
-
 
     return (
         <div className="flex h-screen">
@@ -67,16 +79,24 @@ const Home = () => {
                 <h2 className="text-2xl font-bold mb-4">All Datasets</h2>
                 <div className="space-y-2">
                     {datasets.map((dataset) => (
-                        <button
-                            key={dataset}
-                            className="w-full p-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600"
-                            onClick={() =>
-                                navigate(`/query/${dataset}`, {
-                                    state: { datasets }, // Passing datasets state
-                                })}
-                        >
-                            {dataset}
-                        </button>
+                        <div key={dataset} className="flex items-center space-x-2">
+                            <button
+                                className="flex-1 p-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600"
+                                onClick={() =>
+                                    navigate(`/query/${dataset}`, {
+                                        state: { datasets },
+                                    })
+                                }
+                            >
+                                {dataset}
+                            </button>
+                            <button
+                                className="p-2 bg-red-500 text-white rounded shadow hover:bg-red-600"
+                                onClick={() => handleDelete(dataset)}
+                            >
+                                Delete
+                            </button>
+                        </div>
                     ))}
                 </div>
             </aside>
@@ -100,4 +120,3 @@ const Home = () => {
 };
 
 export default Home;
-
