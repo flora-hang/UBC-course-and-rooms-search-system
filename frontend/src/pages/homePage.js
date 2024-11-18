@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import QueryPage from "./queryPage";
 import { useNavigate, useLocation } from "react-router-dom";
 const Home = () => {
 
@@ -7,18 +6,50 @@ const Home = () => {
     const { state } = location || {};
     const [datasets, setDatasets] = useState(state?.datasets || []); //  useState(state?.datasets || ["Dataset1", "Dataset2"]); <-- for debugging
     const navigate = useNavigate();
-    const handleDrop = (event) => {
+    const handleDrop = async (event) => {
         event.preventDefault();
-
+    
         const files = Array.from(event.dataTransfer.files);
-        const newDatasets = files.map((file) => file.name.replace(".zip", ""));
-
-        // Add unique datasets only
-        setDatasets((prevDatasets) => {
-            const existingNames = new Set(prevDatasets);
-            return [...prevDatasets, ...newDatasets.filter((name) => !existingNames.has(name))];
-        });
+    
+        for (const file of files) {
+            const datasetId = file.name.replace(".zip", ""); // Extract dataset ID from the filename
+            const datasetKind = "sections"; // Example kind; adjust as needed
+    
+            try {
+                // Read the file as an ArrayBuffer
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    const buffer = e.target.result; // Get raw binary data
+    
+                    // Make the PUT request to the server
+                    const response = await fetch(`/dataset/${datasetId}/${datasetKind}`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/octet-stream", // Inform the server of binary content
+                        },
+                        body: buffer, // Send raw buffer content
+                    });
+    
+                    if (response.ok) {
+                        const { result } = await response.json();
+                        console.log("Dataset added successfully:", result);
+    
+                        // Update datasets state with new dataset ID
+                        setDatasets((prevDatasets) => [...prevDatasets, datasetId]);
+                    } else {
+                        const { error } = await response.json();
+                        console.error("Error adding dataset:", error);
+                    }
+                };
+    
+                // Read the file as a binary ArrayBuffer
+                reader.readAsArrayBuffer(file);
+            } catch (err) {
+                console.error("Error processing file:", err);
+            }
+        }
     };
+    
 
     const handleDragOver = (event) => {
         event.preventDefault();
