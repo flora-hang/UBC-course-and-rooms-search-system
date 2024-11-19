@@ -17,6 +17,7 @@ const Home = () => {
 
             reader.onload = async () => {
                 const datasetId = file.name.replace(".zip", "");
+				console.log(datasetId);
 
                 try {
                     const response = await fetch(`http://localhost:4321/dataset/${datasetId}/sections`, {

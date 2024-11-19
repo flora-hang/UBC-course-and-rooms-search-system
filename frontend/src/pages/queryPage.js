@@ -2,6 +2,9 @@ import React from 'react';
 // import { Link } from 'react-router-dom';
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const QueryPage = () => {
 	const { dataset } = useParams();
@@ -12,38 +15,65 @@ const QueryPage = () => {
 	const [numericalValue, setNumericalValue] = React.useState("");
 	const [nominalValue, setNominalValue] = React.useState("");
 	const [filterValue, setFilterValue] = React.useState("");
-	const generateGraphs = () => {
+	const [graphs, setGraphs] = React.useState(null);
+	const generateGraphs = async () => {
 		if (!numericalValue || !nominalValue || !filterValue) {
 			alert("Please select all options");
 			return;
 		};
 
-		// preprocess and query object to be sent to backend
-		const query = preprocessQuery();
-		const rawData = performQuery(query);
-		const tidyData = cleanData(rawData);
+		try {
+			// preprocess and query object to be sent to backend
+			const query = await preprocessQuery();
+			const rawData = await performQuery(query);
+			const tidyData = cleanData(rawData);
+			console.log(tidyData);
 
-		// TODO: Implement and improve upon this function
-		// Generate graphs here
-		const data = {
-			labels: tidyData.map(item => item[`${dataset}_${nominalValue}`]),
-			datasets: [
-				{
+			if (tidyData.length === 0) {
+				alert("No data available for the selected options");
+				return;
+			}
+
+			const labels = tidyData.map(item => item[`${dataset}_${nominalValue}`]);
+			const dataValues = tidyData.map(item => item[`${dataset}_${numericalValue}`]);
+
+			const data = {
+				labels: labels,
+				datasets: [{
 					label: `${numericalValue}`,
-					data: tidyData.map(item => item[`${dataset}_${numericalValue}`]),
+					data: dataValues,
 					backgroundColor: 'rgba(75, 192, 192, 0.6)',
 					borderColor: 'rgba(75, 192, 192, 1)',
 					borderWidth: 1,
-				},
-			],
-		};
+				}],
+			};
 
-		return (
-			<div className="w-1/2 mt-8">
-				<h2>Generated Graphs</h2>
-				<Bar data={data} />
-			</div>
-		);
+			const options = {
+				maintainAspectRatio: false,
+				scales: {
+					x: {
+						beginAtZero: true,
+					},
+					y: {
+						beginAtZero: true,
+					},
+				},
+				plugins: {
+					legend: {
+						position: 'top',
+					},
+					title: {
+						display: true,
+						text: 'Bar Chart',
+					},
+				},
+			};
+
+			setGraphs(<Bar data={data} options={options} />);
+		} catch (error) {
+			console.error(error);
+			alert("Failed to generate graphs");
+		}
 	};
 
 	const preprocessQuery = async () => {
@@ -58,33 +88,35 @@ const QueryPage = () => {
 				],
 				"ORDER": {
 					"dir": direction,
-					keys: `${dataset}_${numericalValue}`
+					"keys": [`${dataset}_${numericalValue}`]
 				}
 			}
 		};
+		console.log(query);
 		return query;
 	};
 
 	const performQuery = async (query) => {
-		try {
-			const response = await fetch('/query', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(query)
-			});
-			const data = await response.json();
-			console.log(data);
-			// Handle the response data here
-			return data;
-		} catch (error) {
-			console.error('Error:', error);
+		const response = await fetch('http://localhost:4321/query', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(query)
+		});
+
+
+		if (response.ok) {
+			return await response.json();
+		} else {
+			const error = await response.json();
+			alert(`Failed to add dataset: ${error.error}`);
 		}
 	};
 
 	const cleanData = (rawData) => {
-		return rawData.slice(0, 10); // Return top 10 results
+		const results = rawData["result"];
+		return results.slice(0, 10); // Return top 10 results
 	};
 
 	return (
@@ -166,9 +198,11 @@ const QueryPage = () => {
 						Generate Graphs
 					</button>
 				</div>
-				<div className="w-1/2 mt-8">
-					<h2>Generated Graphs</h2>
-					{/* Placeholder for generated graphs */}
+				<div className="w-3/4 mx-auto mt-8">
+					<h2 className="text-center">Generated Graphs</h2>
+					<div style={{ height: '400px', width: '100%' }}>
+						{graphs}
+					</div>
 				</div>
 			</main>
 		</div>
