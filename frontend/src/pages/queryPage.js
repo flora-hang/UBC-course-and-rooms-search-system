@@ -143,10 +143,7 @@ const QueryPage = () => {
 							<option value="audit">Number of Students who Audited</option>
 							<option value="avg">Average</option>
 							<option value="fail">Number of Students who Failed</option>
-							<option value="lat">Latitude</option>
-							<option value="lon">Longitude</option>
 							<option value="pass">Number of Students who Passed</option>
-							<option value="seats">Number of Seats</option>
 							<option value="year">Year</option>
 						</select>
 					</label>
@@ -160,18 +157,10 @@ const QueryPage = () => {
 							onChange={(e) => setNominalValue(e.target.value)}
 						>
 							<option value="">Select an option</option>
-							<option value="address">Building Address</option>
 							<option value="dept">Department</option>
-							<option value="fullname">Full Building Name</option>
-							<option value="furniture">Room Furniture</option>
-							<option value="href">Link</option>
 							<option value="id">Course ID</option>
 							<option value="instructor">Instructor Name</option>
-							<option value="name">Room ID</option>
-							<option value="number">Room Number</option>
-							<option value="shortname">Short Building Name</option>
 							<option value="title">Course Name</option>
-							<option value="type">Room Type</option>
 							<option value="uuid">Section ID</option>
 						</select>
 					</label>
