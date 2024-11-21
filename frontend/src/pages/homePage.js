@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Home = () => {
@@ -6,6 +6,25 @@ const Home = () => {
     const { state } = location || {};
     const [datasets, setDatasets] = useState(state?.datasets || []);
     const navigate = useNavigate();
+
+    // Fetch datasets on component mount
+    useEffect(() => {
+        const fetchDatasets = async () => {
+            try {
+                const response = await fetch("http://localhost:4321/datasets");
+                if (response.ok) {
+                    const data = await response.json();
+                    setDatasets(data.result.map((dataset) => dataset.id));
+                } else {
+                    alert("Failed to fetch datasets.");
+                }
+            } catch (error) {
+                console.error("Error fetching datasets:", error);
+            }
+        };
+
+        fetchDatasets();
+    }, []);
 
     const handleDrop = async (event) => {
         event.preventDefault();
@@ -17,7 +36,7 @@ const Home = () => {
 
             reader.onload = async () => {
                 const datasetId = file.name.replace(".zip", "");
-				console.log(datasetId);
+                console.log(datasetId);
 
                 try {
                     const response = await fetch(`http://localhost:4321/dataset/${datasetId}/sections`, {
