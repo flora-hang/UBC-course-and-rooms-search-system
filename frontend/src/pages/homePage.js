@@ -5,9 +5,9 @@ const Home = () => {
     const location = useLocation();
     const { state } = location || {};
     const [datasets, setDatasets] = useState(state?.datasets || []);
+    const [datasetIdInput, setDatasetIdInput] = useState(""); // State for user-input ID
     const navigate = useNavigate();
 
-    // Fetch datasets on component mount
     useEffect(() => {
         const fetchDatasets = async () => {
             try {
@@ -35,7 +35,8 @@ const Home = () => {
             const reader = new FileReader();
 
             reader.onload = async () => {
-                const datasetId = file.name.replace(".zip", "");
+                // Use the user-input ID if provided, otherwise default to the file name
+                const datasetId = datasetIdInput.trim() || file.name.replace(".zip", "");
                 console.log(datasetId);
 
                 try {
@@ -56,6 +57,7 @@ const Home = () => {
                             }
                             return prevDatasets;
                         });
+                        setDatasetIdInput(""); // Clear the input field
                     } else {
                         const error = await response.json();
                         alert(`Failed to add dataset: ${error.error}`);
@@ -126,6 +128,13 @@ const Home = () => {
                 <h1 className="text-4xl font-bold mb-6">Home</h1>
                 <div className="bg-white p-6 rounded shadow-md">
                     <h2 className="text-2xl font-bold mb-4">Add Dataset</h2>
+                    <input
+                        type="text"
+                        placeholder="Enter Dataset ID (optional)"
+                        className="mb-4 p-2 border border-gray-400 rounded w-full"
+                        value={datasetIdInput}
+                        onChange={(e) => setDatasetIdInput(e.target.value)}
+                    />
                     <div
                         className="border-2 border-dashed border-gray-400 p-10 text-gray-600 text-center cursor-pointer hover:bg-gray-50"
                         onDrop={handleDrop}
