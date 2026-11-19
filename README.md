@@ -3,6 +3,7 @@
 A full-stack TypeScript app for querying UBC's historical course records and campus classrooms. It loads raw university data (zipped JSON course files and scraped HTML building pages), turns it into structured datasets, and answers questions written in a custom JSON query language: filters, grouping, aggregates and multi-key sorting.
 
 **Live demo:** https://claude.ai/artifact/MzDJxDtswex4HUBh25cuaE
+
 **Video walkthrough:** https://youtu.be/MP2shx1AZac
 
 ![Language](https://img.shields.io/badge/TypeScript-4.9-blue) ![Backend](https://img.shields.io/badge/Express-4.18-lightgrey) ![Frontend](https://img.shields.io/badge/React-18-61dafb)
